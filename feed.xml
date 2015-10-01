@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Sukai's Blog</title>
+    <link href="" rel="self" />
+    <link href="http://sukai.me/" />
+    <updated>2015-06-08T12:40:00Z</updated>
+    <id>http://sukai.me/</id>
+    
+    <entry>
+        <title><![CDATA[利用大脑进行主动式学习]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/brain_storming/"/>
+        <updated>2015-06-08T12:40:00Z</updated>
+        <published>2015-06-08T12:40:00Z</published>
+        <id>http://sukai.me/brain_storming/</id>
+        <content type="html">
+            <![CDATA[
+             <p>最近读完了<a href="http://book.douban.com/subject/5372651/">《程序员的思维修炼》</a>，有关认知科学，学习和行为理论的头脑风暴一直充斥我的大脑，与其产生共鸣的同时，很想把书中提出的观点和技巧牢记下来  </p>
+
+<p>在读《程序员思维修炼》的期间，脑子里竟不由主地回忆了一些<a href="http://book.douban.com/subject/25783654/">《如何高效学习》</a>里面的内容，后来翻看其笔记，发现二者本质有许多共同之处的，到目前，两本书的内容一直很混乱地存储在我的脑子里，自己大脑着实不发达，需要好好将这些整理下来  </p>
+
+<h3>《程序员的思维修炼》大体内容</h3>
+
+<p>该书从一个模型出发，即Dreyfus模型，介绍了每个学习领域，从新手到专家必须经历的5个阶段：  </p>
+
+<p>新手，高级新手，胜任者，精通者，专家  </p>
+
+<p>该模型强调新手只会执行命令，而专家，凭直觉工作，而且能出色表现。看了第三章，就知道了，这个所谓的直觉就是我们右半脑的功劳  </p>
+
+<p>书中，大脑被类比为计算机，左右半脑分别对应1，2号CPU，即L型和R型。L型负责线性任务指令，逻辑思维和语言处理等细节任务；R型则是一个搜索引擎，能在你思考时候，搜索你所有的存储记忆，并异步返回结果集。一句话总结下：L型负责细节，R型负责整体  </p>
+
+<p>可想而知，R型对于创造力非常重要，这是区别专家和菜鸟的界限  </p>
+
+<p>但是，L型和R型存在着竞争，因为它们共享一根总线，通向大脑内存，大多数人都是L型在工作，R型的作用没有真正发挥出来，你需要主动地去挖掘R型能力  </p>
+
+<p>所以，本书就针对如何充分利用好R型，在后几章提出了许多实用的技巧：  </p>
+
+<ul>
+<li>利用右脑，学会R型到L型的转换<br/></li>
+<li>调试大脑，消除思维定势等<br/></li>
+<li>学会主动学习，指定SMART计划，学会SQ3R主动阅读法<br/></li>
+<li>在实践中积累经验<br/></li>
+<li>如何控制好中断，保证工作中的注意力<br/></li>
+</ul>
+
+<h3>《程序员的思维修炼》和《如何高效学习》的联系</h3>
+
+<p>翻看了高效学习的读书笔记，发现高效学习的学习技巧大多就是针对如何挖掘R型而提出的，比如：通过笔记流（图像流）主动地获取对知识的宏观把握；学会给知识创建模型和结构；学会在不同知识之间建立主动的联系。这些我感觉，都是在讲一个道理：宏观把握，宏观把握，建立联系，建立联系！  </p>
+
+<p>比如关于读书，很简单的改进方法，读之前，先扫一边目录，记下问题，然后有了宏观上的大体了解，进行全部阅读（SQ3R主动阅读法）  </p>
+
+<h3>如何利用右脑</h3>
+
+<p>方法说起来真的很简单：听音乐，绘画，静思，慢跑，针线活，攀岩，散步，尝试新鲜事物等等，即给大脑分配一个会被L型拒绝的工作，从而激活R型的活动  </p>
+
+<p>这里有个“笑话”：传闻，爱因斯坦打盹的时候，手里会握着几个滚珠，刚要睡着的时候，滚珠会掉落，会吵醒爱因斯坦，然后爱因斯坦便会立马拿起笔纸，记录一些东西。因为，他觉得刚睡着，大脑一定在做梦，此时，记忆回顾活动很频繁，一定会产生很多好想法  </p>
+
+<p>每个人都有好想法，只是大多数人想了也就想了，没有充分利用，从中获益。成功的人或许24小时拿着可以记录的东西，不漏记任何一个想法  </p>
+
+<h3>实战性的技巧</h3>
+
+<p>整理一下，值得借鉴的主动学习技巧  </p>
+
+<ul>
+<li>制定SMART目标<br/></li>
+<li>制定务实的投资计划，包括定期投资和主动投资<br/></li>
+<li>多感官学习模式，视觉，听觉，动觉<br/></li>
+<li>SQ3R主动阅读法<br/></li>
+<li>思维导图笔记<br/></li>
+<li>以教代学，对着静物讲述自己刚刚所学知识<br/></li>
+</ul>
+
+<p>还有针对注意力的技巧  </p>
+
+<ul>
+<li>冥想<br/></li>
+<li>在电脑工作时，使用虚拟桌面，从而保存情境堆栈，防止中断回来，很难进入状态<br/></li>
+<li>时刻记录自己的想法<br/></li>
+</ul>
+
+<p>说到注意力，值得看的一本书还有《番茄工作法》，虽然，我觉得番茄工作法很麻烦。但是，在你没有大幅度改善你的拖延症和不集中注意力之前，还是值得去试  </p>
+
+<p>突然，又想起一本书，当时在豆瓣上买的电子书，叫做<a href="http://book.douban.com/subject/20389192/">《30岁前的每一天》</a>，该书也讲解了运用记事本，如何改善注意力&hellip;&hellip;不过，内容和其余书好像啊，有没有抄袭和借鉴别的书啊&hellip;&hellip;  </p>
+
+<hr/>
+
+<p>PS：附上我的读书笔记  </p>
+
+<ul>
+<li><a href="https://github.com/LeanCodeTeam/Xmind_Reading_Note/blob/sukai/gas_station/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E6%80%9D%E7%BB%B4%E4%BF%AE%E7%82%BC.xmind">《程序员的思维修炼》思维导图笔记</a><br/></li>
+<li><a href="https://github.com/su-kaiyao/record/tree/master/Books/GasStation/%E3%80%8A%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0%E3%80%8B">《如何高效学习》markdown笔记</a><br/></li>
+</ul>
+
+<p>给大伙推荐这两本书，不读别后悔  </p>
+
+            ]]>
+        </content>
+    </entry>
+    
+    <entry>
+        <title><![CDATA[Docker初探]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/explore_docker/"/>
+        <updated>2015-06-03T21:50:00Z</updated>
+        <published>2015-06-03T21:50:00Z</published>
+        <id>http://sukai.me/explore_docker/</id>
+        <content type="html">
+            <![CDATA[
+             <p>从周一到今天周三，花了三天的课余时间，看完了一本《第一本Docker书》。对Docker，应该算是有入门级的了解了。  </p>
+
+<p>PS：当时，我在学校图书馆搜索该书的时候，状态是“正在上架”；学校还是蛮紧跟潮流的，这么火的容器技术书籍，学校选购了，赞。后来，足足瞄了一个星期，书一上架，我就从图书馆借回来了，还捎带了旁边的另一本《Docker技术入门》。  </p>
+
+<p>关于该书，我的xmind思维导图笔记地址在<a href="https://github.com/LeanCodeTeam/Xmind_Reading_Note/blob/sukai/docker/%E7%AC%AC%E4%B8%80%E6%9C%ACDocker%E4%B9%A6.xmind">这边</a>  </p>
+
+<hr/>
+
+<p>（2015-09-01更新）<br/>
+最近重新做了笔记，xmind笔记图如下  </p>
+
+<h2><img src="http://7xl2fd.com1.z0.glb.clouddn.com/%E7%AC%AC%E4%B8%80%E6%9C%ACDocker%E4%B9%A6.png" alt="第一本Docker书"/>  </h2>
+
+<p>下面再简单陈述下Docker的知识点  </p>
+
+<h3>什么是Docker，Docker的核心组件，以及我们能用Docker做什么</h3>
+
+<p>Docker在虚拟化的容器环境中，增加了一套程序部署机制  </p>
+
+<p>其核心组件为：  </p>
+
+<ul>
+<li>Docker客户端和服务端<br/></li>
+<li>Docker镜像<br/></li>
+<li>Registry<br/></li>
+<li>Docker容器<br/></li>
+</ul>
+
+<h3>如何在ubuntu安装Docker</h3>
+
+<h3>对Docker容器的一些操作命令</h3>
+
+<h3>对Docker镜像的操作，保存</h3>
+
+<p>重点是使用Dockerfile创建镜像，以及使用Registry保存镜像  </p>
+
+<h3>使用Docker的一些简单例子</h3>
+
+<p>如何让容器之间互连通信，以及多容器的应用栈例子  </p>
+
+<h3>使用Fig编配Docker</h3>
+
+<p>使用了Fig进行编配后，可以很方便地将多个容器“连”在一起，使用简单的组合来构建应用程序栈，实现自动化地管理多个容器  </p>
+
+<p>第8章关于Docker API，我还没看。因为我在网上看到很多使用Docker API制作的Docker监控工具，到时候，使用Docker过程中，要去监控容器运行情况时，我再去翻阅  </p>
+
+<p>Over  </p>
+
+            ]]>
+        </content>
+    </entry>
+    
+    <entry>
+        <title><![CDATA[苏苏查书之前台开发篇]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/doubanapifront/"/>
+        <updated>2015-04-24T19:39:00Z</updated>
+        <published>2015-04-24T19:39:00Z</published>
+        <id>http://sukai.me/doubanapifront/</id>
+        <content type="html">
+            <![CDATA[
+             <p>上一篇(<a href="http://kaiyao.net.cn/doubanapibyjava/">苏苏查书之后台开发篇</a>)，我们已经可以从豆瓣那边取出关于图书的信息了，下面，我们开始编写前台代码，将这些信息显示在浏览器中  </p>
+
+<p>我采用Bootstrap前端开发框架，准备编写两个页面:  </p>
+
+<ul>
+<li>输入书籍名，开启查询页面：供用户输入书籍名，点击‘Search’按钮，向后台发送请求<br/></li>
+<li>书籍详细信息显示页面：从后台接受到数据，然后显示在页面中<br/></li>
+</ul>
+
+<p>先来看下，我做的效果图吧，一睹为快  </p>
+
+<p><img src="https://github.com/su-kaiyao/record/raw/master/others/imgs/search_page.png" alt="Search页面"/>  </p>
+
+<p><img src="https://github.com/su-kaiyao/record/raw/master/others/imgs/book_info.png" alt="book_info"/>  </p>
+
+<p>还是，先看下代码架构吧  </p>
+
+<p><img src="https://github.com/su-kaiyao/record/raw/master/others/imgs/douban_front.png" alt="douban_front"/>  </p>
+
+<p>前段代码的编写就不说了，说下我是如何编写和后端交互那块的  </p>
+
+<h3>从search页面，将书籍名传给书籍详细显示页面</h3>
+
+<p>这里，我定义了一个表单，供用户输入书籍名，然后有一个蓝色的<strong>Search</strong>按钮，点击后，将书籍名传给书籍详细显示页面，看一下表单的代码  </p>
+
+<pre><code>&lt;form class=&quot;text-center&quot; action=&quot;bookDetail.jsp&quot; method=&quot;post&quot;&gt;  
+  &lt;div class=&quot;form-inline&quot;&gt;  
+    &lt;div class=&quot;form-group&quot;&gt;  
+      &lt;div class=&quot;input-group&quot;&gt;  
+        &lt;div class=&quot;input-group-addon&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-book&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;  
+        &lt;/div&gt;  
+        &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;bookname&quot; placeholder=&quot;输入您想查询的书籍名&quot;&gt;     
+      &lt;/div&gt;  
+    &lt;/div&gt;  
+    &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Search&lt;/button&gt;  
+  &lt;/div&gt;  
+&lt;/form&gt;</code></pre>
+
+<p>通过定义form表单的action属性，点击Search按钮后，将input中数据传给<strong>bookDetail.jsp</strong>页面  </p>
+
+<h3>bookDetail.jsp页面接受到bookName后，开始和后台交互</h3>
+
+<p>通过jsp内置的request对象，就可以取出前面表单中输入的书籍名：String bookName = request.getParameter(&ldquo;bookname&rdquo;);  </p>
+
+<p>然后，调用上一讲编写的BookDAO类中的两个方法，最终得到关于书籍详细信息的Book类实例book  </p>
+
+<pre><code>&lt;%  
+request.setCharacterEncoding(&quot;utf-8&quot;);  
+String bookName = request.getParameter(&quot;bookname&quot;);  
+BookDAO bookDao = new BookDAO();  
+Book book = bookDao.getBookById(bookDao.getBIDByName(bookName));  
+if (book == null) {  
+    out.println(&quot;Error&quot;);  
+} else {  
+
+}  
+%&gt;</code></pre>
+
+<p>有了这个book实例，想显示什么信息，就能显示什么信息啦，调用book实例的getter方法，就可以取得相应数据了，在通过jsp表达式，显示在浏览器中就行了  </p>
+
+<p>好了，做到这里，看到上面的两张截图，我认为，前后端就打通了，小系统基本完成了  </p>
+
+<p>下一篇，我想讲一下它的部署问题，想把它部署到SAE上去  </p>
+
+<hr/>
+
+<p>推荐阅读：  </p>
+
+<ul>
+<li><a href="http://kaiyao.net.cn/doubanapibyjava/">苏苏查书之后台开发篇</a><br/></li>
+</ul>
+
+            ]]>
+        </content>
+    </entry>
+    
+    <entry>
+        <title><![CDATA[苏苏查书之后台开发篇]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/doubanapibyjava/"/>
+        <updated>2015-04-24T16:35:00Z</updated>
+        <published>2015-04-24T16:35:00Z</published>
+        <id>http://sukai.me/doubanapibyjava/</id>
+        <content type="html">
+            <![CDATA[
+             <p>最近自学了jsp，想做个demo验证一下学习效果  </p>
+
+<p>脑子里出来这么一个想法：基于web做一个图书查询系统，在查询页面输入你想查询的书籍名称，然后，显示该书籍的详细信息：定价，页数，作者，出版社，出版年等等  </p>
+
+<p>业务逻辑十分简单的系统，我把它叫做苏苏查书，所有的图书数据来源是豆瓣Book API  </p>
+
+<p>下面，让我们开始这个系统的开发  </p>
+
+<h3>如何获取图书的数据</h3>
+
+<p>答案是：豆瓣Book API  </p>
+
+<p>基于豆瓣API，我可以获得全面的图书信息，之前开发微信公共平台时，使用过豆瓣Movie API，所以这里写起来还是很快的  </p>
+
+<p>根据豆瓣提供的api手册，我的思路是这样的：先根据用户输入的书籍名，调用api找到该书籍的豆瓣id，然后拿这个id去查询该书籍的详细信息  </p>
+
+<p>下面，开始编写代码  </p>
+
+<h3>代码架构与编写</h3>
+
+<p>看一下后端业务逻辑的包和类结构  </p>
+
+<p><img src="https://github.com/su-kaiyao/record/raw/master/others/imgs/douban_package.png" alt="豆瓣API后台包结构"/>  </p>
+
+<p>先编写一个Book.java，作为图书POJO类，里面的属性可以自行定义，你想需要关于图书的哪些信息，你就定义之；并为属性设置get和set方法  </p>
+
+<p>然后，编写BookDAO.java，作为与豆瓣api打交道的类，里面有两个基本方法：  </p>
+
+<ul>
+<li><strong>public String getBIDByName(String bookName)</strong>：根据书籍名，向豆瓣api请求，返回该书籍的豆瓣唯一id<br/></li>
+<li><strong>public Book getBookById(String id)</strong>：根据id，向另一个豆瓣api请求，获取关于书籍的详细信息（json格式），然后把我们需要的信息保存到Book类的实例中，并返回<br/></li>
+</ul>
+
+<p>下面，先来看第一个方法：  </p>
+
+<p>首先，豆瓣给出，根据书名找id的api url是：<code>https://api.douban.com/v2/book/search?q=</code>，后面加上书籍名，就会返回给我一个json格式的数据，里面包含有关于id的值  </p>
+
+<p>我采用Httpclient模拟http get请求；关于如何用httpclient模拟http get获得json对象，网上搜一下，一大堆  </p>
+
+<p>最终，获得到JSONObject对象json，这个json就是我待会要用的数据，关于id的键值对就在里面  </p>
+
+<h3>解析json数据</h3>
+
+<p>因为要解析json数据，从而获得我自己需要的数据，我封了一个工具类JsonUtil.java，里面有两个静态函数，专门用来解析json数据：  </p>
+
+<ul>
+<li><strong>public static String getBookId(JSONObject json)</strong>：从json数据中，获得豆瓣图书id<br/></li>
+<li><strong>public staic Book getBookInfo(JSONObject json)</strong>：从json数据中，获得图书信息，将信息存在Book对象中，返回<br/></li>
+</ul>
+
+<p>这样，我的代码就很清晰了，BookDAO.java专门负责从豆瓣获取json数据，不负责解析工作，解析工作交给JsonUtil.java这个工具类，嘿嘿，符合单一职责的设计原则  </p>
+
+<p>简单说一下如何解析json数据，我借助的是第三方jar包，里面有两个很重要的类<strong>JSONObject和JSONArray</strong>，当时遇到一个难题，解析时候遇到了问题，先看下面这组json数据(数据不是豆瓣返回给我的，我瞎编的，只是为了说明问题)  </p>
+
+<pre><code>{  
+&quot;id&quot;: &quot;123456&quot;,  
+&quot;tags&quot;: [  
+  {&quot;count&quot;: 1, &quot;name&quot;: &quot;test1&quot;},  
+  {&quot;count&quot;: 2, &quot;name&quot;: &quot;test2&quot;}  
+],  
+&quot;rating&quot;: {  
+  &quot;min&quot;: &quot;0&quot;,  
+  &quot;max&quot;: &quot;9&quot;  
+}  
+}</code></pre>
+
+<p>就是这种数组（在方括号中，对应JSONArray）和对象（在花括号中，对应JSONObjcet）相互参杂的解析，那么如何获得&quot;tags&quot;这个key的数据呢？  </p>
+
+<p>翻看<a href="http://www.json.org.cn/resource/json-in-java.htm">api手册</a>，JSONObject有一个方法叫<strong>JSONArray getJSONArray(String key)</strong>，该函数的意思是用一个key作为参数，获得该key的value，这个value是一个JSONArray；相应地，JSONArray有一个方法叫<strong>JSONObject getJSONObject(String key)</strong>，自行体会吧  </p>
+
+<p>这样，我们不管什么格式的json，肯定都可以解析了  </p>
+
+<p>这里，我就不贴出我的代码了，等这个系统弄完，会把源代码放到github上  </p>
+
+<h3>最终结果</h3>
+
+<p>我们来看看，后台写的咋样了，测试结果如下：  </p>
+
+<p>这是在控制台打印出来的信息，搜了《暗时间》这本书的详细信息（ps：这是本好书啊）  </p>
+
+<p><img src="https://github.com/su-kaiyao/record/raw/master/others/imgs/doubanbookapi.png" alt="豆瓣Book API测试"/>  </p>
+
+<p>足足运行了1m多  </p>
+
+<p>下面准备开始用编写前台代码了，并用jsp编写和后台交互的代码  </p>
+
+<hr/>
+
+<p>推荐阅读：  </p>
+
+<ul>
+<li><a href="http://kaiyao.net.cn/doubanapifront/">苏苏查书之前台开发篇</a><br/></li>
+</ul>
+
+            ]]>
+        </content>
+    </entry>
+    
+    <entry>
+        <title><![CDATA[Hibernate Functions]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/hibernate_functions/"/>
+        <updated>2015-04-19T21:08:00Z</updated>
+        <published>2015-04-19T21:08:00Z</published>
+        <id>http://sukai.me/hibernate_functions/</id>
+        <content type="html">
+            <![CDATA[
+             <p>本博文记录Hibernate的功能点（持续补充中&hellip;）   </p>
+
+<h2>ORM</h2>
+
+<p>首先，为什么Hibernate把ORM功能的实现放在第一位呢？主要是因为面向对象编程语言和关系型数据库的各自思想不匹配，所导致  </p>
+
+<p>基于对象的编程语言有继承，一对多，多对一，多对多等特性；而关系型数据库就是一个基于行，列的数据表，最多也就利用外键形成与外表的联系；二者之间的思想差异很大  </p>
+
+<p>利用Hibernate，我们可以很痛快地使用面向对象思想去操作数据库  </p>
+
+<p>编码过程中，涉及到数据库DML时，可以利用Hibernate实现编码对象到关系型数据库数据表的映射  </p>
+
+<p>但是，这里涉及到的映射模式有很多；最简单的映射就是一张表对应一个POJO  </p>
+
+<p>这样，我们就可以直接存储，查询，修改一个POJOs（符合编程语言中面向对象的思想），代替JDBC的PreparedStatemen进行数据库操作，取代JDBC的是Hibernate中的SessionFactory  </p>
+
+<p>而且，Hibernate支持任意更换数据库，中途更换数据库，编写的代码无需做任何变动  </p>
+
+<p>使用Hibernate框架后，代码中主要组成部分就变成了：  </p>
+
+<ul>
+<li>POJOs：必须有一个唯一的身份标识属性，对应数据表的主键<br/></li>
+<li>配置信息：可以利用XML或者properties文件，来告知Hibernate关于数据连接所需要的信息；也可以在代码中进行编码过程中的配置<br/></li>
+<li>映射信息：一种使用方法是映射文件（最好一个POJO对应一个映射文件），一种是使用JPA注解（此时的POJO就更改名叫做annotated Java object），都是用来告诉Hibernate每个POJO分别对应数据库那张表<br/></li>
+<li>利用Hibernate API操纵数据库<br/></li>
+</ul>
+
+<hr/>
+
+<p>参考：  </p>
+
+<ul>
+<li>《Just Hibernate》<br/></li>
+</ul>
+
+            ]]>
+        </content>
+    </entry>
+    
+</feed>

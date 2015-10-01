@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="Plugin Manager &mdash; VundleVundle, a Plugin Manager, makes Plugin Install&amp;Update&amp;Search&amp;Clean easier.   1.Set Up   $ git clone https://g">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="我的Vim配置">
+<meta name="twitter:description" content="Plugin Manager &mdash; VundleVundle, a Plugin Manager, makes Plugin Install&amp;Update&amp;Search&amp;Clean easier.   1.Set Up   $ git clone https://g">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+我的Vim配置 | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=f7f50f0e1df3786101dc911c064e06fe" type="text/css" />
+    <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://sukai.me/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://kaiyao.net.cn/"><img src="http://sukai.me/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://kaiyao.net.cn">日志归档</a></li>
+            
+            <li><a href="http://sukai.me/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://sukai.me/Board/">交流版块</a></li>
+            
+            <li><a href="http://sukai.me/friend/">友链</a></li>
+            
+            <li><a href="http://sukai.me/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://sukai.me/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">我的Vim配置</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Sep 09, 2014</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <h3>Plugin Manager &mdash; <a href="https://github.com/gmarik/Vundle.vim">Vundle</a></h3>
+
+<p>Vundle, a Plugin Manager, makes Plugin Install&amp;Update&amp;Search&amp;Clean easier.   </p>
+
+<p>1.Set Up   </p>
+
+<p><code>$ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim</code>  </p>
+
+<p>2.Configure  </p>
+
+<p>在你的<code>.vimrc</code>首部添加如下信息：  </p>
+<div class="highlight"><pre><span class="nb">set </span>nocompatible              <span class="s2">&quot; be iMproved, required    </span>
+<span class="s2">filetype off                  &quot;</span> required    
+
+<span class="s2">&quot; set the runtime path to include Vundle and initialize    </span>
+<span class="s2">set rtp+=~/.vim/bundle/Vundle.vim    </span>
+<span class="s2">call vundle#begin()    </span>
+<span class="s2">&quot;</span> alternatively, pass a path where Vundle should install plugins    
+<span class="s2">&quot;call vundle#begin(&#39;~/some/path/here&#39;)    </span>
+
+<span class="s2">&quot;</span> <span class="nb">let </span>Vundle manage Vundle, required    
+Plugin <span class="s1">&#39;gmarik/Vundle.vim&#39;</span>    
+
+<span class="s2">&quot; The following are examples of different formats supported.    </span>
+<span class="s2">&quot;</span> Keep Plugin commands between vundle#begin/end.    
+<span class="s2">&quot; plugin on GitHub repo    </span>
+<span class="s2">Plugin &#39;tpope/vim-fugitive&#39;    </span>
+<span class="s2">&quot;</span> plugin from http://vim-scripts.org/vim/scripts.html    
+Plugin <span class="s1">&#39;L9&#39;</span>    
+<span class="s2">&quot; Git plugin not hosted on GitHub    </span>
+<span class="s2">Plugin &#39;git://git.wincent.com/command-t.git&#39;    </span>
+<span class="s2">&quot;</span> git repos on your <span class="nb">local </span>machine <span class="o">(</span>i.e. when working on your own plugin<span class="o">)</span>    
+Plugin <span class="s1">&#39;file:///home/gmarik/path/to/plugin&#39;</span>    
+<span class="s2">&quot; The sparkup vim script is in a subdirectory of this repo called vim.    </span>
+<span class="s2">&quot;</span> Pass the path to <span class="nb">set </span>the runtimepath properly.    
+Plugin <span class="s1">&#39;rstacruz/sparkup&#39;</span>, <span class="o">{</span><span class="s1">&#39;rtp&#39;</span>: <span class="s1">&#39;vim/&#39;</span><span class="o">}</span>    
+<span class="s2">&quot; Avoid a name conflict with L9    </span>
+<span class="s2">Plugin &#39;user/L9&#39;, {&#39;name&#39;: &#39;newL9&#39;}    </span>
+
+<span class="s2">&quot;</span> All of your Plugins must be added before the following line    
+call vundle#end<span class="o">()</span>            <span class="s2">&quot; required    </span>
+<span class="s2">filetype plugin indent on    &quot;</span> required    
+<span class="s2">&quot; To ignore plugin indent changes, instead use:    </span>
+<span class="s2">&quot;</span>filetype plugin on    
+<span class="s2">&quot;    </span>
+<span class="s2">&quot;</span> Brief <span class="nb">help</span>    
+<span class="s2">&quot; :PluginList       - lists configured plugins    </span>
+<span class="s2">&quot;</span> :PluginInstall    - installs plugins; append <span class="sb">`</span>!<span class="sb">`</span> to update or just :PluginUpdate    
+<span class="s2">&quot; :PluginSearch foo - searches for foo; append `!` to refresh local cache    </span>
+<span class="s2">&quot;</span> :PluginClean      - confirms removal of unused plugins; append <span class="sb">`</span>!<span class="sb">`</span> to auto-approve removal    
+<span class="s2">&quot;    </span>
+<span class="s2">&quot;</span> see :h vundle <span class="k">for </span>more details or wiki <span class="k">for </span>FAQ    
+<span class="err">&quot;</span> Put your non-Plugin stuff after this line
+</pre></div>
+
+<p>3.Install Plugin   </p>
+
+<p>如果欲安装的插件在Github上有其仓库，比如<a href="https://github.com/plasticboy/vim-markdown">vim-markdown</a>.  </p>
+
+<p>只需vim your <code>.vimrc</code>, 在里头添加一行Plugin &#39;plasticboy/vim-markdown&#39;  </p>
+
+<p>之后vim命令行模式下,<code>:PluginInstall</code>  </p>
+
+<p>（当然安装插件也支持非Github库，具体看刚刚粘帖的配置文件，以及无用插件清除:PluginClean等命令都可以在刚刚的配置文件中查看）  </p>
+
+<h3>Vim配色-Molokai</h3>
+
+<p>将下载的molokai.vim放入~/.vim/colors  </p>
+
+<p>vim <code>.vimrc</code>, 添加  </p>
+<div class="highlight"><pre>syntax <span class="nb">enable  </span>
+<span class="nb">set </span><span class="nv">t_Co</span><span class="o">=</span>256  
+colorscheme molokai
+</pre></div>
+
+<p>代码缩进显示-<a href="https://github.com/nathanaelkane/vim-indent-guides">vim-indent-guides</a>  </p>
+
+<p>安装见Github链接，看一下<code>.vimrc</code>下的配置：  </p>
+<div class="highlight"><pre><span class="err">&quot;</span> vim-indent-guides  
+<span class="nb">let </span>g:indent_guides_enable_on_vim_startup <span class="o">=</span> 1  
+<span class="nb">let </span>g:indent_guides_auto_colors <span class="o">=</span> 0  
+<span class="nb">let </span>g:indent_guides_guide_size <span class="o">=</span> 1  
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  <span class="nv">guibg</span><span class="o">=</span>red   <span class="nv">ctermbg</span><span class="o">=</span>3  
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven <span class="nv">guibg</span><span class="o">=</span>green <span class="nv">ctermbg</span><span class="o">=</span>4  
+hi IndentGuidesOdd <span class="nv">guibg</span><span class="o">=</span>red <span class="nv">ctermbg</span><span class="o">=</span>3  
+hi IndentGuidesEven <span class="nv">guibg</span><span class="o">=</span>green <span class="nv">ctermbg</span><span class="o">=</span>4
+</pre></div>
+
+<h3>目录树插件-NERDTree</h3>
+
+<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/NERDTree.png" alt="Vim目录树插件"/>  </p>
+
+<p>Vim命令行模式下<code>:NERDTree</code>,窗口切换<code>ctrl+w+h/l</code>  </p>
+
+<h3>Vim补全</h3>
+
+<p>网络上都推荐YCM代码补全超级插件,安装和配置都好繁琐,而且平时不写C-Family代码,Vim主要用来写py,所以用了安装简便的<a href="https://github.com/davidhalter/jedi-vim">jedi-vim</a>  </p>
+
+<p>当然可以用Vundle安装,而且也不需要<code>.vimrc</code>的配置  </p>
+
+<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/jedi-vim.png" alt="Vim代码补全"/>  </p>
+
+<p>(全文完-2014-09-09)  </p>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://sukai.me/tag/Linux/">Linux</a>
+            
+            <a href="http://sukai.me/tag/Vim/">Vim</a>
+            
+        </div>
+        
+        
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>

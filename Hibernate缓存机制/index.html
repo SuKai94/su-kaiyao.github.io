@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="什么是缓存？百度百科说得好：缓存是介于应用程序和物理数据源之间，其作用是为了降低应用程序对物理数据源访问的频次，从而提高了应用的运行性能。缓存内的数据是对物理数据源中的数据的复制，应用程序在运行时从缓存读写数据，在特定的时刻或事件会同步缓存和物理数据源的数据。  缓存的介质一般是内存，所以读写速度很">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="Hibernate缓存机制">
+<meta name="twitter:description" content="什么是缓存？百度百科说得好：缓存是介于应用程序和物理数据源之间，其作用是为了降低应用程序对物理数据源访问的频次，从而提高了应用的运行性能。缓存内的数据是对物理数据源中的数据的复制，应用程序在运行时从缓存读写数据，在特定的时刻或事件会同步缓存和物理数据源的数据。  缓存的介质一般是内存，所以读写速度很">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+Hibernate缓存机制 | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=f7f50f0e1df3786101dc911c064e06fe" type="text/css" />
+    <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://sukai.me/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://kaiyao.net.cn/"><img src="http://sukai.me/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://kaiyao.net.cn">日志归档</a></li>
+            
+            <li><a href="http://sukai.me/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://sukai.me/Board/">交流版块</a></li>
+            
+            <li><a href="http://sukai.me/friend/">友链</a></li>
+            
+            <li><a href="http://sukai.me/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://sukai.me/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">Hibernate缓存机制</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Oct 17, 2014</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <h3>什么是缓存？</h3>
+
+<p><a href="http://baike.baidu.com/view/2273788.htm">百度百科</a>说得好：缓存是介于应用程序和物理数据源之间，其作用是为了降低应用程序对物理数据源访问的频次，从而提高了应用的运行性能。缓存内的数据是对物理数据源中的数据的复制，应用程序在运行时从缓存读写数据，在特定的时刻或事件会同步缓存和物理数据源的数据。  </p>
+
+<p>缓存的介质一般是内存，所以读写速度很快。但如果缓存中存放的数据量非常大时，也会用硬盘作为缓存介质。Hibernate缓存包括Session缓存和SessionFactory缓存。  </p>
+
+<ul>
+<li><p>一级缓存：session缓存，内置缓存，无法卸载  </p></li>
+<li><p>二级缓存：sessionFactory缓存，需要第三方组件支持(比如EHcache)，使用磁盘作为存储介质  </p></li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/hibernate%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6.png" alt="Hibernate缓存视图"/>  </p>
+
+<h3>一个叼丝级别的缓存实现</h3>
+<div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Cache</span> <span class="o">{</span>  
+
+    <span class="kd">static</span> <span class="n">Map</span> <span class="n">cache</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>  
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="n">User</span> <span class="n">u</span> <span class="o">=</span> <span class="n">getUser</span><span class="o">();</span>  
+    <span class="o">}</span>  
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">User</span> <span class="nf">getUser</span><span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="n">id</span><span class="o">;</span>  
+        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="o">(</span><span class="n">User</span><span class="o">)</span><span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>  
+        <span class="k">if</span><span class="o">(</span><span class="n">user</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  
+            <span class="k">return</span> <span class="n">user</span><span class="o">;</span>  
+        <span class="o">}</span>  
+        <span class="n">user</span> <span class="o">=</span> <span class="n">getFromDB</span><span class="o">();</span>  
+        <span class="n">cache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">user</span><span class="o">);</span>  
+        <span class="k">return</span> <span class="n">user</span><span class="o">;</span>  
+    <span class="o">}</span>  
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">User</span> <span class="nf">getFromDB</span><span class="o">()</span> <span class="o">{</span>  
+        <span class="c1">//从数据库查询User信息  </span>
+    <span class="o">}</span>  
+<span class="o">}</span>
+</pre></div>
+
+<p>上述代码中, <code>getUser()</code>功能是根据id值查询User信息，它的第一步是从cache中查询，如果缓存命中，就将缓存中的User信息返回;否则就调用<code>getFromDB()</code>从数据库查询此id的User信息  </p>
+
+<h3>Hibernate一级缓存</h3>
+
+<p>这是强制性缓存，每个数据请求都会经历一级缓存，缓存命中，就取出缓存数据信息;否则就连接数据库进行查询。session对象负责管理实体对象，当你更新多个对象数据时，hibernate会尽可能延迟更新数据对象的时间，以做到减少sql语句发送数量。一旦session被关闭，所有在此session旗下的缓存全部消失。  </p>
+
+<p>测试：对某一条数据连续查询两次  </p>
+<div class="highlight"><pre><span class="n">Session</span> <span class="n">s</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>  
+
+<span class="k">try</span> <span class="o">{</span>  
+    <span class="n">s</span> <span class="o">=</span> <span class="n">HibernateUtil</span><span class="o">.</span><span class="na">getSession</span><span class="o">();</span>  
+    <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="o">(</span><span class="n">User</span><span class="o">)</span><span class="n">s</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>  
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>  
+    <span class="n">User</span> <span class="n">user1</span> <span class="o">=</span> <span class="o">(</span><span class="n">User</span><span class="o">)</span><span class="n">s</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>  
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user1</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>  
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">HibernateException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>  
+    <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>  
+<span class="o">}</span>
+</pre></div>
+
+<p>会看到hibernate仅仅只输出了一条sql语句，因为第一次从数据库查询数据后，将实体对象缓存在内存中，第二次只需从缓存读取数据信息即可，无需和数据库打交道。如果session中途关闭，会怎么样呢？  </p>
+<div class="highlight"><pre><span class="n">s</span> <span class="o">=</span> <span class="n">HibernateUtil</span><span class="o">.</span><span class="na">getSession</span><span class="o">();</span>  
+<span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="o">(</span><span class="n">User</span><span class="o">)</span><span class="n">s</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>  
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>  
+<span class="n">User</span> <span class="n">user1</span> <span class="o">=</span> <span class="o">(</span><span class="n">User</span><span class="o">)</span><span class="n">s</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>  
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user1</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</pre></div>
+
+<p>很明显，控制台打印出了两条sql，说明第一次session关闭后，其缓存也跟着丢失。  </p>
+
+<h3>Hibernate二级缓存</h3>
+
+<p>二级缓存是可选缓存，由sessionFactory负责管理，默认情况下二级缓存不会开启，需要我们借助第三方插件以及配置文件开启。当然，在请求二级缓存之前肯定要去请求hibernate的一级缓存的  </p>
+
+<p>这里我们借助的二级缓存包是EHcache，在下载好的hibernate包的lib/optional下可以找到，将其作为第三方依赖包引入Java工程  </p>
+
+<p>首先，在hibernate.cfg.xml下配置二级缓存  </p>
+<div class="highlight"><pre>&lt;!-- 开启二级缓存 --&gt;  
+&lt;property <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;hibernate.cache.use_second_level_cache&quot;</span>&gt;true&lt;/property&gt;  
+&lt;property <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;hibernate.cache.region.factory_class&quot;</span>&gt;org.hibernate.cache.ehcache.EhCacheRegionFactory&lt;/property&gt;  
+&lt;property <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;hibernate.cache.provider_configuration_file_resource_path&quot;</span>&gt;ehcache.xml&lt;/property&gt;
+</pre></div>
+
+<p>然后，你需要指定缓存区域的属性，也就是要为EHCache设置配置文件：encache.xml，需放在项目根目录  </p>
+<div class="highlight"><pre>&lt;ehcache&gt;  
+    &lt;!--指定二级缓存存放在磁盘上的位置--&gt;  
+    &lt;diskStore <span class="nv">path</span><span class="o">=</span><span class="s2">&quot;user.dir&quot;</span>/&gt;  
+    &lt;!--我们可以给每个实体类指定一个对应的缓存，如果没有匹配到该类，则使用这个默认的缓存配置--&gt;  
+    &lt;defaultCache  
+        <span class="nv">maxElementsInMemory</span><span class="o">=</span><span class="s2">&quot;10000&quot;</span>　　//在内存中存放的最大对象数  
+        <span class="nv">eternal</span><span class="o">=</span><span class="s2">&quot;false&quot;</span>  
+        <span class="nv">timeToIdleSeconds</span><span class="o">=</span><span class="s2">&quot;120&quot;</span>  
+        <span class="nv">timeToLiveSeconds</span><span class="o">=</span><span class="s2">&quot;120&quot;</span>  
+        <span class="nv">overflowToDisk</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>　　　　　//如果对象数量超过内存中最大的数，是否将其保存到磁盘中，设置成true  
+    /&gt;  
+
+    &lt;!--可以给每个实体类指定一个配置文件，通过name属性指定，要使用类的全名--&gt;  
+    &lt;cache <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;com.kaiyao.hibernate.hibernate.User&quot;</span>  
+        <span class="nv">maxElementsInMemory</span><span class="o">=</span><span class="s2">&quot;10000&quot;</span>  
+        <span class="nv">eternal</span><span class="o">=</span><span class="s2">&quot;false&quot;</span>  
+        <span class="nv">timeToIdleSeconds</span><span class="o">=</span><span class="s2">&quot;300&quot;</span>  
+        <span class="nv">timeToLiveSeconds</span><span class="o">=</span><span class="s2">&quot;600&quot;</span>  
+        <span class="nv">overflowToDisk</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>  
+    /&gt;  
+&lt;/ehcache&gt;
+</pre></div>
+
+<p>最后一步，在User.hbm.xml增加一行配置即可  </p>
+<div class="highlight"><pre>&lt;hibernate-mapping <span class="nv">package</span><span class="o">=</span><span class="s2">&quot;com.kaiyao.hibernate.hibernate&quot;</span>&gt;  
+    &lt;class <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;User&quot;</span> <span class="nv">table</span><span class="o">=</span><span class="s2">&quot;person&quot;</span>&gt;  
+        &lt;!-- 二级缓存一般设置为只读的 --&gt;  
+        &lt;cache <span class="nv">usage</span><span class="o">=</span><span class="s2">&quot;read-only&quot;</span>/&gt;  
+        &lt;id <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;id&quot;</span>&gt;  
+            &lt;generator <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;native&quot;</span>/&gt;  
+        &lt;/id&gt;  
+        &lt;property <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span>/&gt;  
+        &lt;property <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span>/&gt;  
+    &lt;/class&gt;  
+&lt;/hibernate-mapping&gt;
+</pre></div>
+
+<p>用刚刚测试一级缓存，对某一数据连续查询两次的代码测试一下，发现控制台只打印了一条sql语句，效果显而易见。这说明二级缓存起到了作用，而且二级缓存是sessionFactory级别，即使session关闭了，也不会影响  </p>
+
+<p>二级缓存存储的是对象，如果你只查询对象中的某些属性，是不会加入到二级缓存中去的  </p>
+
+<h3>Hibernate查询缓存</h3>
+
+<p>要使用hibernate查询缓存功能，首先得在hibernate.cfg.xml中设置：  </p>
+<div class="highlight"><pre>&lt;!-- 开启查询缓存 --&gt;  
+&lt;property <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;hibernate.cache.use_query_cache&quot;</span>&gt;true&lt;/property&gt;
+</pre></div>
+
+<p>之后，在每个Query类中调用<code>setCacheable(boolean)</code>，for example：   </p>
+<div class="highlight"><pre><span class="n">Session</span> <span class="n">session</span> <span class="o">=</span> <span class="n">SessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>    
+<span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&quot;FROM EMPLOYEE&quot;</span><span class="o">);</span>    
+<span class="n">query</span><span class="o">.</span><span class="na">setCacheable</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>    
+<span class="n">List</span> <span class="n">users</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">list</span><span class="o">();</span>    
+<span class="n">SessionFactory</span><span class="o">.</span><span class="na">closeSession</span><span class="o">();</span>
+</pre></div>
+
+<p>当然，查询缓存也是sessionFactory级别，而且只有当hql语句完全相同时，查询缓存才产生效果，也就是说hql的参数设置也要相同  </p>
+
+<p>Over  </p>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://sukai.me/tag/Hibernate/">Hibernate</a>
+            
+        </div>
+        
+        
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>

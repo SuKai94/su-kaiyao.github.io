@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="有人称NIO为New IO,有人称其为non-blocking IO,两个都是NIO的特征表现  NIO有两个版本，下面内容基于版本１  它是JDK提供的标准库，让你突破标准同步IO的瓶颈，实现异步非阻塞的IO执行操作，它利用将多个IO的阻塞复用在同一个selector上（IO多路复用技术），使得单">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="Java NIO初探">
+<meta name="twitter:description" content="有人称NIO为New IO,有人称其为non-blocking IO,两个都是NIO的特征表现  NIO有两个版本，下面内容基于版本１  它是JDK提供的标准库，让你突破标准同步IO的瓶颈，实现异步非阻塞的IO执行操作，它利用将多个IO的阻塞复用在同一个selector上（IO多路复用技术），使得单">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+Java NIO初探 | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=f7f50f0e1df3786101dc911c064e06fe" type="text/css" />
+    <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://sukai.me/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://kaiyao.net.cn/"><img src="http://sukai.me/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://kaiyao.net.cn">日志归档</a></li>
+            
+            <li><a href="http://sukai.me/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://sukai.me/Board/">交流版块</a></li>
+            
+            <li><a href="http://sukai.me/friend/">友链</a></li>
+            
+            <li><a href="http://sukai.me/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://sukai.me/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">Java NIO初探</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Aug 13, 2014</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <p>有人称NIO为<strong>New IO</strong>,有人称其为<strong>non-blocking IO</strong>,两个都是NIO的特征表现  </p>
+
+<p>NIO有两个版本，下面内容基于版本１  </p>
+
+<p>它是JDK提供的标准库，让你突破标准同步IO的瓶颈，实现异步非阻塞的IO执行操作，它利用将多个IO的阻塞复用在同一个selector上（IO多路复用技术），使得单线程也能够处理多个client对server的请求，有效避免了大量线程的资源开销，如果再结合多线程，能承受很大的并发量  </p>
+
+<p>重点学习下NIO Socket知识  </p>
+
+<h3>Blocking versus non-blocing IO</h3>
+
+<p>看两张图，分别是阻塞IO的工作方式和非阻塞IO的工作方式（图片摘自《Netty in Action》）  </p>
+
+<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/bIO.png" alt="blocking IO"/>  </p>
+
+<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/nbIO.png" alt="non-blocking IO"/>  </p>
+
+<ul>
+<li>IO面向流&lt;-&gt;NIO面向通道与缓冲：IO从流中读取数据直至读完，读取的数据没有缓存;NIO从通道读取数据到buffer，灵活性加强，但处理容易出错<br/></li>
+<li>阻塞IO&lt;-&gt;非阻塞IO：阻塞IO中线程请求读写操作时，处于阻塞状态，直至数据读取操作完成前，不能进行其余事件;而NIO的一个线程从一个通道请求读取数据后，处于非阻塞模式，无需等待数据读取完成，而是利用这段空闲时间，线程去进行其余通道的IO操作<br/></li>
+</ul>
+
+<h3>NIO的核心</h3>
+
+<ul>
+<li>Channels<br/></li>
+<li>Buffers<br/></li>
+<li>Selectors<br/></li>
+</ul>
+
+<p>NIO基于Channel和Buffer进行工作，数据在Channel和Buffer之间进行传递  </p>
+
+<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/cb.png" alt="Channel-Buffer"/>  </p>
+
+<p>Selector用于监听许许多多的Channel，是IO多路复用的关键（见上图）  </p>
+
+<h3>Channel</h3>
+
+<p>Java NIO有哪些通道？  </p>
+
+<ul>
+<li>FileChannel：File<br/></li>
+<li>DatagramChannel：UDP<br/></li>
+<li>ScoketChannel：TCP<br/></li>
+<li>ServerSocketChannel：监听TCP连接<br/></li>
+</ul>
+
+<h3>Buffer</h3>
+
+<p>Buffer内部结构：（图片拷贝自<a href="http://ifeve.com/">并发编程网站</a>），图非常好！  </p>
+
+<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/buffer.png" alt="Buufer"/>  </p>
+
+<ul>
+<li>capacity：标志Buffer的存储大小，若Buffer数据存储已满，需要及时清除<br/></li>
+<li>limit：写模式下代表还能往里面写多少数据，读模式代表最多能读到多少数据<br/></li>
+<li>position：写数据时候position是当前位置，读数据时候看情况：可以从特定位置读取，还有从写模式切换到读模式，position就被重置为0<br/></li>
+</ul>
+
+<p>有许多Buffer类型，说一下ByteBuffer（其余类似）  </p>
+
+<p>典型用法：  </p>
+
+<ul>
+<li>写data到ByteBuffer<br/></li>
+<li>ByteBuffer.flip（），将Buffer从写模式到读模式<br/></li>
+<li>从ByteBuffer读数据<br/></li>
+<li>ByteBuffer.clear()或者ByteBuffer.compact()（前一种是清楚Buffer中所有数据，后一种是清楚已读数据，将未读数据拷贝到ByteBuffer起始位置）<br/></li>
+</ul>
+
+<p>还有两个方法值得一提：  </p>
+
+<ul>
+<li><strong>ByteBuffer.allocate(1024)：</strong>对Buffer对象进行分配，这里分配了1024字节<br/></li>
+<li><strong>ByteBuffer.duplicate()：</strong>对ByteBuffer对象复制，返回值是复制后的ByteBuffer<br/></li>
+</ul>
+
+<p>还有一种创建ByteBuffer的方法：ByteBuffer,allocateDirect(int)，这是在JVM heap外申请内存，使得ByteBuffer突破JVM内存限制，调用系统直接分配的内存，此时ByteBuffer不为JVM相关工具所管理，JVM垃圾回收机制不作用于ByteBuffer，所以监控ByteBuffer很困难，内存泄漏定位不清晰，可以用GC机制强行垃圾回收。当使用较大数据块的时候，就能提高效率  </p>
+
+<h3>Selector</h3>
+
+<p>线程的花销很大，selector帮助开发者突破IO的瓶颈，是处理多个Channel的组件，管理着channel的连接，数据读写等操作！  </p>
+
+<p>典型用法：  </p>
+
+<ul>
+<li>创建selector：<code>Selector selector = Selector.open()</code><br/></li>
+<li>将通道注册进Selector：此时为了与Selector一起使用，需将Channel设为非阻塞模式：<code>channel.configureBlocking(false)</code>，然后将Channel注册进去：<code>channel.register(selector, SelectionKey.OP_ACCEPT)</code><br/></li>
+<li>当channel被注册，你需要指定你感兴趣的监听事件：<strong>OP_ACCEPT,OP_CONNECT,OP_READ,OP_WRITE</strong><br/></li>
+<li>运行Selector.select()进入阻塞，直到某个事件发生<br/></li>
+<li>如果某些通道准备就绪，select()方法就非阻塞，通过selector的selectedkeys()方法获取所有<strong>SelectionKey(集合)</strong>，之后遍历key集合，进行你想要的操作<br/></li>
+</ul>
+<div class="highlight"><pre><span class="n">Set</span> <span class="n">selectedKeys</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="na">selectedKeys</span><span class="o">();</span>  
+<span class="n">Iterator</span> <span class="n">keyIterator</span> <span class="o">=</span> <span class="n">selectedKeys</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>  
+<span class="k">while</span><span class="o">(</span><span class="n">keyIterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span>   
+<span class="o">{</span>  
+    <span class="n">SelectionKey</span> <span class="n">key</span> <span class="o">=</span> <span class="n">keyIterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>  
+    <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isAcceptable</span><span class="o">())</span>   
+    <span class="o">{</span>  
+        <span class="c1">// TODO  </span>
+    <span class="o">}</span>  
+    <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isConnectable</span><span class="o">())</span>   
+    <span class="o">{</span>  
+        <span class="c1">// TODO   </span>
+    <span class="o">}</span>  
+    <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isReadable</span><span class="o">())</span>  
+    <span class="o">{</span>  
+        <span class="c1">// TODO  </span>
+    <span class="o">}</span>  
+    <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isWritable</span><span class="o">())</span>  
+    <span class="o">{</span>  
+        <span class="c1">// TODO  </span>
+    <span class="o">}</span>  
+<span class="o">}</span>
+</pre></div>
+
+<p>值得一提：可以将数据attach到SelectionKey上，就可以让Channel拥有自己专属的ByteBuffer  </p>
+
+<ul>
+<li>将数据附加到key：<strong>selectionKey.attch(ByteBuffer)</strong><br/></li>
+<li>将key上附加的数据取出：<strong>ByteBuffer a = (ByteBuffer)selectionKey.attachment()</strong><br/></li>
+</ul>
+
+<p>完整Server端实例：<a href="https://github.com/su-kaiyao/Java-Practice/blob/master/test/src/main/java/com/kaiyao/test/NioEchoServer.java">View</a>  </p>
+
+<h3>NIO problems</h3>
+
+<ul>
+<li>跨平台兼容性问题：在linux下正常使用NIO，不代表windows下同样如此<br/></li>
+<li>ByteBuffer无扩展性：如果你想尽量减少内存拷贝，想用ByteBuffer数组扩容，来代替先前的ByteBuffer,这是不可能的，JDK NIO的ByteBuffer有一个私有的构造函数，我们无法去扩展ByteBuffer<br/></li>
+<li>分散和收集机制可能会导致内存泄漏<br/></li>
+<li>epoll bug：如果没有事件发生，那你的<code>selector.select()</code>语句将一直在while(true)中阻塞，有吃掉内存的隐患<br/></li>
+</ul>
+
+<p>&hellip;  </p>
+
+<p>Those are reasons why we choose Netty  </p>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://sukai.me/tag/Java/">Java</a>
+            
+            <a href="http://sukai.me/tag/NIO/">NIO</a>
+            
+        </div>
+        
+        
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>

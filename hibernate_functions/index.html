@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="本博文记录Hibernate的功能点（持续补充中&hellip;）   ORM首先，为什么Hibernate把ORM功能的实现放在第一位呢？主要是因为面向对象编程语言和关系型数据库的各自思想不匹配，所导致  基于对象的编程语言有继承，一对多，多对一，多对多等特性；而关系型数据库就是一个基于行，列的数">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="Hibernate Functions">
+<meta name="twitter:description" content="本博文记录Hibernate的功能点（持续补充中&hellip;）   ORM首先，为什么Hibernate把ORM功能的实现放在第一位呢？主要是因为面向对象编程语言和关系型数据库的各自思想不匹配，所导致  基于对象的编程语言有继承，一对多，多对一，多对多等特性；而关系型数据库就是一个基于行，列的数">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+Hibernate Functions | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=f7f50f0e1df3786101dc911c064e06fe" type="text/css" />
+    <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://sukai.me/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://kaiyao.net.cn/"><img src="http://sukai.me/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://kaiyao.net.cn">日志归档</a></li>
+            
+            <li><a href="http://sukai.me/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://sukai.me/Board/">交流版块</a></li>
+            
+            <li><a href="http://sukai.me/friend/">友链</a></li>
+            
+            <li><a href="http://sukai.me/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://sukai.me/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">Hibernate Functions</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Apr 19, 2015</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <p>本博文记录Hibernate的功能点（持续补充中&hellip;）   </p>
+
+<h2>ORM</h2>
+
+<p>首先，为什么Hibernate把ORM功能的实现放在第一位呢？主要是因为面向对象编程语言和关系型数据库的各自思想不匹配，所导致  </p>
+
+<p>基于对象的编程语言有继承，一对多，多对一，多对多等特性；而关系型数据库就是一个基于行，列的数据表，最多也就利用外键形成与外表的联系；二者之间的思想差异很大  </p>
+
+<p>利用Hibernate，我们可以很痛快地使用面向对象思想去操作数据库  </p>
+
+<p>编码过程中，涉及到数据库DML时，可以利用Hibernate实现编码对象到关系型数据库数据表的映射  </p>
+
+<p>但是，这里涉及到的映射模式有很多；最简单的映射就是一张表对应一个POJO  </p>
+
+<p>这样，我们就可以直接存储，查询，修改一个POJOs（符合编程语言中面向对象的思想），代替JDBC的PreparedStatemen进行数据库操作，取代JDBC的是Hibernate中的SessionFactory  </p>
+
+<p>而且，Hibernate支持任意更换数据库，中途更换数据库，编写的代码无需做任何变动  </p>
+
+<p>使用Hibernate框架后，代码中主要组成部分就变成了：  </p>
+
+<ul>
+<li>POJOs：必须有一个唯一的身份标识属性，对应数据表的主键<br/></li>
+<li>配置信息：可以利用XML或者properties文件，来告知Hibernate关于数据连接所需要的信息；也可以在代码中进行编码过程中的配置<br/></li>
+<li>映射信息：一种使用方法是映射文件（最好一个POJO对应一个映射文件），一种是使用JPA注解（此时的POJO就更改名叫做annotated Java object），都是用来告诉Hibernate每个POJO分别对应数据库那张表<br/></li>
+<li>利用Hibernate API操纵数据库<br/></li>
+</ul>
+
+<hr/>
+
+<p>参考：  </p>
+
+<ul>
+<li>《Just Hibernate》<br/></li>
+</ul>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://sukai.me/tag/Hibernate/">Hibernate</a>
+            
+        </div>
+        
+        
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>

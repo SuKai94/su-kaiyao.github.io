@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="上一篇(苏苏查书之后台开发篇)，我们已经可以从豆瓣那边取出关于图书的信息了，下面，我们开始编写前台代码，将这些信息显示在浏览器中  我采用Bootstrap前端开发框架，准备编写两个页面:  输入书籍名，开启查询页面：供用户输入书籍名，点击‘Search’按钮，向后台发送请求书籍详细信息显示页面：从">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="苏苏查书之前台开发篇">
+<meta name="twitter:description" content="上一篇(苏苏查书之后台开发篇)，我们已经可以从豆瓣那边取出关于图书的信息了，下面，我们开始编写前台代码，将这些信息显示在浏览器中  我采用Bootstrap前端开发框架，准备编写两个页面:  输入书籍名，开启查询页面：供用户输入书籍名，点击‘Search’按钮，向后台发送请求书籍详细信息显示页面：从">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+苏苏查书之前台开发篇 | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=f7f50f0e1df3786101dc911c064e06fe" type="text/css" />
+    <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://sukai.me/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://kaiyao.net.cn/"><img src="http://sukai.me/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://kaiyao.net.cn">日志归档</a></li>
+            
+            <li><a href="http://sukai.me/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://sukai.me/Board/">交流版块</a></li>
+            
+            <li><a href="http://sukai.me/friend/">友链</a></li>
+            
+            <li><a href="http://sukai.me/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://sukai.me/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">苏苏查书之前台开发篇</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Apr 24, 2015</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <p>上一篇(<a href="http://kaiyao.net.cn/doubanapibyjava/">苏苏查书之后台开发篇</a>)，我们已经可以从豆瓣那边取出关于图书的信息了，下面，我们开始编写前台代码，将这些信息显示在浏览器中  </p>
+
+<p>我采用Bootstrap前端开发框架，准备编写两个页面:  </p>
+
+<ul>
+<li>输入书籍名，开启查询页面：供用户输入书籍名，点击‘Search’按钮，向后台发送请求<br/></li>
+<li>书籍详细信息显示页面：从后台接受到数据，然后显示在页面中<br/></li>
+</ul>
+
+<p>先来看下，我做的效果图吧，一睹为快  </p>
+
+<p><img src="https://github.com/su-kaiyao/record/raw/master/others/imgs/search_page.png" alt="Search页面"/>  </p>
+
+<p><img src="https://github.com/su-kaiyao/record/raw/master/others/imgs/book_info.png" alt="book_info"/>  </p>
+
+<p>还是，先看下代码架构吧  </p>
+
+<p><img src="https://github.com/su-kaiyao/record/raw/master/others/imgs/douban_front.png" alt="douban_front"/>  </p>
+
+<p>前段代码的编写就不说了，说下我是如何编写和后端交互那块的  </p>
+
+<h3>从search页面，将书籍名传给书籍详细显示页面</h3>
+
+<p>这里，我定义了一个表单，供用户输入书籍名，然后有一个蓝色的<strong>Search</strong>按钮，点击后，将书籍名传给书籍详细显示页面，看一下表单的代码  </p>
+
+<pre><code>&lt;form class=&quot;text-center&quot; action=&quot;bookDetail.jsp&quot; method=&quot;post&quot;&gt;  
+  &lt;div class=&quot;form-inline&quot;&gt;  
+    &lt;div class=&quot;form-group&quot;&gt;  
+      &lt;div class=&quot;input-group&quot;&gt;  
+        &lt;div class=&quot;input-group-addon&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-book&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;  
+        &lt;/div&gt;  
+        &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;bookname&quot; placeholder=&quot;输入您想查询的书籍名&quot;&gt;     
+      &lt;/div&gt;  
+    &lt;/div&gt;  
+    &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Search&lt;/button&gt;  
+  &lt;/div&gt;  
+&lt;/form&gt;</code></pre>
+
+<p>通过定义form表单的action属性，点击Search按钮后，将input中数据传给<strong>bookDetail.jsp</strong>页面  </p>
+
+<h3>bookDetail.jsp页面接受到bookName后，开始和后台交互</h3>
+
+<p>通过jsp内置的request对象，就可以取出前面表单中输入的书籍名：String bookName = request.getParameter(&ldquo;bookname&rdquo;);  </p>
+
+<p>然后，调用上一讲编写的BookDAO类中的两个方法，最终得到关于书籍详细信息的Book类实例book  </p>
+
+<pre><code>&lt;%  
+request.setCharacterEncoding(&quot;utf-8&quot;);  
+String bookName = request.getParameter(&quot;bookname&quot;);  
+BookDAO bookDao = new BookDAO();  
+Book book = bookDao.getBookById(bookDao.getBIDByName(bookName));  
+if (book == null) {  
+    out.println(&quot;Error&quot;);  
+} else {  
+
+}  
+%&gt;</code></pre>
+
+<p>有了这个book实例，想显示什么信息，就能显示什么信息啦，调用book实例的getter方法，就可以取得相应数据了，在通过jsp表达式，显示在浏览器中就行了  </p>
+
+<p>好了，做到这里，看到上面的两张截图，我认为，前后端就打通了，小系统基本完成了  </p>
+
+<p>下一篇，我想讲一下它的部署问题，想把它部署到SAE上去  </p>
+
+<hr/>
+
+<p>推荐阅读：  </p>
+
+<ul>
+<li><a href="http://kaiyao.net.cn/doubanapibyjava/">苏苏查书之后台开发篇</a><br/></li>
+</ul>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://sukai.me/tag/JSP/">JSP</a>
+            
+            <a href="http://sukai.me/tag/Douban/">Douban</a>
+            
+        </div>
+        
+        
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>

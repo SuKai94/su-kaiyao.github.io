@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="背景Github创建项目仓库后随即只产生一个master分支，只需要再添加gh-pages分支就可以创建静态页面了，创建后的页面url是：Github用户名.github.io/创建的仓库名，这利用了项目站点（即Project Pages）的方式，还有一种创建站点的方式叫做User/Organiza">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="gh-pages分支生成静态页面">
+<meta name="twitter:description" content="背景Github创建项目仓库后随即只产生一个master分支，只需要再添加gh-pages分支就可以创建静态页面了，创建后的页面url是：Github用户名.github.io/创建的仓库名，这利用了项目站点（即Project Pages）的方式，还有一种创建站点的方式叫做User/Organiza">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+gh-pages分支生成静态页面 | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=f7f50f0e1df3786101dc911c064e06fe" type="text/css" />
+    <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://sukai.me/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://kaiyao.net.cn/"><img src="http://sukai.me/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://kaiyao.net.cn">日志归档</a></li>
+            
+            <li><a href="http://sukai.me/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://sukai.me/Board/">交流版块</a></li>
+            
+            <li><a href="http://sukai.me/friend/">友链</a></li>
+            
+            <li><a href="http://sukai.me/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://sukai.me/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">gh-pages分支生成静态页面</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Jul 16, 2014</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <h3>背景</h3>
+
+<p>Github创建项目仓库后随即只产生一个master分支，只需要再添加<code>gh-pages</code>分支就可以创建静态页面了，创建后的页面url是：<code>Github用户名.github.io/创建的仓库名</code>，这利用了项目站点（即<code>Project Pages</code>）的方式，还有一种创建站点的方式叫做<code>User/Organization Pages</code>  </p>
+
+<h3>使用Project Pages创建静态页面</h3>
+
+<p>1.在Github上创建一个项目仓库，暂时叫MyPages  </p>
+
+<p>2.建立与之对应的本地仓库：  </p>
+<div class="highlight"><pre><span class="nb">cd</span> 你要存放的目录  
+mkdir MyPages  
+<span class="nb">cd </span>MyPages  
+git init  
+git remote add origin https://github.com/Github用户名/项目仓库名.git  
+touch README.md  
+git add README.md  
+git commit -m <span class="s2">&quot;init&quot;</span>  
+git push origin master
+</pre></div>
+
+<p>3.使用命令行创建干净的<code>gh-pages</code>分支，用到git底层命令：<code>git symbolic-ref</code>  </p>
+<div class="highlight"><pre>git symbolic-ref HEAD refs/heads/gh-pages  
+rm .git/index  
+git clean -fdx  
+<span class="nb">echo</span> <span class="s2">&quot;My Pages Works&quot;</span>&gt;index.html  
+git add index.html  
+git commit -m <span class="s2">&quot;init My Pages&quot;</span>  
+git push origin gh-pages
+</pre></div>
+
+<p>4.OK，访问一下上面提及到的url吧：<code>Github用户名.github.io/创建的仓库名</code>（刚执行完上述命令，可能需要等待一段时间再去访问），是不是出现了<code>My Pages Works</code>  </p>
+
+<p>5.修改index.html，改成你想要显示的一切内容  </p>
+
+<p>如果你不会写html的话，你可以先用<code>MarkDown</code>写下你想表达的内容，然后转化成html就行  </p>
+
+<p>修改好index.html，别忘记再把它提交到项目的gh-pages分支  </p>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://sukai.me/tag/Github/">Github</a>
+            
+        </div>
+        
+        
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>
