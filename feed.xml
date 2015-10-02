@@ -3,8 +3,69 @@
     <title>Sukai's Blog</title>
     <link href="" rel="self" />
     <link href="http://sukai.me/" />
-    <updated>2015-06-08T12:40:00Z</updated>
+    <updated>2015-10-02T15:50:00Z</updated>
     <id>http://sukai.me/</id>
+    
+    <entry>
+        <title><![CDATA[多说评论迁移]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/doushuo-commment/"/>
+        <updated>2015-10-02T15:50:00Z</updated>
+        <published>2015-10-02T15:50:00Z</published>
+        <id>http://sukai.me/doushuo-commment/</id>
+        <content type="html">
+            <![CDATA[
+             <p>国庆了，放假了，学校人烟稀少  </p>
+
+<p>博客搭建也已经一年多了。之前的博客域名kaiyao.net.cn由于是中国域名，需要备案，也不方便别人记住，就换了一个更个性化的域名：sukai.me，之后就准备一直用这个了。虽然.me域名要贵很多，但算是给自己投资吧，希望我能坚持写博客  </p>
+
+<p>博客迁移，是一件挺麻烦的事情，涉及到文章数据和评论数据。我的博客平台使用的多说评论系统，在我迁移评论的时候，也遇到了一些障碍。但是，最终还是比较完美地迁移成功。讲一下我迁移的方案吧  </p>
+
+<h3>多说评论迁移准备工作</h3>
+
+<p>先去多说后台管理系统，寻找迁移方法。果然，在工具里面找到了<strong>导入数据，导出数据</strong>功能，然后选择<strong>包含评论数据</strong>，并导出评论。之后，会得到一个Json格式的文件  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/%E5%A4%9A%E8%AF%B4%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE.png" alt="多说导入导出数据"/>  </p>
+
+<p>导出的json文件没有格式化，随便找个json在线格式化网站，格式化一下，来看看里面是什么内容。我们来选其中一个个体看一下  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/duoshuo-json.png" alt="json个体"/>  </p>
+
+<p>不难读懂：post_id就是这条评论的全局唯一的标识，thread_id是评论所在网站的全局唯一标识，message即具体评论的内容，下面的author_id，author_emial等等就是评论人的相关多说账号信息了  </p>
+
+<p><a href="http://dev.duoshuo.com/docs/500d0629448f04782b00000a">多说文档</a>也是说的明明白白的，结合看一下，一目了然  </p>
+
+<p>ok，当时，心中就大体有方案了  </p>
+
+<h3>多说评论迁移方案</h3>
+
+<p>既然是迁移评论，那么该评论的全局id肯定还是原来的，变的就是文章id了。因为换了新域名嘛，文章id变换了，只要把json文件里面评论的原文章id（就是thread_id）变成相应的新文章id就行啦  </p>
+
+<p>那么，怎么获取新文章的thread_id呢。我当时想到的最笨的方法，去新文章页面下面随便评论一下，从新域名的多说后台系统导出评论数据，打开看一下，thread_id不全都有了吗  </p>
+
+<p>所以，具体的方案就是：从old.com（老域名）的多说后台系统导出评论数据，找到old.com/first-post文章的thread_id；在对应的新文章new.com/first-post下随便评论，导出评论数据，获得新的thread_id；用新id覆盖老id；最后在新域名的博客多说后台系统导入评论数据就ok了  </p>
+
+<p>亲测可行的  </p>
+
+<p>至于，你想手动覆盖json文件，还是写脚本对josn文件操作进行覆盖，看你评论数量而定吧。怎么省事，怎么搞  </p>
+
+<h3>对多说的吐槽</h3>
+
+<p>寻找评论迁移方案的时候，先在多说开发者中心尝试看看能不能找到，结果是没找到。而且，我局的多说是不是不再维护了？？？很多人再下面提问，就是没有技术支持的回答  </p>
+
+<p>还有，在多说后台管理系统的文章管理页面，多说永远只呈现给我一页的文章数据，甚至有很多内网测试的文章在上面，什么127.0.0.1:8080/first-post这一类。想翻看第二页更多的文章，根本做不到  </p>
+
+<p>我还想换一个评论系统disqus，由于它的加载比较慢，账号不支持国内许多社交账号，还是放弃了  </p>
+
+<p>不得不说，多说成功的原因就是：接天朝地气吧。界面做的也比disqus好看些。接地气，而且好看的东西果然还是很受欢迎的。  </p>
+
+<p>多数的后台数据管理，我就不敢恭维了。估计不止我一个人在吐槽吧  </p>
+
+<p>放假在实验室，没事就喜欢瞎折腾，不写了，国庆快乐啦！</p>
+
+            ]]>
+        </content>
+    </entry>
     
     <entry>
         <title><![CDATA[利用大脑进行主动式学习]]></title>
@@ -344,54 +405,6 @@ if (book == null) {
 
 <ul>
 <li><a href="http://kaiyao.net.cn/doubanapifront/">苏苏查书之前台开发篇</a><br/></li>
-</ul>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[Hibernate Functions]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/hibernate_functions/"/>
-        <updated>2015-04-19T21:08:00Z</updated>
-        <published>2015-04-19T21:08:00Z</published>
-        <id>http://sukai.me/hibernate_functions/</id>
-        <content type="html">
-            <![CDATA[
-             <p>本博文记录Hibernate的功能点（持续补充中&hellip;）   </p>
-
-<h2>ORM</h2>
-
-<p>首先，为什么Hibernate把ORM功能的实现放在第一位呢？主要是因为面向对象编程语言和关系型数据库的各自思想不匹配，所导致  </p>
-
-<p>基于对象的编程语言有继承，一对多，多对一，多对多等特性；而关系型数据库就是一个基于行，列的数据表，最多也就利用外键形成与外表的联系；二者之间的思想差异很大  </p>
-
-<p>利用Hibernate，我们可以很痛快地使用面向对象思想去操作数据库  </p>
-
-<p>编码过程中，涉及到数据库DML时，可以利用Hibernate实现编码对象到关系型数据库数据表的映射  </p>
-
-<p>但是，这里涉及到的映射模式有很多；最简单的映射就是一张表对应一个POJO  </p>
-
-<p>这样，我们就可以直接存储，查询，修改一个POJOs（符合编程语言中面向对象的思想），代替JDBC的PreparedStatemen进行数据库操作，取代JDBC的是Hibernate中的SessionFactory  </p>
-
-<p>而且，Hibernate支持任意更换数据库，中途更换数据库，编写的代码无需做任何变动  </p>
-
-<p>使用Hibernate框架后，代码中主要组成部分就变成了：  </p>
-
-<ul>
-<li>POJOs：必须有一个唯一的身份标识属性，对应数据表的主键<br/></li>
-<li>配置信息：可以利用XML或者properties文件，来告知Hibernate关于数据连接所需要的信息；也可以在代码中进行编码过程中的配置<br/></li>
-<li>映射信息：一种使用方法是映射文件（最好一个POJO对应一个映射文件），一种是使用JPA注解（此时的POJO就更改名叫做annotated Java object），都是用来告诉Hibernate每个POJO分别对应数据库那张表<br/></li>
-<li>利用Hibernate API操纵数据库<br/></li>
-</ul>
-
-<hr/>
-
-<p>参考：  </p>
-
-<ul>
-<li>《Just Hibernate》<br/></li>
 </ul>
 
             ]]>

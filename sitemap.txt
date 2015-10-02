@@ -1,3 +1,4 @@
+http://sukai.me/doushuo-commment/
 http://sukai.me/brain_storming/
 http://sukai.me/explore_docker/
 http://sukai.me/doubanapifront/
@@ -35,7 +36,9 @@ http://sukai.me/tag/Study/
 http://sukai.me/tag/Unit-Test/
 http://sukai.me/tag/Tmux/
 http://sukai.me/tag/Vim/
+http://sukai.me/tag/Blog/
 http://sukai.me/tag/Brain/
+http://sukai.me/tag/DuoShuo/
 http://sukai.me/tag/APM/
 http://sukai.me/tag/Docker/
 http://sukai.me/tag/Crawler/
