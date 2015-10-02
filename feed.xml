@@ -25,11 +25,11 @@
 
 <p>先去多说后台管理系统，寻找迁移方法。果然，在工具里面找到了<strong>导入数据，导出数据</strong>功能，然后选择<strong>包含评论数据</strong>，并导出评论。之后，会得到一个Json格式的文件  </p>
 
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/多说导入导出数据.png" width = "300" height = "300" alt="多说导入导出数据" align=center />  </p>
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/多说导入导出数据.png" width = "310" height = "260" alt="多说导入导出数据" align=center />  </p>
 
 <p>导出的json文件没有格式化，随便找个json在线格式化网站，格式化一下，来看看里面是什么内容。我们来选其中一个个体看一下  </p>
 
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/duoshuo-json.png" width = "300" height = "300" alt="json个体" align=center />  </p>
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/duoshuo-json.png" width = "310" height = "260" alt="json个体" align=center />  </p>
 
 <p>不难读懂：post_id就是这条评论的全局唯一的标识，thread_id是评论所在网站的全局唯一标识，message即具体评论的内容，下面的author_id，author_emial等等就是评论人的相关多说账号信息了  </p>
 
