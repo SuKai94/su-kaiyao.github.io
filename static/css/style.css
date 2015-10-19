@@ -295,15 +295,22 @@ h1:first-child {
 }
 
 .post-content pre {
-	padding: 7px;
+	/*padding: 7px;
 	border: 1px solid #DADADA;
 	border-radius: 4px;
 	overflow: auto;
 	line-height: 1.5;
 	font-size: 0.96em;
+	font: 1em/1.3em "Droid Sans Mono","DejaVu Sans Mono","Lucida Console","Courier New",monospace;
 	font-family: "Inconsolata","Menlo",monospace,sans-serif, "Microsoft Yahei";
-	color: #4C4C4C;
-	background-color: #FCFCFC;
+	color: #4C4C4C;*/
+	display: block;
+	padding: 0.5em;
+	margin: 8px 0px;
+	font: 1em/1.3em "Droid Sans Mono","DejaVu Sans Mono","Lucida Console","Courier New",monospace;
+	background: #000 none repeat scroll 0% 0%;
+	color: #F8F8F8;
+	box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.7);
 }
 
 .post-content ul li,.post-content ol li {
