@@ -25,11 +25,11 @@
 
 <p>先去多说后台管理系统，寻找迁移方法。果然，在工具里面找到了<strong>导入数据，导出数据</strong>功能，然后选择<strong>包含评论数据</strong>，并导出评论。之后，会得到一个Json格式的文件  </p>
 
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/多说导入导出数据.png" width = "310" height = "260" alt="多说导入导出数据" align=center />  </p>
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/多说导入导出数据.png" width = "380" height = "260" alt="多说导入导出数据" align=center />  </p>
 
 <p>导出的json文件没有格式化，随便找个json在线格式化网站，格式化一下，来看看里面是什么内容。我们来选其中一个个体看一下  </p>
 
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/duoshuo-json.png" width = "310" height = "260" alt="json个体" align=center />  </p>
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/duoshuo-json.png" width = "380" height = "260" alt="json个体" align=center />  </p>
 
 <p>不难读懂：post_id就是这条评论的全局唯一的标识，thread_id是评论所在网页的全局唯一标识（即文章的id），message即具体评论的内容，下面的author_id，author_emial等等就是评论人的相关多说账号信息了  </p>
 
@@ -161,59 +161,25 @@
     <entry>
         <title><![CDATA[Docker初探]]></title>
         <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/explore_docker/"/>
+        <link href="http://sukai.me/docker-explore/"/>
         <updated>2015-06-03T21:50:00Z</updated>
         <published>2015-06-03T21:50:00Z</published>
-        <id>http://sukai.me/explore_docker/</id>
+        <id>http://sukai.me/docker-explore/</id>
         <content type="html">
             <![CDATA[
-             <p>从周一到今天周三，花了三天的课余时间，看完了一本《第一本Docker书》。对Docker，应该算是有入门级的了解了。  </p>
+             <p>从周一到今天周三，花了三天的课余时间，看完了一本《第一本Docker书》。对Docker，应该算是有入门级的了解了  </p>
 
-<p>PS：当时，我在学校图书馆搜索该书的时候，状态是“正在上架”；学校还是蛮紧跟潮流的，这么火的容器技术书籍，学校选购了，赞。后来，足足瞄了一个星期，书一上架，我就从图书馆借回来了，还捎带了旁边的另一本《Docker技术入门》。  </p>
+<p>PS：当时，我在学校图书馆搜索该书的时候，状态是“正在上架”；学校还是蛮紧跟潮流的，这么火的容器技术书籍，学校选购了，赞。后来，足足瞄了一个星期，书一上架，我就从图书馆借回来了，还捎带了旁边的另一本《Docker技术入门》  </p>
 
-<p>关于该书，我的xmind思维导图笔记地址在<a href="https://github.com/LeanCodeTeam/Xmind_Reading_Note/blob/sukai/docker/%E7%AC%AC%E4%B8%80%E6%9C%ACDocker%E4%B9%A6.xmind">这边</a>  </p>
+<p>关于该书，我的思维导图笔记地址在<a href="https://github.com/su-kaiyao/gold/tree/master/docker" target="_blank">我的gold仓库中</a>  </p>
 
-<hr/>
+<p>思维导图笔记转为jpg如下：  </p>
 
-<p>（2015-09-01更新）<br/>
-最近重新做了笔记，xmind笔记图如下  </p>
+<p><img src="https://github.com/su-kaiyao/gold/blob/master/docker/%E7%AC%AC%E4%B8%80%E6%9C%ACDocker%E4%B9%A6.png" alt="第一本Docker书"/>  </p>
 
-<h2><img src="http://7xl2fd.com1.z0.glb.clouddn.com/%E7%AC%AC%E4%B8%80%E6%9C%ACDocker%E4%B9%A6.png" alt="第一本Docker书"/>  </h2>
+<p>具体内容就不再重复，可以直接翻阅思维导图比较  </p>
 
-<p>下面再简单陈述下Docker的知识点  </p>
-
-<h3>什么是Docker，Docker的核心组件，以及我们能用Docker做什么</h3>
-
-<p>Docker在虚拟化的容器环境中，增加了一套程序部署机制  </p>
-
-<p>其核心组件为：  </p>
-
-<ul>
-<li>Docker客户端和服务端<br/></li>
-<li>Docker镜像<br/></li>
-<li>Registry<br/></li>
-<li>Docker容器<br/></li>
-</ul>
-
-<h3>如何在ubuntu安装Docker</h3>
-
-<h3>对Docker容器的一些操作命令</h3>
-
-<h3>对Docker镜像的操作，保存</h3>
-
-<p>重点是使用Dockerfile创建镜像，以及使用Registry保存镜像  </p>
-
-<h3>使用Docker的一些简单例子</h3>
-
-<p>如何让容器之间互连通信，以及多容器的应用栈例子  </p>
-
-<h3>使用Fig编配Docker</h3>
-
-<p>使用了Fig进行编配后，可以很方便地将多个容器“连”在一起，使用简单的组合来构建应用程序栈，实现自动化地管理多个容器  </p>
-
-<p>第8章关于Docker API，我还没看。因为我在网上看到很多使用Docker API制作的Docker监控工具，到时候，使用Docker过程中，要去监控容器运行情况时，我再去翻阅  </p>
-
-<p>Over  </p>
+<p>希望自己日后能把docker用到项目中去</p>
 
             ]]>
         </content>
@@ -252,19 +218,19 @@
 <h3>从search页面，将书籍名传给书籍详细显示页面</h3>
 
 <p>这里，我定义了一个表单，供用户输入书籍名，然后有一个蓝色的<strong>Search</strong>按钮，点击后，将书籍名传给书籍详细显示页面，看一下表单的代码  </p>
-
-<pre><code>&lt;form class=&quot;text-center&quot; action=&quot;bookDetail.jsp&quot; method=&quot;post&quot;&gt;  
-  &lt;div class=&quot;form-inline&quot;&gt;  
-    &lt;div class=&quot;form-group&quot;&gt;  
-      &lt;div class=&quot;input-group&quot;&gt;  
-        &lt;div class=&quot;input-group-addon&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-book&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;  
-        &lt;/div&gt;  
-        &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;bookname&quot; placeholder=&quot;输入您想查询的书籍名&quot;&gt;     
-      &lt;/div&gt;  
-    &lt;/div&gt;  
-    &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Search&lt;/button&gt;  
-  &lt;/div&gt;  
-&lt;/form&gt;</code></pre>
+<div class="highlight"><pre><span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;text-center&quot;</span> <span class="na">action=</span><span class="s">&quot;bookDetail.jsp&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>  
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-inline&quot;</span><span class="nt">&gt;</span>  
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>  
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;input-group&quot;</span><span class="nt">&gt;</span>  
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;input-group-addon&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-book&quot;</span> <span class="na">aria-hidden=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>  
+        <span class="nt">&lt;/div&gt;</span>  
+        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">name=</span><span class="s">&quot;bookname&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;输入您想查询的书籍名&quot;</span><span class="nt">&gt;</span>     
+      <span class="nt">&lt;/div&gt;</span>  
+    <span class="nt">&lt;/div&gt;</span>  
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">class=</span><span class="s">&quot;btn btn-primary&quot;</span><span class="nt">&gt;</span>Search<span class="nt">&lt;/button&gt;</span>  
+  <span class="nt">&lt;/div&gt;</span>  
+<span class="nt">&lt;/form&gt;</span>
+</pre></div>
 
 <p>通过定义form表单的action属性，点击Search按钮后，将input中数据传给<strong>bookDetail.jsp</strong>页面  </p>
 
@@ -273,18 +239,18 @@
 <p>通过jsp内置的request对象，就可以取出前面表单中输入的书籍名：String bookName = request.getParameter(&ldquo;bookname&rdquo;);  </p>
 
 <p>然后，调用上一讲编写的BookDAO类中的两个方法，最终得到关于书籍详细信息的Book类实例book  </p>
+<div class="highlight"><pre><span class="k">&lt;%</span>  
+<span class="n">request</span><span class="o">.</span><span class="na">setCharacterEncoding</span><span class="o">(</span><span class="s">&quot;utf-8&quot;</span><span class="o">);</span>  
+<span class="n">String</span> <span class="n">bookName</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&quot;bookname&quot;</span><span class="o">);</span>  
+<span class="n">BookDAO</span> <span class="n">bookDao</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BookDAO</span><span class="o">();</span>  
+<span class="n">Book</span> <span class="n">book</span> <span class="o">=</span> <span class="n">bookDao</span><span class="o">.</span><span class="na">getBookById</span><span class="o">(</span><span class="n">bookDao</span><span class="o">.</span><span class="na">getBIDByName</span><span class="o">(</span><span class="n">bookName</span><span class="o">));</span>  
+<span class="k">if</span> <span class="o">(</span><span class="n">book</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  
+    <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Error&quot;</span><span class="o">);</span>  
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>  
 
-<pre><code>&lt;%  
-request.setCharacterEncoding(&quot;utf-8&quot;);  
-String bookName = request.getParameter(&quot;bookname&quot;);  
-BookDAO bookDao = new BookDAO();  
-Book book = bookDao.getBookById(bookDao.getBIDByName(bookName));  
-if (book == null) {  
-    out.println(&quot;Error&quot;);  
-} else {  
-
-}  
-%&gt;</code></pre>
+<span class="o">}</span>  
+<span class="k">%&gt;</span>
+</pre></div>
 
 <p>有了这个book实例，想显示什么信息，就能显示什么信息啦，调用book实例的getter方法，就可以取得相应数据了，在通过jsp表达式，显示在浏览器中就行了  </p>
 
@@ -297,7 +263,7 @@ if (book == null) {
 <p>推荐阅读：  </p>
 
 <ul>
-<li><a href="http://kaiyao.net.cn/doubanapibyjava/">苏苏查书之后台开发篇</a><br/></li>
+<li><a href="http://kaiyao.net.cn/doubanapibyjava/">苏苏查书之后台开发篇</a></li>
 </ul>
 
             ]]>
@@ -307,10 +273,10 @@ if (book == null) {
     <entry>
         <title><![CDATA[苏苏查书之后台开发篇]]></title>
         <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/doubanapibyjava/"/>
+        <link href="http://sukai.me/douban-book-api/"/>
         <updated>2015-04-24T16:35:00Z</updated>
         <published>2015-04-24T16:35:00Z</published>
-        <id>http://sukai.me/doubanapibyjava/</id>
+        <id>http://sukai.me/douban-book-api/</id>
         <content type="html">
             <![CDATA[
              <p>最近自学了jsp，想做个demo验证一下学习效果  </p>
@@ -404,7 +370,7 @@ if (book == null) {
 <p>推荐阅读：  </p>
 
 <ul>
-<li><a href="http://kaiyao.net.cn/doubanapifront/">苏苏查书之前台开发篇</a><br/></li>
+<li><a href="http://kaiyao.net.cn/doubanapifront/">苏苏查书之前台开发篇</a></li>
 </ul>
 
             ]]>

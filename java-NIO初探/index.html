@@ -5,12 +5,12 @@
     <meta charset="utf-8">
     
 
-<meta name="description" content="有人称NIO为New IO,有人称其为non-blocking IO,两个都是NIO的特征表现  NIO有两个版本，下面内容基于版本１  它是JDK提供的标准库，让你突破标准同步IO的瓶颈，实现异步非阻塞的IO执行操作，它利用将多个IO的阻塞复用在同一个selector上（IO多路复用技术），使得单">
+<meta name="description" content="有人称NIO为New IO，有人称其为non-blocking IO，两个都算是NIO的特征表现  NIO有两个版本，下面内容基于版本１  NIO Version 1是JDK提供的标准库，让你突破标准阻塞IO的瓶颈，实现非阻塞的IO执行操作。它将多个IO的阻塞复用在同一个selector上（俗称：I">
 
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="SuKai_Coding">
 <meta name="twitter:title" content="Java NIO初探">
-<meta name="twitter:description" content="有人称NIO为New IO,有人称其为non-blocking IO,两个都是NIO的特征表现  NIO有两个版本，下面内容基于版本１  它是JDK提供的标准库，让你突破标准同步IO的瓶颈，实现异步非阻塞的IO执行操作，它利用将多个IO的阻塞复用在同一个selector上（IO多路复用技术），使得单">
+<meta name="twitter:description" content="有人称NIO为New IO，有人称其为non-blocking IO，两个都算是NIO的特征表现  NIO有两个版本，下面内容基于版本１  NIO Version 1是JDK提供的标准库，让你突破标准阻塞IO的瓶颈，实现非阻塞的IO执行操作。它将多个IO的阻塞复用在同一个selector上（俗称：I">
 <meta name="twitter:creator" content="SuKai_Coding">
 
 
@@ -59,13 +59,13 @@ Java NIO初探 | Sukai's Blog
 </div>
 
 <div class="post-content">
-        <p>有人称NIO为<strong>New IO</strong>,有人称其为<strong>non-blocking IO</strong>,两个都是NIO的特征表现  </p>
+        <p>有人称NIO为<strong>New IO</strong>，有人称其为<strong>non-blocking IO</strong>，两个都算是NIO的特征表现  </p>
 
 <p>NIO有两个版本，下面内容基于版本１  </p>
 
-<p>它是JDK提供的标准库，让你突破标准同步IO的瓶颈，实现异步非阻塞的IO执行操作，它利用将多个IO的阻塞复用在同一个selector上（IO多路复用技术），使得单线程也能够处理多个client对server的请求，有效避免了大量线程的资源开销，如果再结合多线程，能承受很大的并发量  </p>
+<p>NIO Version 1是JDK提供的标准库，让你突破标准阻塞IO的瓶颈，实现非阻塞的IO执行操作。它将多个IO的阻塞复用在同一个selector上（俗称：IO多路复用技术），使得单线程也能够处理多个client对server的请求，有效避免了大量线程的资源开销，能承受较大的并发量  </p>
 
-<p>重点学习下NIO Socket知识  </p>
+<p>下面，借助socket学习一下NIO的基础知识  </p>
 
 <h3>Blocking versus non-blocing IO</h3>
 
@@ -75,9 +75,11 @@ Java NIO初探 | Sukai's Blog
 
 <p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/nbIO.png" alt="non-blocking IO"/>  </p>
 
+<p>比较：  </p>
+
 <ul>
-<li>IO面向流&lt;-&gt;NIO面向通道与缓冲：IO从流中读取数据直至读完，读取的数据没有缓存;NIO从通道读取数据到buffer，灵活性加强，但处理容易出错<br/></li>
-<li>阻塞IO&lt;-&gt;非阻塞IO：阻塞IO中线程请求读写操作时，处于阻塞状态，直至数据读取操作完成前，不能进行其余事件;而NIO的一个线程从一个通道请求读取数据后，处于非阻塞模式，无需等待数据读取完成，而是利用这段空闲时间，线程去进行其余通道的IO操作<br/></li>
+<li>IO面向流&lt;-&gt;NIO面向通道与缓冲：IO从流中读取数据直至读完，读取的数据没有缓存；NIO从通道读取数据到buffer，灵活性加强，但处理容易出错<br/></li>
+<li>阻塞IO&lt;-&gt;非阻塞IO：阻塞IO中线程请求读写操作时，处于阻塞状态，直至数据读取操作完成前，不能进行其余事件；而NIO的一个线程从一个通道请求读取数据后，处于非阻塞模式，无需等待数据读取完成，而是利用这段空闲时间，线程去进行其余通道的IO操作<br/></li>
 </ul>
 
 <h3>NIO的核心</h3>
@@ -181,8 +183,6 @@ Java NIO初探 | Sukai's Blog
 <li>将key上附加的数据取出：<strong>ByteBuffer a = (ByteBuffer)selectionKey.attachment()</strong><br/></li>
 </ul>
 
-<p>完整Server端实例：<a href="https://github.com/su-kaiyao/Java-Practice/blob/master/test/src/main/java/com/kaiyao/test/NioEchoServer.java">View</a>  </p>
-
 <h3>NIO problems</h3>
 
 <ul>
@@ -195,6 +195,8 @@ Java NIO初探 | Sukai's Blog
 <p>&hellip;  </p>
 
 <p>Those are reasons why we choose Netty  </p>
+
+<p>接下来有空就学习下Netty吧</p>
 
         
         <div class="post-meta pull-right">

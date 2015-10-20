@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="这件事起源于，我的一次重装系统。程序猿，肯定要玩ubuntu的，当时装ubuntu没有正确设置系统时间，一次github仓库提交发现，灰色格子没有点绿  排查原因：github git commit时间是根据你本地git仓库的（即ubuntu系统时间）。然后，邪恶了一下，随意改ubuntu系统时间，">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="Github马拉松进行作弊">
+<meta name="twitter:description" content="这件事起源于，我的一次重装系统。程序猿，肯定要玩ubuntu的，当时装ubuntu没有正确设置系统时间，一次github仓库提交发现，灰色格子没有点绿  排查原因：github git commit时间是根据你本地git仓库的（即ubuntu系统时间）。然后，邪恶了一下，随意改ubuntu系统时间，">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+Github马拉松进行作弊 | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8888/static/css/style.css?v=b15c69e1d0b8be12eb69aad2b091f75c" type="text/css" />
+    <link rel="stylesheet" href="http://127.0.0.1:8888/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://127.0.0.1:8888/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://sukai.me/"><img src="http://127.0.0.1:8888/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://sukai.me/">日志归档</a></li>
+            
+            <li><a href="http://127.0.0.1:8888/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://127.0.0.1:8888/Board/">交流版块</a></li>
+            
+            <li><a href="http://127.0.0.1:8888/friend/">友链</a></li>
+            
+            <li><a href="http://127.0.0.1:8888/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://127.0.0.1:8888/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">Github马拉松进行作弊</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Dec 12, 2014</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <p>这件事起源于，我的一次重装系统。程序猿，肯定要玩ubuntu的，当时装ubuntu没有正确设置系统时间，一次github仓库提交发现，灰色格子没有点绿  </p>
+
+<p>排查原因：github git commit时间是根据你本地git仓库的（即ubuntu系统时间）。然后，邪恶了一下，随意改ubuntu系统时间，再git commit，发现相应日期的github灰色格子都会被点绿。实在想不出这篇博客取啥标题名，好像和github马拉松“有关”吧，就取“Github马拉松如何作弊”吧  </p>
+
+<p>这是我当时发现这个问题后发的微博  </p>
+
+<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/weibo.png" alt="github git commit时间"/>  </p>
+
+<p>感谢Linux中国的转发&hellip;  </p>
+
+<p>后来又邪恶了，准备写个python脚本，自动完成github commit“断签补签”的任务。无非就是用python执行ubuntu命令嘛，代码逻辑很简单。准备用python subprocess模块执行shell命令  </p>
+
+<p>这里面涉及到一个问题：使用ubuntu date命令修改时间，是需要sudo权限的，所以待会运行.py文件时，也要用sudo python xxx.py；跟着这一步，执行git push origin master命令时，为了躲避输入github用户名和密码的麻烦，需要把公钥传到github，这里必须是你ubuntu root用户的公钥，因为你刚刚是以root身份运行python文件的嘛  </p>
+
+<p>脚本很简单，纯粹是娱乐的目的写的，想看的话可以参考我的<a href="https://github.com/su-kaiyao/Python-Practice/tree/master/githubShua">github仓库</a></p>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://127.0.0.1:8888/tag/Github/">Github</a>
+            
+            <a href="http://127.0.0.1:8888/tag/Python/">Python</a>
+            
+        </div>
+        
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>

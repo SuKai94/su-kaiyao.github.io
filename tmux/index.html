@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="本文将持续更新&hellip;  声明：在本文中，CTRL-b为Tmux的前缀健，用于激活控制台  面板操作&ldquo; ：面板水平分割% ：面板竖直分割x ：关闭当前面板，需要输入y进行关闭确认! ：将当前面板置于新窗口Ctrl+方向键 ：调整面板大小（调整幅度单位１单元格）Alt+方向键：调整">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="ubuntu中Tmux快捷键备忘录">
+<meta name="twitter:description" content="本文将持续更新&hellip;  声明：在本文中，CTRL-b为Tmux的前缀健，用于激活控制台  面板操作&ldquo; ：面板水平分割% ：面板竖直分割x ：关闭当前面板，需要输入y进行关闭确认! ：将当前面板置于新窗口Ctrl+方向键 ：调整面板大小（调整幅度单位１单元格）Alt+方向键：调整">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+ubuntu中Tmux快捷键备忘录 | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=b15c69e1d0b8be12eb69aad2b091f75c" type="text/css" />
+    <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://sukai.me/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://sukai.me/"><img src="http://sukai.me/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://sukai.me/">日志归档</a></li>
+            
+            <li><a href="http://sukai.me/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://sukai.me/Board/">交流版块</a></li>
+            
+            <li><a href="http://sukai.me/friend/">友链</a></li>
+            
+            <li><a href="http://sukai.me/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://sukai.me/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">ubuntu中Tmux快捷键备忘录</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Aug 14, 2014</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <p>本文将持续更新&hellip;  </p>
+
+<p>声明：在本文中，CTRL-b为Tmux的前缀健，用于激活控制台  </p>
+
+<h3>面板操作</h3>
+
+<ul>
+<li>&ldquo; ：面板水平分割<br/></li>
+<li>% ：面板竖直分割<br/></li>
+<li>x ：关闭当前面板，需要输入y进行关闭确认<br/></li>
+<li>! ：将当前面板置于新窗口<br/></li>
+<li>Ctrl+方向键 ：调整面板大小（调整幅度单位１单元格）<br/></li>
+<li>Alt+方向键：调整面板大小（调整幅度单位５单元格）<br/></li>
+<li>q ：显示面板编号<br/></li>
+<li>方向键 ：选择面板<br/></li>
+</ul>
+
+<h3>session操作</h3>
+
+<ul>
+<li>d ：脱离当前会话，但是为脱离，输入tmux attach重新连接<br/></li>
+<li>? ：现实所有绑定热键<br/></li>
+</ul>
+
+<h3>vim在bash和tmux下主题显示不一致的问题</h3>
+
+<p>解决步骤如下：  </p>
+
+<p>1.在~/.bashrc中加入：<code>alias tmux=&quot;TERM=screen-256color-bce tmux&quot;</code><br/>
+2.在~/.tmux.conf加入：<code>set -g default-terminal &quot;screen-256color&quot;</code><br/>
+3.使配置生效：<code>source ~/.bashrc</code>  </p>
+
+<p>解决办法来自<a href="http://rhnh.net/2011/08/20/vim-and-tmux-on-osx">stackoverflow</a></p>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://sukai.me/tag/Linux/">Linux</a>
+            
+            <a href="http://sukai.me/tag/Tmux/">Tmux</a>
+            
+        </div>
+        
+        
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>

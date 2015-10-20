@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="一. 单元测试在项目开发中不同阶段进行的不同影响1.1 TDD项目开发模式优点：  项目开发过程中编写单元测试，提高开发质量，提前解决开发代码错误(bug解决时间越长，修复代价就翻倍)有利于开发过程中设计出高内聚，低耦合的模块框架，提高代码可测试性，不可单元测试的代码一般来说模块设计就不是很合理为之">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="有关单元测试">
+<meta name="twitter:description" content="一. 单元测试在项目开发中不同阶段进行的不同影响1.1 TDD项目开发模式优点：  项目开发过程中编写单元测试，提高开发质量，提前解决开发代码错误(bug解决时间越长，修复代价就翻倍)有利于开发过程中设计出高内聚，低耦合的模块框架，提高代码可测试性，不可单元测试的代码一般来说模块设计就不是很合理为之">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+有关单元测试 | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=b15c69e1d0b8be12eb69aad2b091f75c" type="text/css" />
+    <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://sukai.me/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://sukai.me/"><img src="http://sukai.me/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://sukai.me/">日志归档</a></li>
+            
+            <li><a href="http://sukai.me/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://sukai.me/Board/">交流版块</a></li>
+            
+            <li><a href="http://sukai.me/friend/">友链</a></li>
+            
+            <li><a href="http://sukai.me/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://sukai.me/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">有关单元测试</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Jul 28, 2014</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <h3>一. 单元测试在项目开发中不同阶段进行的不同影响</h3>
+
+<h4>1.1 TDD项目开发模式</h4>
+
+<p>优点：  </p>
+
+<ul>
+<li>项目开发过程中编写单元测试，提高开发质量，提前解决开发代码错误(bug解决时间越长，修复代价就翻倍)<br/></li>
+<li>有利于开发过程中设计出高内聚，低耦合的模块框架，提高代码可测试性，不可单元测试的代码一般来说模块设计就不是很合理<br/></li>
+<li>为之后集成测试做一定的保障，单元测试能有效保证保证模块内部正确性，提高集成联调的效率<br/></li>
+<li>单元测试代码是最好的项目文档<br/></li>
+</ul>
+
+<h4>1.2 项目开发完成后才进行单元测试</h4>
+
+<p>优点：  </p>
+
+<ul>
+<li>进一步熟悉开发代码及其编写<br/></li>
+<li>有利于项目不合理设计部分的重构，单元测试帮助你重构出更好的类和方法结构，单元测试加上重构帮助我们作出一个稳定的良好产品<br/></li>
+<li>同样可以为项目联调提高效率，保证项目质量<br/></li>
+</ul>
+
+<h3>二. 拒绝写单元测试的危难</h3>
+
+<h4>2.1 对已有项目编写单元测试的难度非常大</h4>
+
+<ul>
+<li>开发到后期代码越多的时候，才开始单元测试，负担很大。因为很多代码将“不可单元测试”，为了介入单元测试，不得已做一些改动<br/></li>
+<li>单元测试是需要良好的设计来支撑的，单元测试很难在耦合度高的项目中进行单元测试，可测试性越高，耦合度相应越低，但是为了可测试性，对耦合度高的代码进行重构，往往代价很大<br/></li>
+</ul>
+
+<h3>三. 单元测试遵循规则</h3>
+
+<p>单元测试通常以一个方法(功能)为原子单位  </p>
+
+<ul>
+<li>每个单元测试必须独立于其他单元测试而运行<br/></li>
+<li>必须以单元测试为单位进行检测和报告错误<br/></li>
+<li>必须易于定义你要单元测试的内容<br/></li>
+</ul>
+
+<h3>四. 工具：Java项目中使用Junit进行单元测试（简述）</h3>
+
+<p>Junit工作过程就是由TestRunner来运行包含一个或多个TestCase(或TestSuit)的TestSuit，我们使用Junit编写测试代码时候只需和TestCase打交道，TestSuit由Junit帮你完成  </p>
+
+<p>TestCase + TestSuite + BaseTestRunner = TestRunner  </p>
+
+<ul>
+<li>TestCase:测试用例，扩展了TestCase类的类，以<code>testXXX</code>的命名形式包含一个或者多个测试<br/></li>
+<li>TestSuit:测试集合，Junit会将你所有的TestCase存放在测试集合里面，然后扔给TestRunner去运行，当然一个最大的TestSuit可以包含同时次级的TestSuit和TestCase，TestSuit可以由你自己显式创建(复写Junit包里的TestSuit类)，也可以由Junit自动创建<br/></li>
+<li>TestRunner:测试运行器，执行TestSuit里的测试程序<br/></li>
+</ul>
+
+<p>典型的TestCase包含两个部件:fixture＋单元测试内容＋assert断言  </p>
+
+<ul>
+<li>fixture:管理资源，即运行一个或多个测试所需的公用资源或数据集合，通过setUp()和tearDown()这两个方法自动创建和销毁fixture，把不止一个测试内容放到一个TestCase类里面，为了就是共享fixture部分的资源集合<br/></li>
+<li>单元测试内容:根据你要测试的方法进行编写<br/></li>
+<li>assert:简化单元测试的编写，常用的是assertEquals方法</li>
+</ul>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://sukai.me/tag/Unit-Test/">Unit Test</a>
+            
+        </div>
+        
+        
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>

@@ -83,19 +83,19 @@
 <h3>从search页面，将书籍名传给书籍详细显示页面</h3>
 
 <p>这里，我定义了一个表单，供用户输入书籍名，然后有一个蓝色的<strong>Search</strong>按钮，点击后，将书籍名传给书籍详细显示页面，看一下表单的代码  </p>
-
-<pre><code>&lt;form class=&quot;text-center&quot; action=&quot;bookDetail.jsp&quot; method=&quot;post&quot;&gt;  
-  &lt;div class=&quot;form-inline&quot;&gt;  
-    &lt;div class=&quot;form-group&quot;&gt;  
-      &lt;div class=&quot;input-group&quot;&gt;  
-        &lt;div class=&quot;input-group-addon&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-book&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;  
-        &lt;/div&gt;  
-        &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;bookname&quot; placeholder=&quot;输入您想查询的书籍名&quot;&gt;     
-      &lt;/div&gt;  
-    &lt;/div&gt;  
-    &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Search&lt;/button&gt;  
-  &lt;/div&gt;  
-&lt;/form&gt;</code></pre>
+<div class="highlight"><pre><span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;text-center&quot;</span> <span class="na">action=</span><span class="s">&quot;bookDetail.jsp&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>  
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-inline&quot;</span><span class="nt">&gt;</span>  
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>  
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;input-group&quot;</span><span class="nt">&gt;</span>  
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;input-group-addon&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-book&quot;</span> <span class="na">aria-hidden=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>  
+        <span class="nt">&lt;/div&gt;</span>  
+        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">name=</span><span class="s">&quot;bookname&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;输入您想查询的书籍名&quot;</span><span class="nt">&gt;</span>     
+      <span class="nt">&lt;/div&gt;</span>  
+    <span class="nt">&lt;/div&gt;</span>  
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">class=</span><span class="s">&quot;btn btn-primary&quot;</span><span class="nt">&gt;</span>Search<span class="nt">&lt;/button&gt;</span>  
+  <span class="nt">&lt;/div&gt;</span>  
+<span class="nt">&lt;/form&gt;</span>
+</pre></div>
 
 <p>通过定义form表单的action属性，点击Search按钮后，将input中数据传给<strong>bookDetail.jsp</strong>页面  </p>
 
@@ -104,18 +104,18 @@
 <p>通过jsp内置的request对象，就可以取出前面表单中输入的书籍名：String bookName = request.getParameter(&ldquo;bookname&rdquo;);  </p>
 
 <p>然后，调用上一讲编写的BookDAO类中的两个方法，最终得到关于书籍详细信息的Book类实例book  </p>
+<div class="highlight"><pre><span class="k">&lt;%</span>  
+<span class="n">request</span><span class="o">.</span><span class="na">setCharacterEncoding</span><span class="o">(</span><span class="s">&quot;utf-8&quot;</span><span class="o">);</span>  
+<span class="n">String</span> <span class="n">bookName</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&quot;bookname&quot;</span><span class="o">);</span>  
+<span class="n">BookDAO</span> <span class="n">bookDao</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BookDAO</span><span class="o">();</span>  
+<span class="n">Book</span> <span class="n">book</span> <span class="o">=</span> <span class="n">bookDao</span><span class="o">.</span><span class="na">getBookById</span><span class="o">(</span><span class="n">bookDao</span><span class="o">.</span><span class="na">getBIDByName</span><span class="o">(</span><span class="n">bookName</span><span class="o">));</span>  
+<span class="k">if</span> <span class="o">(</span><span class="n">book</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  
+    <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Error&quot;</span><span class="o">);</span>  
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>  
 
-<pre><code>&lt;%  
-request.setCharacterEncoding(&quot;utf-8&quot;);  
-String bookName = request.getParameter(&quot;bookname&quot;);  
-BookDAO bookDao = new BookDAO();  
-Book book = bookDao.getBookById(bookDao.getBIDByName(bookName));  
-if (book == null) {  
-    out.println(&quot;Error&quot;);  
-} else {  
-
-}  
-%&gt;</code></pre>
+<span class="o">}</span>  
+<span class="k">%&gt;</span>
+</pre></div>
 
 <p>有了这个book实例，想显示什么信息，就能显示什么信息啦，调用book实例的getter方法，就可以取得相应数据了，在通过jsp表达式，显示在浏览器中就行了  </p>
 
@@ -128,7 +128,7 @@ if (book == null) {
 <p>推荐阅读：  </p>
 
 <ul>
-<li><a href="http://kaiyao.net.cn/doubanapibyjava/">苏苏查书之后台开发篇</a><br/></li>
+<li><a href="http://kaiyao.net.cn/doubanapibyjava/">苏苏查书之后台开发篇</a></li>
 </ul>
 
         
