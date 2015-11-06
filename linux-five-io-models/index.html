@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+
+<meta name="description" content="一. 总览先来说一下，Unix平台有哪几种I/O模型：  阻塞I/O（blocking I/O）非阻塞I/O（nonblocking I/O）I/O多路复用（I/O multiplexing），如select, poll信号驱动I/O（signal driven I/O），SIGIO异步I/O（as">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="SuKai_Coding">
+<meta name="twitter:title" content="Unix五种I/O模型对比">
+<meta name="twitter:description" content="一. 总览先来说一下，Unix平台有哪几种I/O模型：  阻塞I/O（blocking I/O）非阻塞I/O（nonblocking I/O）I/O多路复用（I/O multiplexing），如select, poll信号驱动I/O（signal driven I/O），SIGIO异步I/O（as">
+<meta name="twitter:creator" content="SuKai_Coding">
+
+
+    <title>
+Unix五种I/O模型对比 | Sukai's Blog
+</title>
+    <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=b15c69e1d0b8be12eb69aad2b091f75c" type="text/css" />
+    <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+    <link rel="alternate" type="application/rss+xml" href="http://sukai.me/feed.xml" title="Sukai's Blog" />
+    <link rel="canonical" href=""/>
+    
+    
+
+</head>
+
+<body>
+<div id="wrap" class="clearfix">
+    <div class="pull-left w180">
+        <div id="logo">
+            <a href="http://sukai.me/"><img src="http://sukai.me/static/imgs/logo.png?v=48119af2491aacbd72cdd480014e9d5f"></a>
+        </div>
+
+        <ul id="navigator">
+            <li><a href="http://sukai.me/">日志归档</a></li>
+            
+            <li><a href="http://sukai.me/AboutMe/">关于我</a></li>
+            
+            <li><a href="http://sukai.me/Board/">交流版块</a></li>
+            
+            <li><a href="http://sukai.me/friend/">友链</a></li>
+            
+            <li><a href="http://sukai.me/MyHistory/">苏苏足迹</a></li>
+            
+            <li><a href="http://sukai.me/MyTrans/">开源翻译</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="pull-right w910">
+        
+<div class="post-header">
+    <h1 class="post-title">Unix五种I/O模型对比</h1>
+    <div class="clearfix">
+        <div class="post-meta pull-right">Published at Nov 04, 2015</div>
+    </div>
+</div>
+
+<div class="post-content">
+        <h3>一. 总览</h3>
+
+<p>先来说一下，<strong>Unix平台有哪几种I/O模型：</strong>  </p>
+
+<ul>
+<li>阻塞I/O（blocking I/O）<br/></li>
+<li>非阻塞I/O（nonblocking I/O）<br/></li>
+<li>I/O多路复用（I/O multiplexing），如select, poll<br/></li>
+<li>信号驱动I/O（signal driven I/O），SIGIO<br/></li>
+<li>异步I/O（asynchronous I/O），aio POSIX<br/></li>
+</ul>
+
+<p>备注：下面介绍各个I/O模型时，会配上一幅示意图，内容是进程进行读取数据操作的请求过程  </p>
+
+<p>需要说明的是，请求进程读取数据的操作时分两步完成的：  </p>
+
+<p>1.等待数据通过网络传输，到达本机内核数据区<br/>
+2.将内核数据区的数据拷贝至用户数据区  </p>
+
+<p>之后，程序即可对用户数据区的数据进行业务逻辑操作  </p>
+
+<p>好了，开始了  </p>
+
+<h3>二. 5种I/O模型</h3>
+
+<h4>2.1 blocking I/O</h4>
+
+<p>这个不用多说，最常见的模型。不人为重新设置，socket io默认都是阻塞模式  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/blocking-io.gif" alt="blocking-io"/>  </p>
+
+<p>进程调用了recvfrom，系统不会立即返回，直到数据到达，并成功拷贝至用户区（或者发生一个错误）。之后进程才重新从阻塞状态进入就绪状态  </p>
+
+<h4>2.2 nonblocking I/O</h4>
+
+<p>设置socket为非阻塞模式后，如果I/O操作没有完成，内核不会让该进程进入睡眠状态（即阻塞），而是一直返回一个错误信号（e.g EWOULDBLOCK）  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/nonblocking-io.gif" alt="nonblocking-io"/>  </p>
+
+<p>图片中前三次的recvfrom调用，数据都没有成功返回，而是返回EWOULDBLOCK错误。第四次调用时，数据才准备好。之后，数据被拷贝进用户区，recvfrom调用返回ok  </p>
+
+<p>这种模型的缺点是：应用进程要不断地轮询（polling）内核，查看数据是否到达；这会一直占据CPU，造成浪费  </p>
+
+<p>这种模型不是很常用  </p>
+
+<h4>2.3 I/O multiplexing</h4>
+
+<p>常见的io多路复用的系统调用有select或poll两种  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/io-multiplexing.gif" alt="io-multiplexing"/>  </p>
+
+<p>如图所示：这种模型并没有阻塞在读取I/O操作的系统调用上（e.g recvfrom），而是阻塞在了select(poll)上。等到数据到来，select调用返回，应用程序调用recvfrom将数据从内核区拷贝至用户区进行操作  </p>
+
+<p>仔细看实例图，发现select模型似乎有些disadvantage，即前后进行了两次系统调用，比上一个模型多了一次  </p>
+
+<p>然而，select模型也有其明显的优势：每次select阻塞结束返回后，可以获得多个准备就绪的套接字（即一个select可以对多个套接字进行管理，类似于同时多个监控套接字上的事件是否就绪）  </p>
+
+<p>PS：还有一种与该模型类似的I/O模型：多线程模型。一个线程对应一个套接字，一个线程的阻塞，不影响其他应用  </p>
+
+<h4>2.4 Signal-Driven I/O</h4>
+
+<p>当描述符就绪时，我们可以让内核使用SIGIO信号通知应用程序  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/signal-io.gif" alt=""/>  </p>
+
+<p>首先，我们先得建立一个信号处理者（signal handler），之后程序继续运行干别的事情（此时，并不会阻塞），同时一边等待数据的到达。当数据到达，signal信号激发，之后应用程序可以进行内核区到用户区的数据拷贝（此时是阻塞的），随后进行处理  </p>
+
+<p>该模型的好处就是，等待数据到达前，当前应用线程不会被阻塞  </p>
+
+<h4>2.5 Asynchronous I/O</h4>
+
+<p>AIO是由POSIX标准定义的。它的工作方式是：当所有的I/O操作完成后（包括将数据从内核区复制到用户区），内核再通知应用程序  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/aio.gif" alt="aio"/>  </p>
+
+<p>和signal-driven io不同的是，信号驱动式模型是在数据拷贝前通知应用程序的，这是还未开始真正的I/O操作；而aio是在I/O操作完成时候再进行通知  </p>
+
+<h3>三. 五种I/O模型的比较</h3>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/difference-ios.gif" alt="differnence-between-ios"/>  </p>
+
+<h4>补充：同步I/O和异步I/O</h4>
+
+<ul>
+<li>同步I/O：在I/O操作未完成前，请求进程会被阻塞<br/></li>
+<li>异步I/O：在I/O操作未完成前，请求进程未会被阻塞<br/></li>
+</ul>
+
+<p>上述五种I/O模型，前四种均属于同步I/O，因为recvfrom调用均阻塞了当前请求进程。只有最后一种io属于异步I/O  </p>
+
+<p>我认为，同步与异步的区别在于，数据拷贝时进程是否阻塞；阻塞于非阻塞的区别在于应用程序的调用内核是否立即返回  </p>
+
+<h3>四. 再谈I/O多路复用</h3>
+
+<p>常见的I/O多路复用技术有：  </p>
+
+<ul>
+<li>select<br/></li>
+<li>poll<br/></li>
+</ul>
+
+<p>还有一个高级版本的，叫epoll  </p>
+
+<h4>4.1 select</h4>
+
+<p>select()，确定一个或多个套接口的状态，本函数用于确定一个或多个套接口的状态，对每一个套接口，调用者可查询它的可读性、可写性及错误状态信息，用fd_set结构来表示一组等待检查的套接口，在调用返回时，这个结构存有满足一定条件的套接口组的子集，并且select()返回满足条件的套接口的数目  </p>
+
+<p>其缺点：  </p>
+
+<ul>
+<li>每次调用select，先要把fd集合从用户态拷贝到内核态<br/></li>
+<li>同时每次调用select都需要在内核遍历传递进来的所有fd；即：每次都会无差别的轮询，即要遍历所有的文件描述符；IO效率随着FD数目增加而线性下降<br/></li>
+<li>select所能支持的最多文件描述符数量默认是1024，不是很多<br/></li>
+</ul>
+
+<p>Java版本一的NIO库就是利用的select模型，可以参阅我之前的一篇博客<a href="http://sukai.me/java-NIO%E5%88%9D%E6%8E%A2/">“Java NIO初探”</a>  </p>
+
+<h4>4.2 poll</h4>
+
+<p>和select类似  </p>
+
+<p>不同之处在于，描述fd集合的方式不同，poll使用pollfd结构，而不是select的fd_set结构  </p>
+
+<h4>4.3 epoll</h4>
+
+<p>epoll算是I/O多路复用的高级版本，对前两者做了一些改进  </p>
+
+<p>对于第一个缺点，epoll的解决方案在epoll_ctl函数中。每次注册新的事件到epoll句柄中时（在epoll_ctl中指定EPOLL_CTL_ADD），会把所有的fd拷贝进内核，而不是在epoll_wait的时候重复拷贝。epoll保证了每个fd在整个过程中只会拷贝一次。  </p>
+
+<p>对于第二个缺点，epoll的解决方案不像select或poll一样每次都把current轮流加入fd对应的设备等待队列中，而只在epoll_ctl时把current挂一遍（这一遍必不可少）并为每个fd指定一个回调函数，当设备就绪，唤醒等待队列上的等待者时，就会调用这个回调函数，而这个回调函数会把就绪的fd加入一个就绪链表）。epoll_wait的工作实际上就是在这个就绪链表中查看有没有就绪的fd（利用schedule_timeout()实现睡一会，判断一会的效果，和select实现中的第7步是类似的）。  </p>
+
+<p>对于第三个缺点，epoll没有这个限制，它所支持的FD上限是最大可以打开文件的数目，这个数字一般远大于2048  </p>
+
+<p>epoll的优点主要是一下几个方面：  </p>
+
+<ul>
+<li>IO的效率不会随着监视fd的数量的增长而下降<br/></li>
+<li>监视的描述符数量不受限制<br/></li>
+</ul>
+
+<p>关于epoll，可以再看看<a href="http://blog.csdn.net/lingfengtengfei/article/details/12398299">CSDN的帖子</a>  </p>
+
+<h4>4.4 比较</h4>
+
+<p>在select/poll中，进程只有在调用一定的方法后，内核才对所有监视的文件描述符进行扫描，而epoll事先通过epoll_ctl()来注册一 个文件描述符，一旦基于某个文件描述符就绪时，内核会采用类似callback的回调机制，迅速激活这个文件描述符，当进程调用epoll_wait()时便得到通知  </p>
+
+<p>这方面的比较，也有一份好帖子，<a href="http://www.cnblogs.com/Anker/p/3265058.html">cnblog</a>  </p>
+
+<hr/>
+
+<p>本文匆忙赶成，错误很多，欢迎纠错  </p>
+
+<p>本文翻译自：<a href="http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch06lev1sec2.html">unix_network_programming</a>  </p>
+
+<hr/>
+
+<h3>参考来源</h3>
+
+<ul>
+<li><a href="http://www.cnblogs.com/Anker/p/3265058.html">cnBlog</a></li>
+</ul>
+
+        
+        <div class="post-meta pull-right">
+            Tagged in :
+            
+            <a href="http://sukai.me/tag/Unix/">Unix</a>
+            
+            <a href="http://sukai.me/tag/I/O/">I/O</a>
+            
+        </div>
+        
+        
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</div>
+
+    </div>
+
+</div>
+</body>
+
+</html>
