@@ -45,8 +45,6 @@ http://sukai.me/tag/Tmux/
 http://sukai.me/tag/Vim/
 http://sukai.me/tag/Brain/
 http://sukai.me/tag/Unix/
-http://sukai.me/archive/2015/
-http://sukai.me/archive/2014/
 http://sukai.me/feed.xml
 http://sukai.me/
 http://sukai.me/404.html
