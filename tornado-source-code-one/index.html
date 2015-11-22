@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>
+自顶向下学习Tornado源码(一) | 苏苏
+</title>
+  <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
+  <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=2e97ef91dedacb7e66b66fd3121e0937" type="text/css" />
+  <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- header-->
+    <header class="header-wrapper">
+      <div class="header-container">
+        <nav>
+          <ul class="header-nav">
+            <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
+            <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
+            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-globe" id="nav-icon"></span>History</a></li>
+            <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- header -->
+
+    <!-- conetent -->
+    <div class="content-wrapper">
+      <div class="am-g am-g-fixed blog-g-fixed">
+        <div class="am-u-md-9">
+        
+<article class="post-main" id="post-font">
+  <header class="blog-header">
+    <span class="round-date">
+      <span class="month">11月</span>
+      <span class="day">21</span>
+    </span>
+    <p class="blog-title">自顶向下学习Tornado源码(一)</p>
+    <p class="blog-meta">
+      <i class="am-icon-calendar"></i> Published at Nov 21, 2015 • 
+      <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
+      <!--<i class="am-icon-bookmark"></i> 0条评论-->
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Python/">Python</a>
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Tornado/">Tornado</a>
+      
+    </p>
+
+  </header>
+  <section class="blog-content">
+    <h3>一. 从Hello Tornado开始</h3>
+
+<h4>1.1 Hello World</h4>
+
+<p>用tornado写的一个最简单的demo，但已经用到了很多tornado的核心类：httpserver, ioloop, Application&hellip;  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/hello-tornado.png" width = "500" height = "400" alt="tornado-demo" align=center />  </p>
+
+<h4>1.2 调试运行</h4>
+
+<p>利用pdb进行调试，打印方法栈信息，在IndexHandler中加入代码：  </p>
+<div class="highlight"><pre><span class="n">greeting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_argument</span><span class="p">(</span><span class="s">&#39;greeting&#39;</span><span class="p">,</span> <span class="s">&#39;Hello&#39;</span><span class="p">)</span>  
+<span class="kn">import</span> <span class="nn">pdb</span>  
+<span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>   
+<span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">greeting</span> <span class="o">+</span> <span class="s">&#39;, friendly user!&#39;</span><span class="p">)</span>
+</pre></div>
+
+<p>利用curl或者浏览器，触发程序，查看栈桢  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/stack-hello-tornado.png" width = "500" height = "400" alt="stack-tornado-demo" align=center />  </p>
+
+<h4>1.3 猜测</h4>
+
+<p>图中模模糊糊给了我们一些执行流程信息，我又参考了几篇文章，先得出一些结论  </p>
+
+<ul>
+<li>ioloop：核心的io循环，用于处理所有socket的read, write, accept等事件。其i/o模型视主机而定，一般Linux平台采用epoll(关于i/o模型，<a href="http://sukai.me/linux-five-io-models/">Click For More..</a>)<br/></li>
+<li>iostream：封装了对socket的异步读写操作<br/></li>
+<li>httpConnection(代码在httpserver.py中)：接受HTTP请求，根据路由信息，调用相应的Handler。再把相应的数据写会client<br/></li>
+</ul>
+
+<p>tornado服务器的大体流程如下图(图片来源：<a href="http://kenby.iteye.com/blog/1159621">kenby.iteye</a>)  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/tornado-core.png" width = "500" height = "400" alt="tornado-core" align=center />  </p>
+
+<p>首先，服务器创建监听套接字，同时将自己注册进ioloop进行事件循环检查（主要检查是否有新的客户端连接到来）。client到达后，服务器通过accept函数，返回一个client socket，同时client socket被注册进ioloop进行事件循环检查（检查read，write等事件）。客户端若向服务器发起读操作，HTTPConnetcion通过_on_headers解析HTTP头，之后通过iostream的write操作，将数据写给客户端  </p>
+
+<h3>二. HTTPServer</h3>
+
+<p>按照自顶向下的顺序，先阅读HTTPServer的源码  </p>
+
+<p>HTTPServer继承自TCPServer  </p>
+
+<p>刚刚的demo中，与HTTPServer相关的只有两条编程语句  </p>
+<div class="highlight"><pre><span class="n">http_server</span> <span class="o">=</span> <span class="n">tornado</span><span class="o">.</span><span class="n">httpserver</span><span class="o">.</span><span class="n">HTTPServer</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>  
+<span class="n">http_server</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</pre></div>
+
+<p>先是初始化函数  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/tornado-httpserver-init.png" width = "600" height = "400" alt="tornado-httpserver-init" align=center />  </p>
+
+<p>就是简单地初始化一些参数，然后就是父类的初始化。最主要的是这个request_callback，我们传进去的是Application实例，里面有我们自己配制的路由信息，到时候tornado服务器会根据我们的路由信息，将相应的路由请求转发给相应的RequestHandler。  </p>
+
+<p>然后是<code>listen</code>监听，HTTPServer没有覆写父类TCPServer的listen函数，直接看TCPServer的listen：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/tornado-tcpsever-listen.png" width = "500" height = "200" alt="tornado-tcpserver-listen" align=center />  </p>
+
+<p>先调用了<code>bind_socket</code>，该函数在netutil.py中：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/netutil-bind_socket.png" width = "550" height = "100" alt="netutil-bind_socket" align=center />  </p>
+
+<p>代码就不看了，功能很简单，我截图了该函数的doc string，根据给定的地址和端口，创建一系列的listening sockets  </p>
+
+<p>之后<code>listen</code>函数调用了<code>self.add_sockets(sockets)</code>，我们来看一下<code>add_sockets</code>：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/tcpserver-add_sockets.png" width = "650" height = "320" alt="tornado-tcpserver-add_sockets" align=center />  </p>
+
+<p>通过<code>add_accept_handler(sock, self._handle_connection, io_ioop=elf.io_loop)</code>将一系列的listen sockets注册进ioloop（ioloop的作用就是利用epoll，轮询检查所有套接字的io事件，效率很高，是tornado并发量突出的重要原因）  </p>
+
+<p>仔细看一下<code>add_accept_handler()</code>，它在netuilt.py中：  </p>
+<div class="highlight"><pre><span class="k">if</span> <span class="n">io_loop</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  
+    <span class="n">io_loop</span> <span class="o">=</span> <span class="n">IOLoop</span><span class="o">.</span><span class="n">current</span><span class="p">()</span>  
+
+<span class="k">def</span> <span class="nf">accept_handler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">):</span>  
+    <span class="c"># More connections may come in while we&#39;re handling callbacks;  </span>
+    <span class="c"># to prevent starvation of other tasks we must limit the number  </span>
+    <span class="c"># of connections we accept at a time.  Ideally we would accept  </span>
+    <span class="c"># up to the number of connections that were waiting when we  </span>
+    <span class="c"># entered this method, but this information is not available  </span>
+    <span class="c"># (and rearranging this method to call accept() as many times  </span>
+    <span class="c"># as possible before running any callbacks would have adverse  </span>
+    <span class="c"># effects on load balancing in multiprocess configurations).  </span>
+    <span class="c"># Instead, we use the (default) listen backlog as a rough  </span>
+    <span class="c"># heuristic for the number of connections we can reasonably  </span>
+    <span class="c"># accept at once.  </span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">_DEFAULT_BACKLOG</span><span class="p">):</span>  
+        <span class="k">try</span><span class="p">:</span>  
+            <span class="n">connection</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>  
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  
+            <span class="c"># _ERRNO_WOULDBLOCK indicate we have accepted every  </span>
+            <span class="c"># connection that is available.  </span>
+            <span class="k">if</span> <span class="n">errno_from_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="ow">in</span> <span class="n">_ERRNO_WOULDBLOCK</span><span class="p">:</span>  
+                <span class="k">return</span>  
+            <span class="c"># ECONNABORTED indicates that there was a connection  </span>
+            <span class="c"># but it was closed while still in the accept queue.  </span>
+            <span class="c"># (observed on FreeBSD).  </span>
+            <span class="k">if</span> <span class="n">errno_from_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">ECONNABORTED</span><span class="p">:</span>  
+                <span class="k">continue</span>  
+            <span class="k">raise</span>  
+        <span class="n">callback</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>  
+<span class="n">io_loop</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">accept_handler</span><span class="p">,</span> <span class="n">IOLoop</span><span class="o">.</span><span class="n">READ</span><span class="p">)</span>
+</pre></div>
+
+<p>利用<code>io_loop.add_handler(sock, accept_handler, IOLoop.READ)</code>，将listen socket注册进ioloop，等待READ事件发生。发生后即回调<code>accept_handler</code>函数，该函数里面有<code>sock.accept()</code>方法，接受客户端连接，之后再调用<code>callback(connection, address)</code>。这里的callback函数就是我们调用<code>add_accept_handler()</code>时候，传进去的<code>self._handle_connection</code>，它的代码在<code>TCPServer</code>中，核心的功能代码内容是  </p>
+<div class="highlight"><pre><span class="k">try</span><span class="p">:</span>  
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssl_options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>  
+        <span class="n">stream</span> <span class="o">=</span> <span class="n">SSLIOStream</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">io_loop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">io_loop</span><span class="p">,</span>  
+                <span class="n">max_buffer_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_buffer_size</span><span class="p">,</span>  
+                <span class="n">read_chunk_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">read_chunk_size</span><span class="p">)</span>  
+    <span class="k">else</span><span class="p">:</span>  
+        <span class="n">stream</span> <span class="o">=</span> <span class="n">IOStream</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">io_loop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">io_loop</span><span class="p">,</span>  
+                <span class="n">max_buffer_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_buffer_size</span><span class="p">,</span>  
+                <span class="n">read_chunk_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">read_chunk_size</span><span class="p">)</span>  
+    <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_stream</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>  
+    <span class="k">if</span> <span class="n">future</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">io_loop</span><span class="o">.</span><span class="n">add_future</span><span class="p">(</span><span class="n">future</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>  
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  
+        <span class="n">app_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Error in connection callback&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+<p>为每个connection创建<code>IOStream</code>实例（用于对socket的异步读写），之后的IO操作由此实例负责（其实在IOStream中的读写事件也会注册到ioloop中，后续分析）。然后调用<code>self.handle_stream(stream, address)</code>，<code>handle_stream()</code>由HTTPServer覆写：  </p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">handle_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>  
+    <span class="n">context</span> <span class="o">=</span> <span class="n">_HTTPRequestContext</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span>  
+                        <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">)</span>  
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">HTTP1ServerConnection</span><span class="p">(</span>  
+            <span class="n">stream</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn_params</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>  
+    <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>  
+    <span class="n">conn</span><span class="o">.</span><span class="n">start_serving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+
+<p><code>handler_stream</code>创建了HTTPConnection对象，HTTPConnection对象负责处理剩下的交互部分  </p>
+
+<p>ok，HTTPServer大体的核心流程走完了一遍  </p>
+
+<h3>三. 后续</h3>
+
+<p>现在，所有的socket（listen和client）都被注册进了ioloop，它们会被不断地轮询检查，是否有io事件发生。如有读写事件发生，会通过iostream封装的异步READ和WRITE函数进行。HTTPConnection，IOLOOP和IOSTERAM后续再进行分析  </p>
+
+<hr/>
+
+<p>本文参考：<a href="http://www.douban.com/group/topic/13276435/">mywaiting.douban</a>; <a href="kenby.iteye.com/blog/1159621">kenby.iteye</a></p>
+
+  </section>
+  
+    
+        
+        
+            <div class="ds-thread"></div>
+            <script type="text/javascript">
+                var duoshuoQuery = {short_name:"sukai-me"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';
+                    ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+        
+    
+
+</article>
+
+        </div>
+
+        <div class="sidebar">
+          <div class="am-u-md-3">
+            <!-- about me -->
+            <div class="panel about-me">
+              <div class="about-me-bg"></div>
+              <div class="about-me-content">
+                <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/avatar.jpg"></img></a>
+                <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">苏苏</a></h5>
+                <p class="about-me-words">Strive To Be Full Stack..</p>
+                <ul class="about-me-ul">
+                  <li class="about-me-li">
+                    <a class="about-me-li-content">
+                      日志
+                      <h5 class="about-me-li-h5">17</h5>
+                    </a>
+                  </li>
+                  <li class="about-me-li">
+                    <a class="about-me-li-content">
+                      标签
+                      <h5 class="about-me-li-h5">25</h5>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- about me -->
+            <!-- contact-me -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Contact Me</h5>
+              <div class="contact-me-icons">
+                <a href="https://github.com/su-kaiyao" title="Github: su-kaiyao" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
+                <a href="https://twitter.com/SuKai_Coding" title="Twitter: sukai.me" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
+                <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="Weibo: sukai.me" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
+                <a href="https://cn.linkedin.com/in/凯-苏-847204107" title="linkedin" target="_blank"><i class="am-icon-linkedin-square am-icon-md"></i></a>
+                <a href="http://www.douban.com/people/81024152/" title="豆瓣" target="_blank"><i class="am-icon-globe am-icon-md"></i></a>
+              </div>
+            </div>
+            <!-- contact-me-->
+            <!-- recently -->
+            <div class="shuoshuo panel-two">
+              <h5 class="panel-title">博主说说</h5>
+              <div class="shuoshuo-content">
+                保完研后，在cousera看Machine Learning课
+              </div>
+              <div class="shuoshuo-content">
+                同时为sklcc微信数据分析项目抓取数据源
+              </div>
+            </div>
+            <!-- recently -->
+            <!-- Linux Cn -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Member Of <a href="https://github.com/LCTT">LCTT</a></h5>
+              <span>
+                <img src="http://7xl2fd.com1.z0.glb.clouddn.com/LCTT.png">
+                <a href="http://sukai.me/MyTrans/">Click For More...</a>
+              </span>
+            </div>
+            <!-- Linux Cn -->
+            <!--friends -->
+            <div class="friends panel-two">
+              <h3 class="panel-title">Friends<small><a href="http://sukai.me/friend/">.More</a></small></h5>
+              <ul class="friends-ul">
+                <li>
+                  <a href="http://www.findspace.name/" title="Findspace" target="_blank">Findspace</a>
+                </li>
+                <li>
+                  <a href="http://www.fddcn.cn/" title="奋斗的承诺" target="_blank">奋斗的承诺</a>
+                </li>
+                <li>
+                  <a href="https://www.anotherhome.net/" title="当时只道是寻常" target="_blank">当时只道是寻常</a>
+                </li>
+                <li>
+                  <a href="http://www.llwjy.com/" title="小鸡慢慢" target="_blank">小鸡慢慢</a>
+                </li>
+                <li>
+                  <a href="http://ming.today/" title="Ming YIN" target="_blank">Ming YIN</a>
+                </li>
+                <li>
+                  <a href="http://nextearn.me/" title="NextEarn" target="_blank">NextEarn</a>
+                </li>
+                <li>
+                  <a href="https://xitu.io/" title="稀土" target="_blank">稀土</a>
+                </li>
+                <li>
+                  <a href="http://stomach-ache.github.io/" title="Wei Tong" target="_blank">Wei Tong</a>
+                </li>
+              </ul>
+            </div>
+            <!--friends -->
+            <!-- copyright -->
+            <div class="about-copyright panel-two">
+              ©Powered by<a href="https://github.com/whtsky/Catsup"> Catsup</a>. Designed by<a href="https://github.com/su-kaiyao/catsup-theme-final"> SuKai</a>
+            </div>
+            <!-- Linux Cn -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- conetent -->
+  </div>
+
+<!--
+<script src="blog_files/jquery.js"></script>
+<script src="blog_files/amazeui.js"></script>
+-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?564d3a351e5dd8c80c238f900c479ab3";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70406244-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
