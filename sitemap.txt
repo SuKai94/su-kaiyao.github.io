@@ -1,3 +1,4 @@
+http://sukai.me/ml-cousera-one/
 http://sukai.me/tornado-source-code-one/
 http://sukai.me/linux-five-io-models/
 http://sukai.me/doushuo-commment/
@@ -30,13 +31,15 @@ http://sukai.me/tag/Java/
 http://sukai.me/tag/Cache/
 http://sukai.me/tag/Blog/
 http://sukai.me/tag/DuoShuo/
+http://sukai.me/tag/Vim/
 http://sukai.me/tag/Life/
-http://sukai.me/tag/Hibernate/
+http://sukai.me/tag/cousera/
 http://sukai.me/tag/四轴飞行器/
 http://sukai.me/tag/Stored-Procedure/
 http://sukai.me/tag/Study/
 http://sukai.me/tag/Unit-Test/
 http://sukai.me/tag/I/O/
+http://sukai.me/tag/Hibernate/
 http://sukai.me/tag/APM/
 http://sukai.me/tag/Docker/
 http://sukai.me/tag/Crawler/
@@ -44,7 +47,7 @@ http://sukai.me/tag/Tornado/
 http://sukai.me/tag/NIO/
 http://sukai.me/tag/Sql-Server/
 http://sukai.me/tag/Tmux/
-http://sukai.me/tag/Vim/
+http://sukai.me/tag/Machine-Learning/
 http://sukai.me/tag/Brain/
 http://sukai.me/tag/Unix/
 http://sukai.me/feed.xml

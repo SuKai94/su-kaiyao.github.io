@@ -1,0 +1,539 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>
+Machine Learning公开课总结（一） | 苏苏
+</title>
+  <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
+  <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=2e97ef91dedacb7e66b66fd3121e0937" type="text/css" />
+  <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- header-->
+    <header class="header-wrapper">
+      <div class="header-container">
+        <nav>
+          <ul class="header-nav">
+            <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
+            <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
+            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-globe" id="nav-icon"></span>History</a></li>
+            <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- header -->
+
+    <!-- conetent -->
+    <div class="content-wrapper">
+      <div class="am-g am-g-fixed blog-g-fixed">
+        <div class="am-u-md-9">
+        
+<article class="post-main" id="post-font">
+  <header class="blog-header">
+    <span class="round-date">
+      <span class="month">11月</span>
+      <span class="day">25</span>
+    </span>
+    <p class="blog-title">Machine Learning公开课总结（一）</p>
+    <p class="blog-meta">
+      <i class="am-icon-calendar"></i> Published at Nov 25, 2015 • 
+      <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
+      <!--<i class="am-icon-bookmark"></i> 0条评论-->
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Machine-Learning/">Machine Learning</a>
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/cousera/">cousera</a>
+      
+    </p>
+
+  </header>
+  <section class="blog-content">
+    <h3>一. 前言</h3>
+
+<p>花了一个多月的时间（中间有段时间在为本科实验室项目写后台程序）在cousera上学习Andrew Ng的机器学习入门公开课，11周的课程马上就要结束了。整体上，我觉得这11周的课程相对比较简单，很容易听懂，少去很多数学的原理推导，很适合初学者，也让初学者建立了机器学习领域的一些宏观概念。之前，很多人推荐李航博士的《统计学习方法》作为机器学习的人们教程，我个人认为，看完Andrew Ng的课程视频后，再去阅读《统计学习方法》，会轻松很多  </p>
+
+<p>下面我将连载几篇文章，总结这11周课程中的一些内容。主要根据我看视频时，笔记本上纪录的内容为主  </p>
+
+<p>好了，废话不多说。我先总结Week 1~3，主要涉及到监督学习中的线性回归和逻辑回归等内容  </p>
+
+<h3>二. Week One</h3>
+
+<h4>2.1 Introduction</h4>
+
+<h5>2.1.1 环境的建立</h5>
+
+<p>教你搭建Octave/MATLAB，这部分不多说  </p>
+
+<h5>2.1.2 Introduction</h5>
+
+<p>说明什么是监督学习，什么是非监督学习  </p>
+
+<p>监督学习：  </p>
+
+<ul>
+<li>对于离散变量，主要是分类问题<br/></li>
+<li>对于连续变量，主要是回归问题<br/></li>
+</ul>
+
+<p>非监督学习：数据集没有明确的标签，我们需要在这堆数据中寻找他们的数据结构，常见的有聚类问题  </p>
+
+<h4>2.2 Linear Regression with One Variable</h4>
+
+<p>一元线性回归问题  </p>
+
+<h5>2.2.1 描述一个简单机器学习过程</h5>
+
+<p>首先，说明在一个机器学习模型中，要用到的几个字母变量（符号）的含义：  </p>
+
+<ul>
+<li>E: Experience<br/></li>
+<li>T: Tasks<br/></li>
+<li>P: Performance<br/></li>
+<li>x: 特征变量<br/></li>
+<li>y: 目标变量<br/></li>
+<li>m: 训练集的数目<br/></li>
+<li>(x, y): 训练样本<br/></li>
+<li>(x(i), y(i)): 第i个训练样本<br/></li>
+<li>h: 预测函数<br/></li>
+</ul>
+
+<p>好了，有了这些符号，我们就可以表示一个机器学习模型了：  </p>
+
+<p>首先，既然是线程回归问题，我们就先假设预测函数h的公式为：<img src="http://7xl2fd.com1.z0.glb.clouddn.com/预测函数.png" width = "140" height = "25" align=center />  </p>
+
+<p>其中，<img src="http://7xl2fd.com1.z0.glb.clouddn.com/模型参数.png" width = "80" height = "25" align=center />，我们称为模型参数  </p>
+
+<p>然后，学习算法（learning algorithm）会通过traing set训练集，得到一个最优的预测函数h（对应一个模型参数）。之后，从测试集中取出x，通过预测函数的映射，即可得到预测的目标变量y  </p>
+
+<p>需要说明的是：如何得到一个最优的预测函数h？  </p>
+
+<p>很简答，就是通过代价函数  </p>
+
+<p>平方误差是解决回归问题的常用方法，定义一个代价函数J就很简单：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/cost-function.png" width = "300" height = "45" align=center />  </p>
+
+<p>通过某种方法，寻找到使得代价函数最小的那个模型参数θ，即是我们最终需要的结果  </p>
+
+<h5>2.2.2 如何求解模型参数θ（专业地说：如何进行参数学习）</h5>
+
+<p>cousera上介绍了一种最经典的算法：<strong>梯度下降算法</strong>  </p>
+
+<p>大致的工作过程即，从某个随机的θ0, θ1开始，不停地改变θ0, θ1的值，以保证J(θ0, θ1)不断地减小，直至在某个最小值处结束（不停地在迭代运行）  </p>
+
+<p>来张图理解一下（仿佛一个人下山的过程）  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/gradient%20descent%20img.png" width = "700" height = "360" align=center />  </p>
+
+<p><strong>梯度下降算法定义：</strong>  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/gradient%20descent%20define.png" width = "400" height = "100" align=center />  </p>
+
+<p>其中，α叫做学习速率（learning rate），α很大，下山的步伐会迈的很大；α很小，下山的步伐会迈的相对较小。α用以控制我们以多大的幅度去更新参数θj  </p>
+
+<p>α不宜设置过大，否则容易出现波动，难以收敛  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/梯度下降算法中的学习速率.png" width = "700" height = "360" align=center />  </p>
+
+<p>再看看α后面的偏导数项，它代表什么意思呢？  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/梯度下降算法中的偏导数.png" width = "700" height = "380" align=center />  </p>
+
+<p>先看上面的图，偏导数表示红色线的斜率，此时斜率为正，那么θ1就会减去α*一个正数，θ1会逐渐变小，直至最低点  </p>
+
+<p>下面的图，斜率为负，θ1会逐渐变大，直至最低点  </p>
+
+<p>ok，梯度下降算法定义解释完毕。在本例中，hθ(x)=θ0+θ1*x，那么梯度下降算法的具体步骤为：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/一元线性回归的梯度下降算法.png" width = "430" height = "180" align=center />  </p>
+
+<p>此时，已经具体到了θ0和θ1的具体变换过程  </p>
+
+<p>需要注意的是：θ0和θ1是需要同时更新变化执行的  </p>
+
+<h3>三. Week Two</h3>
+
+<h4>3.1 Linear Regression with Multiple Variables</h4>
+
+<p>多元线性回归问题  </p>
+
+<p>既然已经不止一个特征变量了，那么之前用x表示特征变量，现在要换一种表示方法了：  </p>
+
+<ul>
+<li>n: 表示特征值的个数<br/></li>
+<li>xj(i)：第i个训练样本的第j个特征的值<br/></li>
+</ul>
+
+<p>此时预测函数h表示为：hθ(x) = θT*x  </p>
+
+<p>为了符号的方便表示，我们总是定义x(j)0为1  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/多元线性回归的预测函数.png" width = "550" height = "280" align=center />  </p>
+
+<p>下面，解释在多元线性回归中的梯度下降算法：  </p>
+
+<p>首先，是它的代价函数  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/多元线性回归的代价函数.png" width = "490" height = "110" align=center />  </p>
+
+<p>然后是θj的变换过程  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/多元线性回归的梯度下降算法.png" width = "450" height = "280" align=center />  </p>
+
+<p>ok，下面再介绍梯度下降算法在实际应用中的两个注意点：  </p>
+
+<ul>
+<li>特征缩放<br/></li>
+<li>学习速率的选择<br/></li>
+</ul>
+
+<p><strong>特征缩放：</strong>  </p>
+
+<p>现有一个房价预测系统，若现有两个特征：x1, x2。x1表示房屋的面积，取值范围：0~2000，x2表示房间的个数，取值范围：1~5  </p>
+
+<p>这两个特征的取值的取值规模不在一个级别，使用梯度下降算法时，收敛不快，且容易发生波动。应使用特征缩放方法将两个特征的取值范围约束到大体一致的范围：  </p>
+
+<ul>
+<li>一种方法是：x1=x1/2000，每个特征处以该特征值的最大值。这样，取值范围都被缩小为0~1。一般-1~1, -1/3~1/3和-3~3均可接受<br/></li>
+<li>第二种方法，归一化处理：（xi-平均值）/（MAX-MIN）<br/></li>
+</ul>
+
+<p><strong>学习速率α</strong>  </p>
+
+<p>上面已经解释了learning rate的意义。正常的梯度下降算法，随着迭代次数的增加，代价函数逐渐减小；不正常的工作流程，有可能出现波动现象  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/梯度下降算法的迭代过程.png" width = "440" height = "300" align=center />  </p>
+
+<p>不正常的工作现象：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/不正常的梯度下降过程.png" width = "510" height = "300" align=center />  </p>
+
+<p>看了公开课后的结论是：α一般从0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1开始选择  </p>
+
+<p>截至目前，我们一直都在使用梯度下降算法求解最优的模型参数。梯度下降算法最显著的特征就是，需要不停地迭代  </p>
+
+<p>视频中还介绍了另一种求解方法：<strong>正规方程（Normal Equation）</strong>  </p>
+
+<p>θ=(xT*x)-1*xT*y（证明略&hellip;）  </p>
+
+<p>它一步即可得到最优的模型参数值  </p>
+
+<p>现在，我们来比较一下：  </p>
+
+<table border="1">  
+<tr>  
+<th>梯度下降算法（Gradient Descent）</th>  
+<th>正规方程（Normal Equation）</th>  
+</tr>  
+<tr>  
+<td>需要选择学习速率α</td>  
+<td>不需要选择学习速率α</td>  
+</tr>  
+<tr>  
+<td>需要多次迭代</td>  
+<td>不需要迭代，一步得结果</td>  
+</tr>  
+<tr>  
+<td>当特征数目n特别大时，也可以正常工作</td>  
+<td>当特征数目n特别大时，矩阵纬度很大，计算非常慢（n=100,1000还好，n为千万时，计算非常慢）</td>  
+</tr>  
+</table>  
+  
+
+<h3>四. Week Three 逻辑回归</h3>
+
+<h4>4.1 分类问题</h4>
+
+<p>先从两元分类问题进行研究：  </p>
+
+<p>y∈{0, 1}，定义y=0时，属于Negtive Class；y＝1时，属于Positive Class  </p>
+
+<p>那么，怎样让预测函数 0 &lt;= hθ(x) &lt;= 1？  </p>
+
+<p>这里介绍S型函数g(z)=1/(1=e-z)  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/S型函数.png" width = "510" height = "300" align=center />  </p>
+
+<p>S型函数的取值范围在(0, 1)，则hθ(x) = 1/（1=e-(θT*x)）；而且hθ(x) = P(y=1 | x;θ) = 1 - P(y=0 | x;θ)  </p>
+
+<ul>
+<li>当θT*x &gt;= 0，hθ(x) &gt;= 0.5，y为1<br/></li>
+<li>当θT*x &lt; 0，hθ(x) &lt; 0.5，y为0<br/></li>
+</ul>
+
+<p>举例：hθ(x) = -3 + x1 + x2；当-3 + x1 + x2 &gt;= 0，预测y=1；此时决策边界为 x1 + x2 = 3  </p>
+
+<p>需要注意的是：我们不是用训练集来定义决策边界的，而是用来拟合参数θ的，θ决定了决策边界  </p>
+
+<h4>4.2 代价函数和梯度下降算法</h4>
+
+<p>之前在线性回归中定义的平方误差代价函数，是否能用到逻辑回归中呢？  </p>
+
+<p>答案是：不能  </p>
+
+<p>因为逻辑回归中的预测函数hθ(x)是非线性函数，花出的代价函数将是非凸函数，可能是这样：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/非凸代价函数.png" width = "410" height = "250" align=center />  </p>
+
+<p>它有许多局部最优值，梯度下降算法不能保证收敛到全局最优值。所以，我们希望代价函数是有类似于“单弓形”函数，能确保找到全局最小值  </p>
+
+<p>我们需要重新定义逻辑回归的代价函数了  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归的代价函数.png" width = "490" height = "150" align=center />  </p>
+
+<p>当 y = 1，hθ(x) -&gt; 0, cost -&gt; ∞  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/y=1的逻辑回归代价函数.png" width = "410" height = "250" align=center />  </p>
+
+<p>当 y = 0，hθ(x) -&gt; 1, cost -&gt; ∞  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/y=0的逻辑回归代价函数.png" width = "410" height = "250" align=center />  </p>
+
+<p>ok，新定义的代价函数，符合我们的要求  </p>
+
+<p>此时的代价函数公式，用一行表示：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归代价函数总式子.png" width = "630" height = "200" align=center />  </p>
+
+<p>使用梯度下降算法，迭代并同时更新θ0～θn  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归梯度下降算法.png" width = "530" height = "200" align=center />  </p>
+
+<p>和线性回归的一样，只不过hθ(x)的表达式不同  </p>
+
+<p>当然，特征缩放也是使用于逻辑回归的  </p>
+
+<h4>4.3 高级算法</h4>
+
+<p>除了梯度下降，正规方程，还有许多可以计算出最优模型参数θ的算法  </p>
+
+<p>视频中还提到了：BFGS, L-BFGS和Conjugate gradient  </p>
+
+<p>这些高级算法比梯度下降要快，无需选择学习速率，但是更复杂。具体编程时，可以考虑使用现成的类库，帮助我们快速解决问题  </p>
+
+<h4>4.4 多元分类问题</h4>
+
+<p>三元分类问题  </p>
+
+<p>可以转换为三个两元分类问题来做  </p>
+
+<p>hθ(i)(x) = P(y = i | x:θ)，其中 i＝1，2，3  </p>
+
+<p>训练的出θ后，预测时，选择hθ(i)(x)最大的那个i，就是目标变量的分类  </p>
+
+<h4>4.5 过拟合问题</h4>
+
+<h5>4.5.1 什么是过拟合？什么是欠拟合？</h5>
+
+<ul>
+<li>欠拟合：预测模型没有能很好的拟合训练数据，拟合效果差。产生高偏差<br/></li>
+<li>过拟合：能很好地拟合训练数据。但预测函数变量过多，而没有足够多的数据去约束变量的个数（预测测试集，效果会非常差，即泛化效果差）。差生高方差<br/></li>
+</ul>
+
+<p><a href="http://www.zhihu.com/question/20448464">高偏差；高仿差</a>  </p>
+
+<p>＊泛化：一个测试模型应用到新样本的能力  </p>
+
+<p>这里，先不讲如何识别过拟合问题，后面的课程讲解了如果利用工具去识别过拟合问题（后续整理）  </p>
+
+<p>往往，我们往预测模型中，增加了太多太多的特征，容易导致过拟合问题  </p>
+
+<p>如何避免过拟合问题：  </p>
+
+<ul>
+<li>减少特征变量数目（缺点：同时也会丢失一些重要信息）<br/></li>
+<li>正则化（进行某种惩罚措施）：保留所有的特征变量，但是降低模型参数θj的数量级或者值<br/></li>
+</ul>
+
+<p>正则化技术非常有效，由于是在我们预测模型中有许多特征变量，每个特征变量都能帮助我们预测目标变量，这样我们就可以不用舍弃任何一个特征变量了  </p>
+
+<h5>4.5.2 线性回归代价函数中使用正则化技术：</h5>
+
+<p>重写线性回归中的代价函数：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/正则化的线性回归代价函数.png" width = "530" height = "150" align=center />  </p>
+
+<p>λ为正则化参数。λ越大，惩罚程度越大，模型参数θj会越小，有可能会导致欠拟合问题  </p>
+
+<h5>4.5.3 线性回归梯度下降算法中使用正则化技术：</h5>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/正则化的梯度下降算法.png" width = "650" height = "400" align=center />  </p>
+
+<p>注意θ0是单独的一种  </p>
+
+<h5>4.5.4 正规方程中使用正则化技术：</h5>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/正则化的正规方程.png" width = "380" height = "180" align=center />  </p>
+
+<h5>4.5.5 逻辑回归代价函数中使用正则化技术：</h5>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归正则化代价函数.png" width = "730" height = "300" align=center />  </p>
+
+<h5>4.5.6 逻辑回归梯度下降算法中使用正则化技术：</h5>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归正则化梯度下降算法.png" width = "730" height = "350" align=center />  </p>
+
+<p>这个和线性回归中的一样，hθ(x)不同而已  </p>
+
+<h5>4.5.6 高级算法中使用正则化技术：</h5>
+
+<p>略  </p>
+
+<h3>五. 结语</h3>
+
+<p>ok，前三章整理完了。过几天整理神经网络那块  </p>
+
+<p>感谢七牛云存储为文章提供图片CDN支持  </p>
+
+<p>文章若有错误，请指正</p>
+
+  </section>
+  
+    
+        
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+				var disqus_title = "";
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://sukaime.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        
+        
+    
+
+</article>
+
+        </div>
+
+        <div class="sidebar">
+          <div class="am-u-md-3">
+            <!-- about me -->
+            <div class="panel about-me">
+              <div class="about-me-bg"></div>
+              <div class="about-me-content">
+                <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/avatar.jpg"></img></a>
+                <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">苏苏</a></h5>
+                <p class="about-me-words">Strive To Be Full Stack..</p>
+                <ul class="about-me-ul">
+                  <li class="about-me-li">
+                    <a class="about-me-li-content">
+                      日志
+                      <h5 class="about-me-li-h5">18</h5>
+                    </a>
+                  </li>
+                  <li class="about-me-li">
+                    <a class="about-me-li-content">
+                      标签
+                      <h5 class="about-me-li-h5">26</h5>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- about me -->
+            <!-- contact-me -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Contact Me</h5>
+              <div class="contact-me-icons">
+                <a href="https://github.com/su-kaiyao" title="Github: su-kaiyao" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
+                <a href="https://twitter.com/SuKai_Coding" title="Twitter: sukai.me" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
+                <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="Weibo: sukai.me" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
+                <a href="https://cn.linkedin.com/in/凯-苏-847204107" title="linkedin" target="_blank"><i class="am-icon-linkedin-square am-icon-md"></i></a>
+                <a href="http://www.douban.com/people/81024152/" title="豆瓣" target="_blank"><i class="am-icon-globe am-icon-md"></i></a>
+              </div>
+            </div>
+            <!-- contact-me-->
+            <!-- recently -->
+            <div class="shuoshuo panel-two">
+              <h5 class="panel-title">博主说说</h5>
+              <div class="shuoshuo-content">
+                保完研后，在cousera看Machine Learning课
+              </div>
+              <div class="shuoshuo-content">
+                同时为sklcc微信数据分析项目抓取数据源
+              </div>
+            </div>
+            <!-- recently -->
+            <!-- Linux Cn -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Member Of <a href="https://github.com/LCTT">LCTT</a></h5>
+              <span>
+                <img src="http://7xl2fd.com1.z0.glb.clouddn.com/LCTT.png">
+                <a href="http://sukai.me/MyTrans/">Click For More...</a>
+              </span>
+            </div>
+            <!-- Linux Cn -->
+            <!--friends -->
+            <div class="friends panel-two">
+              <h3 class="panel-title">Friends<small><a href="http://sukai.me/friend/">.More</a></small></h5>
+              <ul class="friends-ul">
+                <li>
+                  <a href="http://www.findspace.name/" title="Findspace" target="_blank">Findspace</a>
+                </li>
+                <li>
+                  <a href="http://www.fddcn.cn/" title="奋斗的承诺" target="_blank">奋斗的承诺</a>
+                </li>
+                <li>
+                  <a href="https://www.anotherhome.net/" title="当时只道是寻常" target="_blank">当时只道是寻常</a>
+                </li>
+                <li>
+                  <a href="http://www.llwjy.com/" title="小鸡慢慢" target="_blank">小鸡慢慢</a>
+                </li>
+                <li>
+                  <a href="http://ming.today/" title="Ming YIN" target="_blank">Ming YIN</a>
+                </li>
+                <li>
+                  <a href="http://nextearn.me/" title="NextEarn" target="_blank">NextEarn</a>
+                </li>
+                <li>
+                  <a href="https://xitu.io/" title="稀土" target="_blank">稀土</a>
+                </li>
+                <li>
+                  <a href="http://stomach-ache.github.io/" title="Wei Tong" target="_blank">Wei Tong</a>
+                </li>
+              </ul>
+            </div>
+            <!--friends -->
+            <!-- copyright -->
+            <div class="about-copyright panel-two">
+              ©Powered by<a href="https://github.com/whtsky/Catsup"> Catsup</a>. Designed by<a href="https://github.com/su-kaiyao/catsup-theme-final"> SuKai</a>
+            </div>
+            <!-- Linux Cn -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- conetent -->
+  </div>
+
+<!--
+<script src="blog_files/jquery.js"></script>
+<script src="blog_files/amazeui.js"></script>
+-->
+<!--<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?564d3a351e5dd8c80c238f900c479ab3";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70406244-1', 'auto');
+  ga('send', 'pageview');
+</script>-->
+</body>
+</html>
