@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>
+神经网络(Neural Networks)基础知识 | 苏苏
+</title>
+  <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
+  <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=2e97ef91dedacb7e66b66fd3121e0937" type="text/css" />
+  <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- header-->
+    <header class="header-wrapper">
+      <div class="header-container">
+        <nav>
+          <ul class="header-nav">
+            <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
+            <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
+            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-globe" id="nav-icon"></span>History</a></li>
+            <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- header -->
+
+    <!-- conetent -->
+    <div class="content-wrapper">
+      <div class="am-g am-g-fixed blog-g-fixed">
+        <div class="am-u-md-9">
+        
+<article class="post-main" id="post-font">
+  <header class="blog-header">
+    <span class="round-date">
+      <span class="month">12月</span>
+      <span class="day">03</span>
+    </span>
+    <p class="blog-title">神经网络(Neural Networks)基础知识</p>
+    <p class="blog-meta">
+      <i class="am-icon-calendar"></i> Published at Dec 03, 2015 • 
+      <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
+      <!--<i class="am-icon-bookmark"></i> 0条评论-->
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Machine-Learning/">Machine Learning</a>
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/cousera/">cousera</a>
+      
+    </p>
+
+  </header>
+  <section class="blog-content">
+    <p>前几天，我们总结了线性回归，逻辑回归等相关的机器学习基础知识，今天我们来总结一下机器学习中一个古老而强大的学习模型：神经网络，主要涉及到：神经网络的模型；工作原理；应用；前向传播和后向传播算法  </p>
+
+<p>那么，开始吧！  </p>
+
+<h3>一. 神经网络模型</h3>
+
+<p>神经网络可以表达一个复杂且非线性的假设模型，其模型表示：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/neural-network-model.png" width = "680" height = "270" align=center />  </p>
+
+<p>最左边Layer 1称为<strong>输入层</strong>；Layer 2称为<strong>隐藏层</strong>；隐藏层每一个元素也叫做“神经元”，它是由前一层通过“激励函数”计算得来的；最后Layer 3称为<strong>输出层</strong>；该模型隐藏层比较少，绝大多数的数量不止一个  </p>
+
+<p>其中：ai(j)表示第j层的第i个神经元，也称为激励值；激励函数可以选择g(z)=1/(1 + e-z)   </p>
+
+<p>备注：激励函数是对类似的非线性函数g(z)的另一种称呼而已  </p>
+
+<p>那么：  </p>
+
+<ul>
+<li>a1(2) = g(Θ10(1)X0 + Θ11(1)x1 + Θ12(1)x2 + Θ13(1)x3)<br/></li>
+<li>a2(2) = g(Θ20(1)x0 + Θ21(1)x1 + Θ22(1)x2 + Θ23(1)x3)<br/></li>
+<li>a3(2) = g(Θ20(1)x0 + Θ31(1)x1 + Θ32(1)x2 + Θ33(1)x3)<br/></li>
+<li>hΘ(x) = a1(3) = g(Θ10(2)a0(2) + Θ11(2)a1(2) + Θ12(2)a2(2) + Θ13(2)a3(2))<br/></li>
+</ul>
+
+<p>其中 Θij(l) 是 第l层 第j个单元 与 第l+1层第i个单元之间的联接参数（其实就是连接线上的权重，注意标号顺序）  </p>
+
+<p>ok，一个简单的模型表示出来了，其实还可以精简一点表示：  </p>
+
+<p>重新定义如下：  </p>
+
+<ul>
+<li>a1(2) = g(z1(2))<br/></li>
+<li>a2(2) = g(z2(2))<br/></li>
+<li>a3(2) = g(z3(2))<br/></li>
+<li>hΘ(x) = a1(3) = g(z1(3))<br/></li>
+<li>z(2) = Θ(1)X<br/></li>
+</ul>
+
+<p>其中，z是x0, x1, x2, x3的加权线性组合  </p>
+
+<p>言而总之，我们从输入层的激励开始，然后进行<strong>前向传播</strong>给隐藏层计算，并进行隐藏层的激励，然后继续传播，计算输出层的激励  </p>
+
+<p>所以，神经网络的工作原理是：  </p>
+
+<p>其本质做的就是逻辑回归，但不直接用x1, x2, x3作为输入特征，而是用a1, a2, a3，而a1, a2, a3是由Θ(1)所决定的。即不直接使用输入特征来训练逻辑回归，而是自己训练逻辑回归的输入特征a1, a2, a3  </p>
+
+<p>Θ(1)不同，会训练出不同复杂而有趣的特征  </p>
+
+<h3>二. 神经网络的应用</h3>
+
+<h4>2.1 具体例子</h4>
+
+<p>使用神经网络实现x1 AND x2  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/neural-network-AND.png" width = "550" height = "370" align=center />  </p>
+
+<p>相应的，可以实现x1 OR x2; x1 XOR x2; x1 XNOR x2。只是，各自的参数权重不同而已  </p>
+
+<h4>2.2 多类型分类系统</h4>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/neural-network-app.png" width = "680" height = "270" align=center />  </p>
+
+<p>预测的输出值有多个，可以预测多种类型  </p>
+
+<h3>三. 反向传播算法</h3>
+
+<p>神经网络的模型已经被我们表示出来了，那么我们如何学习模型参数？利用反向传播算法  </p>
+
+<p>我们要先找到神经网络的代价函数，目的是min它  </p>
+
+<h4>3.1 神经网络的代价函数</h4>
+
+<p>先定义一些字母变量  </p>
+
+<ul>
+<li>L：神经网络中的层数<br/></li>
+<li>Sl：第l层神经单元的个数<br/></li>
+<li>k：输出单元数量；显然，Binary Classification的k为1，multi-class Classification的k就是k，k维向量<br/></li>
+</ul>
+
+<p>既然神经网络的本质就是逻辑回归，我们先来看看逻辑回归的代价函数：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归代价函数总式子.png" width = "630" height = "200" align=center />  </p>
+
+<p>只不过，在神经网络中，输出单元可能不止一个，那么神经网络的代价函数为：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/neural-network-cost-function.png" width = "630" height = "200" align=center />  </p>
+
+<h4>3.2 反向传播算法</h4>
+
+<p>为了计算导数项，我们将使用反向传播算法  </p>
+
+<p>反向传播算法某种意义上是对每一个结点计算这样的一项：δj(l)，即第l层第j个结点的误差  </p>
+
+<p>具体计算方法：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/反向传播算法-1.png" width = "630" height = "300" align=center />  </p>
+
+<p>让我们来整合一下，当我们拥有大量训练样本的时候，如何实现反向传播算法：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/反向传播算法-2.png" width = "630" height = "300" align=center />  </p>
+
+<p>好了，仔细看看上面两张图片，我们的最终目的是计算出了偏导数项。其实就是计算出梯度下降的方向  </p>
+
+<p>PS: 我操，步骤好多。参数好多。。  </p>
+
+<h3>四. 实际中如何使用反向传播算法</h3>
+
+<h4>4.1 梯度检查(Gradient Checking)</h4>
+
+<p>梯度检查，是为了避免反向传播算法实现过程中的小错误；当出现错误时，J(Θ)看似在减小，实则最终值会比没有错误时要高  </p>
+
+<p>其核心原理是J(θ)在θ处的偏导数可以约等于(J(θ+ε) - J(θ-ε)) / 2ε，其中ε要足够小，一般去10的-4次方：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/梯度检查原理.png" width = "630" height = "300" align=center />  </p>
+
+<p>这是高中就知道的知识点了，具体应用到梯度检查中就是：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/梯度检查算法" width = "630" height = "300" align=center />  </p>
+
+<p>上面图中，我们可以for循环1~n来计算代价函数在每个网络中的参数的偏导数的近似值，记为gradApprox  </p>
+
+<p>我们把反向传播算法计算得到的梯度记为DVec  </p>
+
+<p>这样，我们比较gradApprox和DVec是否近似相等（一般最多几位小数的差距）  </p>
+
+<p>ok，总结一下就是：  </p>
+
+<ul>
+<li>先实现反向传播算法，计算出DVec<br/></li>
+<li>实现数值梯度检查算法，计算出gradApprox<br/></li>
+<li>确定两者给出的值，是接近的<br/></li>
+<li>关闭梯度检查（梯度检查计算量相当大），使用反向传播进行神经网络的学习<br/></li>
+</ul>
+
+<p>所以，梯度检查是是用来验证你的方向传播的，不是用来学习参数的  </p>
+
+<h4>4.2 如何随机初始化Θ？</h4>
+
+<p>是否可以将Θ的每个参数都初始化为0？不可以！  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/神经网络初始化参数不能为0.png" width = "630" height = "300" align=center />  </p>
+
+<p>这会导致a1(2)永远等于a2(2)；所有的隐藏单元都会通过完全相同的输入函数计算出来，这完全是多余的  </p>
+
+<p>正确的姿势是：打破这种对称的权重  </p>
+
+<p>随机初始化Θij(l)在[-ε, +ε]之间即可，之间的任何一个数  </p>
+
+<h3>五. 总结回顾</h3>
+
+<p>神经网络的知识点还是比较复杂，需要来一波总结  </p>
+
+<h4>5.1 如何选择神经网络的框架</h4>
+
+<p>该选择多少个隐藏层？每个隐藏层拥有多少个神经元？  </p>
+
+<p>一般默认  </p>
+
+<ul>
+<li>一个隐藏层<br/></li>
+<li>或者多于一个隐藏层，每个隐藏层应具备同样数目的神经元（神经元数量并不是越多越好，越多，计算量也越大），最好能和输入特征的维度匹配<br/></li>
+</ul>
+
+<p>比如：3，5，4 或 3，5，5，4 或 3，5，5，5，4  </p>
+
+<h4>5.2 总结神经网络训练模型的步骤</h4>
+
+<p>1.随机初始化权重（即参数）<br/>
+2.对于训练集中的每一个x(i)，使用前向传播算法得到hΘ(x(i))<br/>
+3.计算代价函数J(Θ)<br/>
+4.实现反向传播算法，计算J(Θ)在Θj处的偏导数<br/>
+5.使用梯度检查算法，确保反向传播算法无差错工作；之后，关闭该算法<br/>
+6.使用梯度下降算法或者其余高级算法（结合反向传播算法），minmizeJ(Θ)，得到最优的模型参数Θ  </p>
+
+<p>反向传播的目的是为了计算梯度下降的方向  </p>
+
+<hr/>
+
+<p>就暂时整理这么多，过几天继续往后整理</p>
+
+  </section>
+  
+    
+        
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+				var disqus_title = "";
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://sukaime.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        
+        
+    
+
+</article>
+
+        </div>
+
+        <div class="sidebar">
+          <div class="am-u-md-3">
+            <!-- about me -->
+            <div class="panel about-me">
+              <div class="about-me-bg"></div>
+              <div class="about-me-content">
+                <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/avatar.jpg"></img></a>
+                <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">苏苏</a></h5>
+                <p class="about-me-words">Strive To Be Full Stack..</p>
+                <ul class="about-me-ul">
+                  <li class="about-me-li">
+                    <a class="about-me-li-content">
+                      日志
+                      <h5 class="about-me-li-h5">21</h5>
+                    </a>
+                  </li>
+                  <li class="about-me-li">
+                    <a class="about-me-li-content">
+                      标签
+                      <h5 class="about-me-li-h5">30</h5>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- about me -->
+            <!-- contact-me -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Contact Me</h5>
+              <div class="contact-me-icons">
+                <a href="https://github.com/su-kaiyao" title="Github: su-kaiyao" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
+                <a href="https://twitter.com/SuKai_Coding" title="Twitter: sukai.me" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
+                <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="Weibo: sukai.me" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
+                <a href="https://cn.linkedin.com/in/凯-苏-847204107" title="linkedin" target="_blank"><i class="am-icon-linkedin-square am-icon-md"></i></a>
+                <a href="http://www.douban.com/people/81024152/" title="豆瓣" target="_blank"><i class="am-icon-globe am-icon-md"></i></a>
+              </div>
+            </div>
+            <!-- contact-me-->
+            <!-- recently -->
+            <div class="shuoshuo panel-two">
+              <h5 class="panel-title">博主说说</h5>
+              <div class="shuoshuo-content">
+                保完研后，在cousera看Machine Learning课
+              </div>
+              <div class="shuoshuo-content">
+                同时为sklcc微信数据分析项目抓取数据源
+              </div>
+            </div>
+            <!-- recently -->
+            <!-- Linux Cn -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Member Of <a href="https://github.com/LCTT">LCTT</a></h5>
+              <span>
+                <img src="http://7xl2fd.com1.z0.glb.clouddn.com/LCTT.png">
+                <a href="http://sukai.me/MyTrans/">Click For More...</a>
+              </span>
+            </div>
+            <!-- Linux Cn -->
+            <!--friends -->
+            <div class="friends panel-two">
+              <h3 class="panel-title">Friends<small><a href="http://sukai.me/friend/">.More</a></small></h5>
+              <ul class="friends-ul">
+                <li>
+                  <a href="http://www.findspace.name/" title="Findspace" target="_blank">Findspace</a>
+                </li>
+                <li>
+                  <a href="http://www.fddcn.cn/" title="奋斗的承诺" target="_blank">奋斗的承诺</a>
+                </li>
+                <li>
+                  <a href="https://www.anotherhome.net/" title="当时只道是寻常" target="_blank">当时只道是寻常</a>
+                </li>
+                <li>
+                  <a href="http://www.llwjy.com/" title="小鸡慢慢" target="_blank">小鸡慢慢</a>
+                </li>
+                <li>
+                  <a href="http://ming.today/" title="Ming YIN" target="_blank">Ming YIN</a>
+                </li>
+                <li>
+                  <a href="http://nextearn.me/" title="NextEarn" target="_blank">NextEarn</a>
+                </li>
+                <li>
+                  <a href="https://xitu.io/" title="稀土" target="_blank">稀土</a>
+                </li>
+                <li>
+                  <a href="http://stomach-ache.github.io/" title="Wei Tong" target="_blank">Wei Tong</a>
+                </li>
+              </ul>
+            </div>
+            <!--friends -->
+            <!-- copyright -->
+            <div class="about-copyright panel-two">
+              ©Powered by<a href="https://github.com/whtsky/Catsup"> Catsup</a>. Designed by<a href="https://github.com/su-kaiyao/catsup-theme-final"> SuKai</a>
+            </div>
+            <!-- Linux Cn -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- conetent -->
+  </div>
+
+<!--
+<script src="blog_files/jquery.js"></script>
+<script src="blog_files/amazeui.js"></script>
+-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?564d3a351e5dd8c80c238f900c479ab3";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70406244-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>

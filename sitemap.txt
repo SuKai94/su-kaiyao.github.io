@@ -1,3 +1,4 @@
+http://sukai.me/ml-neural-networks/
 http://sukai.me/wx-gsdata/
 http://sukai.me/ml-cousera-one/
 http://sukai.me/tornado-source-code-one/
@@ -25,8 +26,10 @@ http://sukai.me/MyHistory/
 http://sukai.me/MyTrans/
 http://sukai.me/tag/Python/
 http://sukai.me/tag/Douban/
+http://sukai.me/tag/cousera/
 http://sukai.me/tag/JSP/
 http://sukai.me/tag/Github/
+http://sukai.me/tag/Machine-Learning/
 http://sukai.me/tag/Linux/
 http://sukai.me/tag/Java/
 http://sukai.me/tag/WeiXin/
@@ -35,7 +38,6 @@ http://sukai.me/tag/Blog/
 http://sukai.me/tag/DuoShuo/
 http://sukai.me/tag/Vim/
 http://sukai.me/tag/Life/
-http://sukai.me/tag/cousera/
 http://sukai.me/tag/Tornado/
 http://sukai.me/tag/BigData/
 http://sukai.me/tag/四轴飞行器/
@@ -51,7 +53,6 @@ http://sukai.me/tag/I/O/
 http://sukai.me/tag/NIO/
 http://sukai.me/tag/Sql-Server/
 http://sukai.me/tag/Tmux/
-http://sukai.me/tag/Machine-Learning/
 http://sukai.me/tag/Brain/
 http://sukai.me/tag/Unix/
 http://sukai.me/feed.xml
