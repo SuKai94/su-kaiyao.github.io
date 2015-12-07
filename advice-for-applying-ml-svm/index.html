@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>
-Machine Learnging应用的几处建议 | 苏苏
+Machine Learning应用的几处建议 | 苏苏
 </title>
   <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
   <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=2e97ef91dedacb7e66b66fd3121e0937" type="text/css" />
@@ -39,7 +39,7 @@ Machine Learnging应用的几处建议 | 苏苏
       <span class="month">12月</span>
       <span class="day">07</span>
     </span>
-    <p class="blog-title">Machine Learnging应用的几处建议</p>
+    <p class="blog-title">Machine Learning应用的几处建议</p>
     <p class="blog-meta">
       <i class="am-icon-calendar"></i> Published at Dec 07, 2015 • 
       <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
@@ -54,6 +54,230 @@ Machine Learnging应用的几处建议 | 苏苏
   </header>
   <section class="blog-content">
     <p>ok，我又来继续总结cousera上的机器学习课程了。这次，我主要整理：应用机器学习过程中的几处建议点。本应该还要总结SVM（支持向量机）的，无奈，这部分我暂时还没搞懂，所以，先对这部分留有空白，未来回头在补充。截止本章，所有监督学习的内容差不多就先整理到这了  </p>
+
+<h3>一. 机器学习应用的一些建议</h3>
+
+<h4>1.1 如何评价一个学习算法的好坏？</h4>
+
+<p>当训练得到的模型参数泛化能力很弱的时候，下一步该做什么？  </p>
+
+<p>很多人认为 1. 增加训练样本，即可改进算法，所以把时间浪费在了收集样本上。通常，盲目地扩大训练样本于事无补  </p>
+
+<p>除了增加训练样本外，还有一些其余的改进方法：  </p>
+
+<p>2.尝试选择更少的特征集，防止过拟合<br/>
+3.尝试选择更多的特征集，防止欠拟合<br/>
+4.增加多项式特征，如x1-&gt;x1的平方<br/>
+5.减少或者增加正则化参数λ  </p>
+
+<p>当我们的模型参数泛化能力差时，这1~5中改进方法，我们选择哪一种？  </p>
+
+<p>通过机器学习诊断算法去帮助我们决定，下面会介绍  </p>
+
+<h4>1.2 如何评价假设函数？</h4>
+
+<p><strong>A. 如何判断一个假设函数是过拟合的？</strong>  </p>
+
+<p>我们先来介绍一个概念：Test Error（测试误差）  </p>
+
+<p>我们将所有样本按照7：3，分为：Training Set和Test Set  </p>
+
+<p>线性回归中，我们可以利用训练集得到的学习参数θ，去计算测试集的代价函数Jtest(θ)，作为测试误差：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/线性回归中的测试误差.png" width = "600" height = "200" align=center />  </p>
+
+<p>其中，mtest表示测试样本数量；(xtest(i), ytest(i))表示第i个测试样本  </p>
+
+<p>逻辑回归中，同样的道理，测试误差为：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归的测试误差.png" width = "720" height = "200" align=center />  </p>
+
+<p>除此之外，逻辑回归中还有一种更加直观的，用来表示测试误差的方式：误分类率，也叫0/1错分率  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归的误分类率.png" width = "740" height = "300" align=center />  </p>
+
+<p>其中，err(hθ(x), y)有两种值：  </p>
+
+<ul>
+<li>当hθ(x) &gt;= 0.5，y = 0；或者 hθ(x) &lt;= 0.5，y = 1时候，err值为1。这时都是没有正确预测的情况<br/></li>
+<li>其余情况，正确预测，err的值为0<br/></li>
+</ul>
+
+<p>此时的测试误差，就是测试集合的err总和的均值  </p>
+
+<p>这样，我们就可以通过<strong>测试误差</strong>去评价我们学习出来的预测函数（假设函数）了，也可以看出假设函数是否能很好的拟合测试数据  </p>
+
+<h4>1.3 模型选择和 训练/交叉验证/测试 集合</h4>
+
+<p>假设d表示我们要选择的多项式的次数，取值为[1, 10]，我们最终该选择何种模型，即d的取值选择多少，才能使得过拟合和欠拟合适中？  </p>
+
+<p>我们可以取d的值为1~10，10个值都分别去训练学习，得到相应取值d下的最优学习参数θ(1) &hellip; θ(10)，然后计算测试误差，得到Jtest(hθ(1)，Jtest(hθ(2)) &hellip; Jtest(hθ(10))  </p>
+
+<p>取最小的Jtest(hθ(i))，i为d的最优取值  </p>
+
+<p>我们用测试误差，去拟合d的值。但，这也不能确切地保证，假设函数在新样本中的泛化能力。我们需要改进我们的集合划分策略，将数据集分为三部分：  </p>
+
+<ul>
+<li>Training Set 60%<br/></li>
+<li>Cross Validation Set 20%<br/></li>
+<li>Test Set 20%<br/></li>
+</ul>
+
+<p>我们可以在三中样本上，定义三种误差，方法上面已经讲过：  </p>
+
+<ul>
+<li>Training Error<br/></li>
+<li>Cross Validation Error<br/></li>
+<li>Test Error<br/></li>
+</ul>
+
+<p>我们的多项式次数选择方法，改进如下：  </p>
+
+<p>我们转向去计算cv集上的误差：Jcv(hθ(1)，Jcv(hθ(2)) &hellip; Jcv(hθ(10))，取交叉测试集误差最小的d，比如d=4。最后在计算Jtest(θ(4))，来判断其与测试集有没有拟合  </p>
+
+<p>这样，可以回避测试集的嫌疑  </p>
+
+<h3>二. 偏差 VS 方差</h3>
+
+<h4>2.1 学会诊断偏差和方差</h4>
+
+<p>学习参数泛化不理想，无外乎两种情况：欠拟合和过拟合，前者对应着较大的偏差，后者对应着较大的方差，我们需要学会诊断什么是高方差，什么是高偏差，这样，才能帮助我们进行学习的改进  </p>
+
+<p>继续上面选择多项式次数d的例子，我们绘制出图形如下，横坐标为d，纵坐标为error：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/error-d图.png" width = "700" height = "400" align=center />  </p>
+
+<p>我们可以从图片中猜测，偏向左端的d值对应着欠拟合问题，偏向右端的d值对应着过拟合问题：  </p>
+
+<p>欠拟合出现，会产生高偏差：  </p>
+
+<ul>
+<li>Jtrain(θ) will be high<br/></li>
+<li>Jcv(θ) 约等于 Jtrain(θ)<br/></li>
+</ul>
+
+<p>过拟合出现，会产生高方差：  </p>
+
+<ul>
+<li>Jtrain(θ) will be low<br/></li>
+<li>Jcv(θ) &gt;&gt; Jtrain(θ) 远大于<br/></li>
+</ul>
+
+<p>这也是我们区别高偏差和高方差的方法  </p>
+
+<h4>2.2 正则化与偏差和方差</h4>
+
+<p>众所周知，正则化技术用来防止过拟合现象  </p>
+
+<p>正则化参数λ过大，模型参数θ将被大大惩罚，结果会导致θ值近似于0，并且h(θ)值也将趋近于0，出现欠拟合现象  </p>
+
+<p>正则化参数λ过小，会出现过拟合情况  </p>
+
+<p><strong>如何选择何止的参数λ？</strong>  </p>
+
+<p>按照之前遵循的方法，取λ值为0, 0.01, 0.02 &hellip; 10.24（一切我们想尝试的λ值），利用train set训练出相应λ值下得模型参数θ。之后，我们就可以用cv集评价假设函数和参数了，选择cv集误差最小的参数λ作为结果  </p>
+
+<p>最终，我们会得到这样的曲线图：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/λ和error曲线图.png" width = "600" height = "330" align=center />  </p>
+
+<p>我们可以根据绘制出的曲线图，选择合适的参数λ  </p>
+
+<h4>2.3 学习曲线</h4>
+
+<p>绘制学习曲线，有助于检查学习算法是否运行正常  </p>
+
+<p>正常情况下得学习曲线：Jtrain(0)随着训练样本数量m的增加，逐渐增大；而Jcv(0)逐渐减小  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/正常情况下得学习曲线.png" width = "600" height = "330" align=center />  </p>
+
+<p>欠拟合情况下，随着m增加，训练集误差和cv集误差趋近于相等，两者预测效果非常接近，都不理想：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/欠拟合的学习曲线.png" width = "600" height = "330" align=center />  </p>
+
+<p>此时，即使你增加训练样本的数目m，基本上不会起作用，因为cv集误差或者测试误差随着m增加，趋近于直线  </p>
+
+<p>过拟合情况下：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/过拟合的学习曲线.png" width = "600" height = "330" align=center />  </p>
+
+<p>此时，获取更多的样本容量，是起作用的：蓝色和红色曲线会慢慢靠近  </p>
+
+<h4>2.4 下一步，我们该做什么？</h4>
+
+<p>整理完前面的知识，一开始就介绍的五种改进学习算法的方法，它们对应的使用情况就明白了：  </p>
+
+<p>1.增加训练样本（fix high variance）<br/>
+2.尝试选择更少的特征集，防止过拟合（fix high variance）<br/>
+3.尝试选择更多的特征集，防止欠拟合（fix high bias）<br/>
+4.增加多项式特征，如x1-&gt;x1的平方（fix high bias）<br/>
+5.减少或者增加正则化参数λ（fix high bias/variance）  </p>
+
+<h3>三. 实战：机器学习系统设计</h3>
+
+<h4>3.1 误差分析</h4>
+
+<p>推荐的一种误差分析方法：  </p>
+
+<p>1.先从一种简单的学习算法入手，一种你能很快实现的算法。然后在cv集中测试该学习算法<br/>
+2.绘制学习曲线，决定：增加样本容量；增减特征；等等是否有用<br/>
+3.误差分析：手动检查那些cv集中出错的样本，发现系统性规律：那些样本是出错的，是否存在共性等等  </p>
+
+<h4>3.2 处理偏态数据</h4>
+
+<p>何为偏态数据（skewed data）：一个类的样本数比另一个类的样本数多很多  </p>
+
+<p>此时，假设函数如果总是预测y=0或者y=1，利用cv error评价该假设函数，会得到不错的评价结果  </p>
+
+<p>所以，我们针对偏态数据，必须寻找新的度量标准：  </p>
+
+<p>这里，我们将介绍Precision和Recall，查准率和召回率  </p>
+
+<p>首先，看图表：  </p>
+
+<table border="1">  
+<tr>  
+<th></th>  
+<th>样本实际值为1</th>  
+<th>| 样本实际值为0</th>  
+</tr>  
+<tr>  
+<td>预测值为1：</td>  
+<td>true positive</td>  
+<td>| flase positive</td>  
+</tr>  
+<tr>  
+<td>预测值为0：</td>  
+<td>false negativie</td>  
+<td>| true negative</td>  
+</tr>  
+</table>  
+  
+
+<p>基于上述图表，  </p>
+
+<ul>
+<li>查准率定义为：(True positive) / (Predict positive) = (True positive) / (True positive + False positive)，我们预测属于1分类的样本中，有多大比率，我们是正确<br/></li>
+<li>召回率定义为：(True positive) / (Actual positive) = (True positive) / (True positive + False negative)，样本中确实属于1分类的样本，有多大比率，我们正确地预测了<br/></li>
+</ul>
+
+<p>很容易理解  </p>
+
+<h4>3.3 权衡查准率和召回率</h4>
+
+<p>以预测病人是否得癌症为例：  </p>
+
+<p>当我们十分十分确定该病人患有癌症时，我们才预测y=1，此时满足：Higher Precision, lower Recall  </p>
+
+<p>当我们不想错过任何一个可能患有癌症的病人时，满足：Higher Recall, lower Precision  </p>
+
+<h4>3.4 如何比较Recall（R） / Precision（P）？</h4>
+
+<p>定义F1 = (2 * PR) / (P+R)  </p>
+
+<h3>四. SVM：支持向量机</h3>
+
+<p>略  </p>
 
   </section>
   
@@ -181,7 +405,6 @@ Machine Learnging应用的几处建议 | 苏苏
 <script src="blog_files/jquery.js"></script>
 <script src="blog_files/amazeui.js"></script>
 -->
-<!--
 <script>
 var _hmt = _hmt || [];
 (function() {
@@ -198,6 +421,6 @@ var _hmt = _hmt || [];
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-70406244-1', 'auto');
   ga('send', 'pageview');
-</script>-->
+</script>
 </body>
 </html>
