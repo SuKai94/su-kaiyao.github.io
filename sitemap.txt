@@ -1,3 +1,4 @@
+http://sukai.me/advice-for-applying-ml-svm/
 http://sukai.me/ml-neural-networks/
 http://sukai.me/wx-gsdata/
 http://sukai.me/ml-cousera-one/
@@ -24,12 +25,12 @@ http://sukai.me/Board/
 http://sukai.me/friend/
 http://sukai.me/MyHistory/
 http://sukai.me/MyTrans/
-http://sukai.me/tag/Python/
-http://sukai.me/tag/Douban/
 http://sukai.me/tag/cousera/
+http://sukai.me/tag/Python/
+http://sukai.me/tag/Machine-Learning/
+http://sukai.me/tag/Douban/
 http://sukai.me/tag/JSP/
 http://sukai.me/tag/Github/
-http://sukai.me/tag/Machine-Learning/
 http://sukai.me/tag/Linux/
 http://sukai.me/tag/Java/
 http://sukai.me/tag/WeiXin/
