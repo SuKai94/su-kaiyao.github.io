@@ -313,6 +313,21 @@ section, article {
   color: #030303;
 }
 
+.contact-me #weixin-info {
+  display: none;
+}
+
+.contact-me #weixin-info img {
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0px auto;
+}
+
+.contact-me #weixin-icon:hover #weixin-info {
+  display: block;
+}
+
+
 /**
 post.html
 */
