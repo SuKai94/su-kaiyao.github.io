@@ -156,6 +156,16 @@ section, article {
   font-size: 16px;
 }
 
+.blog-content pre {
+  display: block;
+  padding: 0.5em;
+  margin: 8px 0px;
+  /*font: 1em/1.3em "Droid Sans Mono","DejaVu Sans Mono","Lucida Console","Courier New",monospace;*/
+  background: #000 none repeat scroll 0% 0%;
+  color: #F8F8F8;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.7);
+}
+
 .blog-content img {
   max-width: 800px;
 }

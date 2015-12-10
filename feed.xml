@@ -3,8 +3,154 @@
     <title>苏苏</title>
     <link href="" rel="self" />
     <link href="http://sukai.me/" />
-    <updated>2015-12-07T16:30:00Z</updated>
+    <updated>2015-12-10T18:00:00Z</updated>
     <id>http://sukai.me/</id>
+    
+    <entry>
+        <title><![CDATA[用Python实现线性回归]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/python-linear-regerssion/"/>
+        <updated>2015-12-10T18:00:00Z</updated>
+        <published>2015-12-10T18:00:00Z</published>
+        <id>http://sukai.me/python-linear-regerssion/</id>
+        <content type="html">
+            <![CDATA[
+             <h3>为什么用Python？</h3>
+
+<p><strong>“</strong>  </p>
+
+<p>说起科学计算，首先会被提到的可能就是强大的MATLAB。然而除了MATLAB的一些专业性很强的工具箱目前还无法替代外，MATLAB的大部分常用功能都可以在Pyython世界中找到相应的扩展库。和MATLAB相比，用Python做科学计算有如下优点：  </p>
+
+<ul>
+<li>免费<br/></li>
+<li>更易学<br/></li>
+<li>丰富扩展库<br/></li>
+</ul>
+
+<p><strong>”</strong>  </p>
+
+<p>&mdash; 这段话摘自<a href="http://book.douban.com/subject/7175280/">《Python科学计算》</a>  </p>
+
+<p>在这篇文章中，我就利用了Python的NumPy库，帮助我更快实现了线性回归中的一些内容：  </p>
+
+<p>代码中注释很详细，直接阅读代码吧：  </p>
+<div class="highlight"><pre><span class="c">#!/usr/bin/env python  </span>
+<span class="c"># -*- coding: utf-8 -*-  </span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>  
+
+<span class="sd">&#39;&#39;&#39;  </span>
+<span class="sd">Implement Linear-Regression, using Python  </span>
+<span class="sd">&#39;&#39;&#39;</span>  
+
+
+<span class="k">def</span> <span class="nf">loadDataSet</span><span class="p">():</span>  
+    <span class="sd">&#39;&#39;&#39;  </span>
+<span class="sd">    Read data from file  </span>
+<span class="sd">    Return:  </span>
+<span class="sd">        x:list, [[x0(0), x1(0)], [x0(1), x1(1)] ... [x0(m), x1(m)]]  </span>
+<span class="sd">        y:list, [y(0), y(1), ... y(m)]  </span>
+<span class="sd">    &#39;&#39;&#39;</span>  
+    <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>  
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>  
+    <span class="n">dataFile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;ex1data1.txt&#39;</span><span class="p">)</span>  
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">dataFile</span><span class="p">:</span>  
+        <span class="n">lineData</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>  
+        <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">lineData</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>  
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">lineData</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>  
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  
+
+
+<span class="k">def</span> <span class="nf">h</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>  
+    <span class="sd">&#39;&#39;&#39;  </span>
+<span class="sd">    Hypothesis Function For one sample  </span>
+<span class="sd">        theta: 个数为n的一维ndarray  </span>
+<span class="sd">        x: 个数为n的一维ndarray  </span>
+<span class="sd">    Return: digit  </span>
+<span class="sd">    &#39;&#39;&#39;</span>  
+    <span class="k">return</span> <span class="n">theta</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
+
+
+<span class="k">def</span> <span class="nf">batch_gradient_descent</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>  
+    <span class="sd">&#39;&#39;&#39;  </span>
+<span class="sd">    Batch-Gradient-Descent&quot;  </span>
+<span class="sd">        alpha: Learning Rate  </span>
+<span class="sd">        x: list, [[x0(0), x1(0)], [x0(1), x1(1)] ... [x0(m), x1(m)]]  </span>
+<span class="sd">        y: list, [y(0), y(1), ... y(m)]  </span>
+<span class="sd">        theta: 默认为np.array([0]*n, dtype=np.float)  </span>
+<span class="sd">    Return:  </span>
+<span class="sd">        newTheta: 训练后的模型参数，个数为n的一维ndarray  </span>
+<span class="sd">    &#39;&#39;&#39;</span>  
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>  
+    <span class="n">newTheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>  
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>  
+        <span class="n">count</span> <span class="o">=</span> <span class="mf">0.0</span>  
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>  
+            <span class="c"># x[i,:]取x第i行，形成n个元素的一维矩阵  </span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="p">(</span><span class="n">h</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,:])</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>  
+        <span class="n">newTheta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">count</span> <span class="o">/</span> <span class="n">m</span>  
+    <span class="k">return</span> <span class="n">newTheta</span>  
+
+
+<span class="k">def</span> <span class="nf">normal_equation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>  
+    <span class="sd">&#39;&#39;&#39;  </span>
+<span class="sd">    Normal Equation  </span>
+<span class="sd">    &#39;&#39;&#39;</span>  
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  
+
+
+<span class="k">def</span> <span class="nf">cost_function</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>  
+    <span class="sd">&quot;&quot;&quot;  </span>
+<span class="sd">    Cost Function  </span>
+<span class="sd">        theta: 模型参数，个数为n的一维ndarray  </span>
+<span class="sd">        x: m*n的二维ndarray  </span>
+<span class="sd">        y: 个数为m的一维ndarray  </span>
+<span class="sd">        x.dot(theta): 个数为m的一维矩阵  </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="p">)</span>  
+
+
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>  
+    <span class="sd">&#39;&#39;&#39;  </span>
+<span class="sd">    Test Function  </span>
+<span class="sd">    &#39;&#39;&#39;</span>  
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">loadDataSet</span><span class="p">()</span>  
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>  
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>  
+    <span class="n">costs</span> <span class="o">=</span> <span class="p">[]</span>  
+    <span class="k">for</span> <span class="n">iters</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>  
+        <span class="n">costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost_function</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>  
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">batch_gradient_descent</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  
+    <span class="k">print</span> <span class="s">&#39;Batch-Gradient-Descent:&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">cost:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">costs</span>  
+    <span class="k">print</span> <span class="s">&#39;theta: &#39;</span><span class="p">,</span> <span class="n">theta</span>  
+    <span class="k">print</span> <span class="s">&#39;Hypothesis: &#39;</span><span class="p">,</span> <span class="n">h</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">5.4994</span><span class="p">])),</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>  
+
+    <span class="k">print</span> <span class="s">&#39;Normal-Equation:&#39;</span>  
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">normal_equation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  
+    <span class="k">print</span> <span class="s">&#39;theta: &#39;</span><span class="p">,</span> <span class="n">theta</span>  
+    <span class="k">print</span> <span class="s">&#39;Hypothesis: &#39;</span><span class="p">,</span> <span class="n">h</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">5.4994</span><span class="p">]))</span>  
+
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&#39;__main__&#39;</span><span class="p">:</span>  
+    <span class="n">test</span><span class="p">()</span>
+</pre></div>
+
+<hr/>
+
+<p>参考：  </p>
+
+<ul>
+<li><a href="http://zhouyichu.com/machine-learning/Gradient-Code.html">梯度下降法的Python实现</a><br/></li>
+<li><a href="https://docs.scipy.org/doc/numpy-dev/user/quickstart.html">Numpy.Quickstart tutorial</a><br/></li>
+<li>《机器学习实战》<br/></li>
+</ul>
+
+            ]]>
+        </content>
+    </entry>
     
     <entry>
         <title><![CDATA[Machine Learning应用的几处建议]]></title>
@@ -928,162 +1074,6 @@
 <p>感谢七牛云存储为文章提供图片CDN支持  </p>
 
 <p>文章若有错误，请指正</p>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[自顶向下学习Tornado源码(一)]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/tornado-source-code-one/"/>
-        <updated>2015-11-21T10:00:00Z</updated>
-        <published>2015-11-21T10:00:00Z</published>
-        <id>http://sukai.me/tornado-source-code-one/</id>
-        <content type="html">
-            <![CDATA[
-             <h3>一. 从Hello Tornado开始</h3>
-
-<h4>1.1 Hello World</h4>
-
-<p>用tornado写的一个最简单的demo，但已经用到了很多tornado的核心类：httpserver, ioloop, Application&hellip;  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/hello-tornado.png" width = "500" height = "400" alt="tornado-demo" align=center />  </p>
-
-<h4>1.2 调试运行</h4>
-
-<p>利用pdb进行调试，打印方法栈信息，在IndexHandler中加入代码：  </p>
-<div class="highlight"><pre><span class="n">greeting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_argument</span><span class="p">(</span><span class="s">&#39;greeting&#39;</span><span class="p">,</span> <span class="s">&#39;Hello&#39;</span><span class="p">)</span>  
-<span class="kn">import</span> <span class="nn">pdb</span>  
-<span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>   
-<span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">greeting</span> <span class="o">+</span> <span class="s">&#39;, friendly user!&#39;</span><span class="p">)</span>
-</pre></div>
-
-<p>利用curl或者浏览器，触发程序，查看栈桢  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/stack-hello-tornado.png" width = "500" height = "400" alt="stack-tornado-demo" align=center />  </p>
-
-<h4>1.3 猜测</h4>
-
-<p>图中模模糊糊给了我们一些执行流程信息，我又参考了几篇文章，先得出一些结论  </p>
-
-<ul>
-<li>ioloop：核心的io循环，用于处理所有socket的read, write, accept等事件。其i/o模型视主机而定，一般Linux平台采用epoll(关于i/o模型，<a href="http://sukai.me/linux-five-io-models/">Click For More..</a>)<br/></li>
-<li>iostream：封装了对socket的异步读写操作<br/></li>
-<li>httpConnection(代码在httpserver.py中)：接受HTTP请求，根据路由信息，调用相应的Handler。再把相应的数据写会client<br/></li>
-</ul>
-
-<p>tornado服务器的大体流程如下图(图片来源：<a href="http://kenby.iteye.com/blog/1159621">kenby.iteye</a>)  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/tornado-core.png" width = "500" height = "400" alt="tornado-core" align=center />  </p>
-
-<p>首先，服务器创建监听套接字，同时将自己注册进ioloop进行事件循环检查（主要检查是否有新的客户端连接到来）。client到达后，服务器通过accept函数，返回一个client socket，同时client socket被注册进ioloop进行事件循环检查（检查read，write等事件）。客户端若向服务器发起读操作，HTTPConnetcion通过_on_headers解析HTTP头，之后通过iostream的write操作，将数据写给客户端  </p>
-
-<h3>二. HTTPServer</h3>
-
-<p>按照自顶向下的顺序，先阅读HTTPServer的源码  </p>
-
-<p>HTTPServer继承自TCPServer  </p>
-
-<p>刚刚的demo中，与HTTPServer相关的只有两条编程语句  </p>
-<div class="highlight"><pre><span class="n">http_server</span> <span class="o">=</span> <span class="n">tornado</span><span class="o">.</span><span class="n">httpserver</span><span class="o">.</span><span class="n">HTTPServer</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>  
-<span class="n">http_server</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
-</pre></div>
-
-<p>先是初始化函数  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/tornado-httpserver-init.png" width = "600" height = "400" alt="tornado-httpserver-init" align=center />  </p>
-
-<p>就是简单地初始化一些参数，然后就是父类的初始化。最主要的是这个request_callback，我们传进去的是Application实例，里面有我们自己配制的路由信息，到时候tornado服务器会根据我们的路由信息，将相应的路由请求转发给相应的RequestHandler。  </p>
-
-<p>然后是<code>listen</code>监听，HTTPServer没有覆写父类TCPServer的listen函数，直接看TCPServer的listen：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/tornado-tcpsever-listen.png" width = "500" height = "200" alt="tornado-tcpserver-listen" align=center />  </p>
-
-<p>先调用了<code>bind_socket</code>，该函数在netutil.py中：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/netutil-bind_socket.png" width = "550" height = "100" alt="netutil-bind_socket" align=center />  </p>
-
-<p>代码就不看了，功能很简单，我截图了该函数的doc string，根据给定的地址和端口，创建一系列的listening sockets  </p>
-
-<p>之后<code>listen</code>函数调用了<code>self.add_sockets(sockets)</code>，我们来看一下<code>add_sockets</code>：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/tcpserver-add_sockets.png" width = "650" height = "320" alt="tornado-tcpserver-add_sockets" align=center />  </p>
-
-<p>通过<code>add_accept_handler(sock, self._handle_connection, io_ioop=elf.io_loop)</code>将一系列的listen sockets注册进ioloop（ioloop的作用就是利用epoll，轮询检查所有套接字的io事件，效率很高，是tornado并发量突出的重要原因）  </p>
-
-<p>仔细看一下<code>add_accept_handler()</code>，它在netuilt.py中：  </p>
-<div class="highlight"><pre><span class="k">if</span> <span class="n">io_loop</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  
-    <span class="n">io_loop</span> <span class="o">=</span> <span class="n">IOLoop</span><span class="o">.</span><span class="n">current</span><span class="p">()</span>  
-
-<span class="k">def</span> <span class="nf">accept_handler</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">):</span>  
-    <span class="c"># More connections may come in while we&#39;re handling callbacks;  </span>
-    <span class="c"># to prevent starvation of other tasks we must limit the number  </span>
-    <span class="c"># of connections we accept at a time.  Ideally we would accept  </span>
-    <span class="c"># up to the number of connections that were waiting when we  </span>
-    <span class="c"># entered this method, but this information is not available  </span>
-    <span class="c"># (and rearranging this method to call accept() as many times  </span>
-    <span class="c"># as possible before running any callbacks would have adverse  </span>
-    <span class="c"># effects on load balancing in multiprocess configurations).  </span>
-    <span class="c"># Instead, we use the (default) listen backlog as a rough  </span>
-    <span class="c"># heuristic for the number of connections we can reasonably  </span>
-    <span class="c"># accept at once.  </span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">_DEFAULT_BACKLOG</span><span class="p">):</span>  
-        <span class="k">try</span><span class="p">:</span>  
-            <span class="n">connection</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>  
-        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  
-            <span class="c"># _ERRNO_WOULDBLOCK indicate we have accepted every  </span>
-            <span class="c"># connection that is available.  </span>
-            <span class="k">if</span> <span class="n">errno_from_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="ow">in</span> <span class="n">_ERRNO_WOULDBLOCK</span><span class="p">:</span>  
-                <span class="k">return</span>  
-            <span class="c"># ECONNABORTED indicates that there was a connection  </span>
-            <span class="c"># but it was closed while still in the accept queue.  </span>
-            <span class="c"># (observed on FreeBSD).  </span>
-            <span class="k">if</span> <span class="n">errno_from_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">ECONNABORTED</span><span class="p">:</span>  
-                <span class="k">continue</span>  
-            <span class="k">raise</span>  
-        <span class="n">callback</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>  
-<span class="n">io_loop</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">accept_handler</span><span class="p">,</span> <span class="n">IOLoop</span><span class="o">.</span><span class="n">READ</span><span class="p">)</span>
-</pre></div>
-
-<p>利用<code>io_loop.add_handler(sock, accept_handler, IOLoop.READ)</code>，将listen socket注册进ioloop，等待READ事件发生。发生后即回调<code>accept_handler</code>函数，该函数里面有<code>sock.accept()</code>方法，接受客户端连接，之后再调用<code>callback(connection, address)</code>。这里的callback函数就是我们调用<code>add_accept_handler()</code>时候，传进去的<code>self._handle_connection</code>，它的代码在<code>TCPServer</code>中，核心的功能代码内容是  </p>
-<div class="highlight"><pre><span class="k">try</span><span class="p">:</span>  
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssl_options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>  
-        <span class="n">stream</span> <span class="o">=</span> <span class="n">SSLIOStream</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">io_loop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">io_loop</span><span class="p">,</span>  
-                <span class="n">max_buffer_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_buffer_size</span><span class="p">,</span>  
-                <span class="n">read_chunk_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">read_chunk_size</span><span class="p">)</span>  
-    <span class="k">else</span><span class="p">:</span>  
-        <span class="n">stream</span> <span class="o">=</span> <span class="n">IOStream</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">io_loop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">io_loop</span><span class="p">,</span>  
-                <span class="n">max_buffer_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_buffer_size</span><span class="p">,</span>  
-                <span class="n">read_chunk_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">read_chunk_size</span><span class="p">)</span>  
-    <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_stream</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>  
-    <span class="k">if</span> <span class="n">future</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>  
-        <span class="bp">self</span><span class="o">.</span><span class="n">io_loop</span><span class="o">.</span><span class="n">add_future</span><span class="p">(</span><span class="n">future</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>  
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  
-        <span class="n">app_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Error in connection callback&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
-
-<p>为每个connection创建<code>IOStream</code>实例（用于对socket的异步读写），之后的IO操作由此实例负责（其实在IOStream中的读写事件也会注册到ioloop中，后续分析）。然后调用<code>self.handle_stream(stream, address)</code>，<code>handle_stream()</code>由HTTPServer覆写：  </p>
-<div class="highlight"><pre><span class="k">def</span> <span class="nf">handle_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>  
-    <span class="n">context</span> <span class="o">=</span> <span class="n">_HTTPRequestContext</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span>  
-                        <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">)</span>  
-    <span class="n">conn</span> <span class="o">=</span> <span class="n">HTTP1ServerConnection</span><span class="p">(</span>  
-            <span class="n">stream</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn_params</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>  
-    <span class="bp">self</span><span class="o">.</span><span class="n">_connections</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>  
-    <span class="n">conn</span><span class="o">.</span><span class="n">start_serving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</pre></div>
-
-<p><code>handler_stream</code>创建了HTTPConnection对象，HTTPConnection对象负责处理剩下的交互部分  </p>
-
-<p>ok，HTTPServer大体的核心流程走完了一遍  </p>
-
-<h3>三. 后续</h3>
-
-<p>现在，所有的socket（listen和client）都被注册进了ioloop，它们会被不断地轮询检查，是否有io事件发生。如有读写事件发生，会通过iostream封装的异步READ和WRITE函数进行。HTTPConnection，IOLOOP和IOSTERAM后续再进行分析  </p>
-
-<hr/>
-
-<p>本文参考：<a href="http://www.douban.com/group/topic/13276435/">mywaiting.douban</a>; <a href="kenby.iteye.com/blog/1159621">kenby.iteye</a></p>
 
             ]]>
         </content>
