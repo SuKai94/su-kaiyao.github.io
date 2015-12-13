@@ -19,7 +19,7 @@
 
 <p><strong>“</strong>  </p>
 
-<p>说起科学计算，首先会被提到的可能就是强大的MATLAB。然而除了MATLAB的一些专业性很强的工具箱目前还无法替代外，MATLAB的大部分常用功能都可以在Pyython世界中找到相应的扩展库。和MATLAB相比，用Python做科学计算有如下优点：  </p>
+<p>说起科学计算，首先会被提到的可能就是强大的MATLAB。然而除了MATLAB的一些专业性很强的工具箱目前还无法替代外，MATLAB的大部分常用功能都可以在Python世界中找到相应的扩展库。和MATLAB相比，用Python做科学计算有如下优点：  </p>
 
 <ul>
 <li>免费<br/></li>
@@ -721,7 +721,27 @@
 
 <p>抛除这些第三方系统的错误或者bug，我想我的工作量很减少很多，我会腾出更多时间去学习其余的知识  </p>
 
-<p>就先写这么多吧，滚去睡觉了！</p>
+<p>就先写这么多吧，滚去睡觉了！  </p>
+
+<h3>2015.12.13 更新</h3>
+
+<p>这几天收到了新的要求：抓取了99个微信公众号的数据；数据量明显比上次多了10倍  </p>
+
+<p>数据库在没有建索引之前，使用explain解析mysql select语句，发现是全表扫描，rows竟达到了7W，这显示是不能接受的  </p>
+
+<p>后来，根据select where用到的字段，建立索引，效果好很多：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/数据库索引select优化.png" width = "780" height = "100" align=center />  </p>
+
+<p>select优化中，参考了几篇文章：  </p>
+
+<ul>
+<li><a href="http://blog.csdn.net/zhuxineli/article/details/14455029">MYSQL Explain详解</a><br/></li>
+<li><a href="http://jingyan.baidu.com/article/8065f87ff5932723312498c5.html">mac系统程序无响应，如何强制关闭程序</a><br/></li>
+<li><a href="http://www.cnblogs.com/cenalulu/archive/2013/01/08/2850820.html">MySQL server has gone away原因分析</a><br/></li>
+</ul>
+
+<p>简单总结一下</p>
 
             ]]>
         </content>
