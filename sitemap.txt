@@ -20,6 +20,7 @@ http://sukai.me/about-unit-test/
 http://sukai.me/github-gh-pages/
 http://sukai.me/sqlserver-store-procedure/
 http://sukai.me/renren-crawler/
+http://sukai.me/three-underutilized-python-commands/
 http://sukai.me/tiandifei-control-apm/
 http://sukai.me/AboutMe/
 http://sukai.me/Board/

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>
-Douban | 苏苏
+三个未充分利用的Python命令 | 苏苏
 </title>
   <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
   <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=87c5429867ae7f8cd2bb1d1964510c96" type="text/css" />
@@ -33,68 +33,65 @@ Douban | 苏苏
       <div class="am-g am-g-fixed blog-g-fixed">
         <div class="am-u-md-9">
         
-<h1>Douban 标签下的文章</h1>
-<!-- blog list -->
-<div class="blog-list">
-  <!--样本 开始-->
-  
-  <article class="blog-main">
+<article class="post-main" id="post-font">
+  <header class="blog-header">
     <span class="round-date">
-      <span class="month">04月</span>
-      <span class="day">24</span>
+      <span class="month">05月</span>
+      <span class="day">02</span>
     </span>
-    <header class="blog-header">
-      <p class="blog-title">
-        <a href="http://sukai.me/doubanapifront/">苏苏查书之前台开发篇</a>
-      </p>
-      <p class="blog-meta">
-        <i class="am-icon-calendar"></i> 发表于 Apr 24, 2015 • 
-        <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
-        <!--<i class="am-icon-bookmark"></i> 0条评论-->
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/JSP/">JSP</a>
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Douban/">Douban</a>
-        
-      </p>
-    </header>
-    <section class="blog-content">
-      <p>上一篇(<a href="http://kaiyao.net.cn/doubanapibyjava/">苏苏查书之后台开发篇</a>)，我们已经可以从豆瓣那边取出关于图书的信息了，下面，我们开始
-    </section>
-    <a class="am-badge am-badge-secondary am-radius blog-content-more" href="http://sukai.me/doubanapifront/">阅读全文</a>
-  </article>
-  
-  <article class="blog-main">
-    <span class="round-date">
-      <span class="month">04月</span>
-      <span class="day">24</span>
-    </span>
-    <header class="blog-header">
-      <p class="blog-title">
-        <a href="http://sukai.me/douban-book-api/">苏苏查书之后台开发篇</a>
-      </p>
-      <p class="blog-meta">
-        <i class="am-icon-calendar"></i> 发表于 Apr 24, 2015 • 
-        <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
-        <!--<i class="am-icon-bookmark"></i> 0条评论-->
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/JSP/">JSP</a>
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Douban/">Douban</a>
-        
-      </p>
-    </header>
-    <section class="blog-content">
-      <p>最近自学了jsp，想做个demo验证一下学习效果  </p>
+    <p class="blog-title">三个未充分利用的Python命令</p>
+    <p class="blog-meta">
+      <i class="am-icon-calendar"></i> Published at May 02, 2014 • 
+      <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
+      <!--<i class="am-icon-bookmark"></i> 0条评论-->
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Python/">Python</a>
+      
+    </p>
 
-<p>脑子里出来这么一个想法：基于web做一个图书查询系统，在查询页面输入你想查询的书籍名称，然后，显示该书籍的详细信息：定价，页
-    </section>
-    <a class="am-badge am-badge-secondary am-radius blog-content-more" href="http://sukai.me/douban-book-api/">阅读全文</a>
-  </article>
+  </header>
+  <section class="blog-content">
+    <p>今天将讨论的三个Python命令，很简单，但很高效：  </p>
+
+<h4>1. 在你的当前工作目录启动一个简单的web server来共享你的文件</h4>
+<div class="highlight"><pre>~<span class="nv">$ </span>python -m SimpleHTTPServer  
+Serving HTTP on 0.0.0.0 port 8000 ...
+</pre></div>
+
+<p>这个命令既不安全，也不是可扩展的。但是，如果你想在某个目录下快速地测试一些东西，那，这就对你很方便了  </p>
+
+<h4>2. 测试邮件</h4>
+<div class="highlight"><pre>~<span class="nv">$ </span>python -m smtpd -n -c DebuggingServer
+</pre></div>
+
+<p>在1025端口开启一个虚设的SMTP服务。当你想在一个不允许可插拔电子邮件后端的系统上测试邮件时，这就派上用场了  </p>
+
+<h4>3. 漂亮地打印出json</h4>
+
+<pre><code>echo &#39;{&quot;2legs&quot;:&quot;Better&quot;, &quot;4Legs&quot;: &quot;Good&quot;, &quot;6Legs&quot;: &quot;Spider&quot;}&#39; | python -m json.tool</code></pre>
+
+<hr/>
+
+<p>来源：<a href="http://agiliq.com/blog/2014/05/three-underutilized-python-commands/">AGILIQ blog</a></p>
+
+  </section>
   
-  <!--样本 结束-->
-</div>
-<!-- blog list -->
+    
+        
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+				var disqus_title = "";
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://sukaime.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        
+        
+    
+
+</article>
 
         </div>
 
