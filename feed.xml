@@ -741,7 +741,18 @@
 <li><a href="http://www.cnblogs.com/cenalulu/archive/2013/01/08/2850820.html">MySQL server has gone away原因分析</a><br/></li>
 </ul>
 
-<p>简单总结一下</p>
+<p>简单总结一下  </p>
+
+<h3>2015.12.26 更新</h3>
+
+<p>最终的抓取程序分为两种模式：  </p>
+
+<ul>
+<li>Batch-Model：批量模式，给定一段日期区间，抓取所有区间内时间的数据<br/></li>
+<li>Day-Model：日常模式：每天定时12：30开启抓取任务，抓取前一天的数据<br/></li>
+</ul>
+
+<p>最终的项目地址：<a href="https://github.com/SKLCC/wx-gsdata">https://github.com/SKLCC/wx-gsdata</a></p>
 
             ]]>
         </content>
