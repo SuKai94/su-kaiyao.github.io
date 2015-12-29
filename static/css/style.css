@@ -219,7 +219,7 @@ section, article {
 }
 
 .about-me-bg {
-  background-image: url("http://7xl2fd.com1.z0.glb.clouddn.com/bg.jpg");
+  background-image: url("http://7xl2fd.com1.z0.glb.clouddn.com/bg-girl.jpg");
   height: 150px;
   background-size: cover;
   color: #1E3948;
@@ -298,7 +298,7 @@ section, article {
 }
 
 .friends-ul {
-  height: 100px;
+  height: 140px;
   overflow-y: auto;
   list-style: outside none none;
   padding-left: 2px;
