@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>
+Shadowsocks科学上网 | 苏苏
+</title>
+  <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
+  <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=702fa7bbdee43b593712871817c12d7e" type="text/css" />
+  <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- header-->
+    <header class="header-wrapper">
+      <div class="header-container">
+        <nav>
+          <ul class="header-nav">
+            <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
+            <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
+            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-globe" id="nav-icon"></span>History</a></li>
+            <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- header -->
+
+    <!-- conetent -->
+    <div class="content-wrapper">
+      <div class="am-g am-g-fixed blog-g-fixed">
+        <div class="am-u-md-9">
+        
+<article class="post-main" id="post-font">
+  <header class="blog-header">
+    <span class="round-date">
+      <span class="month">01月</span>
+      <span class="day">05</span>
+    </span>
+    <p class="blog-title">Shadowsocks科学上网</p>
+    <p class="blog-meta">
+      <i class="am-icon-calendar"></i> Published at Jan 05, 2016 • 
+      <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
+      <!--<i class="am-icon-bookmark"></i> 0条评论-->
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Shadowsocks/">Shadowsocks</a>
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/GFW/">GFW</a>
+      
+    </p>
+
+  </header>
+  <section class="blog-content">
+    <p>GFW，想必大家都不陌生  </p>
+
+<p>针对GFW，渴求真理和自由的程序员们绞尽脑汁，创造出了许多梯子工具。本人在大二的时候尝试翻墙，用过免费VPN，用过GoAgent等等，这些都不算是自食其力式梯子，直到后来了解到了Shadowsocks，提到Shadowsocks，大家一定不陌生这句话：<strong>“Removed according to regulations.”</strong>  </p>
+
+<p>当然，我在写这篇文章之前，已经使用Shadowsocks快一年了，见证了ss从未封杀到被封杀。写这篇文章，是因为：  </p>
+
+<ul>
+<li>1.翻墙对我很重要，我要将“Shadowsocks科学上网”的方案备份下来，我的生活已离不开翻墙<br/></li>
+<li>2.这几天很多人问我借ss账号，我有必要告诉他人如何科学上网<br/></li>
+</ul>
+
+<p>申明：扯了那么多，我其实并不会讲如何利用shadowsocks科学上网，因为这些教程随意Google一大堆（当然，Baidu是不可以的，因为根据相关法律&hellip;&hellip;）。可能你们又会说，我既然不能翻墙，我怎么google，这不是一个死循环吗？ok，我直接贴出一篇教程出来：  </p>
+
+<p><a href="http://www.findspace.name/res/956">FindSpace：SHADOWSOCKS科学上网</a>  </p>
+
+<p>FindeSpace是我的博客友链，我当时也是因为搜索到了Findspace的教程，搞定了ss，和他交了朋友  </p>
+
+<p>所以，当时，按照他的教程：  </p>
+
+<p>我在host1plus上买了一个最最便宜的vps（美国洛杉矶节点），一个月10+RMB，然后在vps上装了ubuntu系统，ssh上去安装了python和shadowsocks（pip install），最后编写了json格式的配置文件，并使用nohup ssserver命令在后台启动服务。 最后在本地也同样安装shadowsocks，以及配置配置文件，使用sslocal启动服务。 我是为了翻墙才买的vps，所以，最终用firefox代理插件，配置本地的shadowsocks代理端口，即可科学上网了（现在换了MAC，不需要任何代理插件了，也不需要命令行启动ss客户端了）。 需要说明的是，ios和android都是有shadowsocks客户端的，所以，科学上网不仅限于PC机端。还有，买个vps跑个shadowsocks，未免太浪费了，还可以跑跑其他程序的，很多人都用vps建站搭博客等。 前前后后不到一小时搞定  </p>
+
+<p>再给大家列举一些资源列表：  </p>
+
+<ul>
+<li><a href="https://github.com/Long-live-shadowsocks">long-live-shadowsocks</a>：仅仅用来备份 shadowsocks 相关项目（re-uploaded because I can）<br/></li>
+</ul>
+
+<p>这个仓库很强大，ios，android，mac，win的ss客户端都有，快去下载吧  </p>
+
+<p>Best Wishes!!</p>
+
+  </section>
+  
+    
+        
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+				var disqus_title = "";
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://sukaime.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        
+        
+    
+
+</article>
+
+        </div>
+
+        <div class="sidebar">
+          <div class="am-u-md-3">
+            <!-- about me -->
+            <div class="panel about-me">
+              <div class="about-me-bg"></div>
+              <div class="about-me-content">
+                <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/avatar.one.jpg"></img></a>
+                <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">苏苏</a></h5>
+                <p class="about-me-words">Strive To Be Full Stack..</p>
+                <ul class="about-me-ul">
+                  <li class="about-me-li">
+                    <a class="about-me-li-content">
+                      日志
+                      <h5 class="about-me-li-h5">25</h5>
+                    </a>
+                  </li>
+                  <li class="about-me-li">
+                    <a class="about-me-li-content">
+                      标签
+                      <h5 class="about-me-li-h5">30</h5>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- about me -->
+            <!-- contact-me -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Follow Me</h5>
+              <div class="contact-me-icons">
+                <a href="https://github.com/su-kaiyao" title="github" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
+                <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="weibo" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
+                <a href="https://twitter.com/SuKai_Coding" title="twitter" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
+                <a id="weixin-icon">
+                  <i class="am-icon-weixin am-icon-md"></i>
+                  <div id="weixin-info">
+                    <br/>
+                    <p>扫扫二维码，多交一枚盆友~</p>
+                    <img src="http://7xl2fd.com1.z0.glb.clouddn.com/weixin-qrcode.png">
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <!-- contact-me-->
+            <!-- email-me -->
+            <div class="panel-two">
+              <h3 class="panel-title">Contact Me</h5>
+              <img src="http://7xl2fd.com1.z0.glb.clouddn.com/sukai.email.gif">
+            </div>
+            <!-- email-me-->
+            <!-- recently -->
+            <div class="shuoshuo panel-two">
+              <h5 class="panel-title">博主说说</h5>
+              <div class="shuoshuo-content">
+                2016：新的梦想，新的开始~
+              </div>
+            </div>
+            <!-- recently -->
+            <!-- Linux Cn -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Member Of <a href="https://github.com/LCTT">LCTT</a></h5>
+              <span>
+                <img src="http://7xl2fd.com1.z0.glb.clouddn.com/LCTT.png">
+                <a href="http://sukai.me/MyTrans/">Click For More...</a>
+              </span>
+            </div>
+            <!-- Linux Cn -->
+            <!--friends -->
+            <div class="friends panel-two">
+              <h3 class="panel-title">Friends<small><a href="http://sukai.me/friend/">.More</a></small></h5>
+              <ul class="friends-ul">
+                <li>
+                  <a href="http://www.findspace.name/" title="Findspace" target="_blank">Findspace</a>
+                </li>
+                <li>
+                  <a href="http://www.fddcn.cn/" title="奋斗的承诺" target="_blank">奋斗的承诺</a>
+                </li>
+                <li>
+                  <a href="https://www.anotherhome.net/" title="当时只道是寻常" target="_blank">当时只道是寻常</a>
+                </li>
+                <li>
+                  <a href="http://www.llwjy.com/" title="小鸡慢慢" target="_blank">小鸡慢慢</a>
+                </li>
+                <li>
+                  <a href="http://ming.today/" title="Ming YIN" target="_blank">Ming YIN</a>
+                </li>
+                <li>
+                  <a href="http://nextearn.me/" title="NextEarn" target="_blank">NextEarn</a>
+                </li>
+                <li>
+                  <a href="https://xitu.io/" title="稀土" target="_blank">稀土</a>
+                </li>
+                <li>
+                  <a href="http://stomach-ache.github.io/" title="Wei Tong" target="_blank">Wei Tong</a>
+                </li>
+                <li>
+                  <a href="http://kirosummer.github.io/" title="Kiro's Blog" target="_blank">Kiro's Blog</a>
+                </li>
+              </ul>
+            </div>
+            <!--friends -->
+            <!-- copyright -->
+            <div class="about-copyright panel-two">
+              ©Powered by<a href="https://github.com/whtsky/Catsup"> Catsup</a>. Designed by<a href="https://github.com/su-kaiyao/catsup-theme-final"> SuKai</a>
+            </div>
+            <!-- Linux Cn -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- conetent -->
+  </div>
+
+
+
+
+<!--<script src="blog_files/amazeui.js"></script>
+<script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+-->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?564d3a351e5dd8c80c238f900c479ab3";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70406244-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
