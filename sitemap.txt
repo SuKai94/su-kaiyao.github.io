@@ -31,9 +31,9 @@ http://sukai.me/MyHistory/
 http://sukai.me/MyTrans/
 http://sukai.me/tag/Python/
 http://sukai.me/tag/Machine-Learning/
+http://sukai.me/tag/Life/
 http://sukai.me/tag/cousera/
 http://sukai.me/tag/Douban/
-http://sukai.me/tag/Life/
 http://sukai.me/tag/JSP/
 http://sukai.me/tag/Github/
 http://sukai.me/tag/Linux/
@@ -47,7 +47,6 @@ http://sukai.me/tag/Tornado/
 http://sukai.me/tag/BigData/
 http://sukai.me/tag/四轴飞行器/
 http://sukai.me/tag/Stored-Procedure/
-http://sukai.me/tag/Study/
 http://sukai.me/tag/Unit-Test/
 http://sukai.me/tag/Project/
 http://sukai.me/tag/Hibernate/
