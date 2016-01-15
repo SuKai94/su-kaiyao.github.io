@@ -3,8 +3,294 @@
     <title>苏苏</title>
     <link href="" rel="self" />
     <link href="http://sukai.me/" />
-    <updated>2016-01-05T14:00:00Z</updated>
+    <updated>2016-01-15T17:00:00Z</updated>
     <id>http://sukai.me/</id>
+    
+    <entry>
+        <title><![CDATA[IMDB数据库结构]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/imdb-db-structure/"/>
+        <updated>2016-01-15T17:00:00Z</updated>
+        <published>2016-01-15T17:00:00Z</published>
+        <id>http://sukai.me/imdb-db-structure/</id>
+        <content type="html">
+            <![CDATA[
+             <p>想要获取IMDB已上映电影的相关信息数据，我立马想到的两点就是：Restful API和爬虫，但就在我google方案的过程中，我意外收获到了其他的东西：  </p>
+
+<p>其中一个，是使用Python语言开发的<a href="http://imdbpy.sourceforge.net/index.html">IMDbPY</a>，它的作用就是帮助开发者取回和管理IMDb的电影数据库  </p>
+
+<p>另外一个就是，IMDB网站其实提供了所有电影的数据库镜像：<a href="http://www.imdb.com/interfaces/">http://www.imdb.com/interfaces</a>  </p>
+
+<p>顺着IMDbPy的文档，会发现一个非常实用的脚本：<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">imdbpy2sql.py</a>，它的作用就是将镜像文件转换为本地的数据库  </p>
+
+<p>第一次使用，就顺着文档<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">http://imdbpy.sourceforge.net/docs/README.sqldb.txt</a>一步一步来，运行完脚本后，本地数据库（我用的Mysql）会得到这样一些表：  </p>
+
+<p>可以看出：IMDB数据库设计的很好，数据高度结构化，数据表无冗余（PS：说来惭愧，平时我做开发，很喜欢一张表，这样写sql语句很方便，但是缺点真的很多），下面来分析下IMDB的数据库结构吧：  </p>
+
+<h3>title</h3>
+
+<p>首先，最想找的就是电影名称了吧，它存储title表里的title字段中，除此之外，title表还有些重要的信息：id和kind_id，production_year，id代表该电影的全局唯一标识，production_year表示电影上映的年份，kind_id暂时不知道，那么可以找到kind_type表，  </p>
+
+<p>kind_type表的信息如下：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_db_kind_type.png" width="170" height="200" align="center">  </p>
+
+<p>我需要的是电影信息，那么就对应着kind_type为1的数据  </p>
+
+<p>以id为2459950的电影为例子吧，在title中的数据如下：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_title_table_ex.png"  height="100" align="center" />  </p>
+
+<p>从图中可以看到select出来的结果为：id为249950的电影名为After Words，上映时间为2015年  </p>
+
+<p>在imdb网站搜索下该电影，链接为：<a href="http://www.imdb.com/title/tt2226630/">http://www.imdb.com/title/tt2226630/</a>  </p>
+
+<h3>movie_info</h3>
+
+<p>之后，我需要电影相关的info，比如：countries, languages, genres, votes, rating  </p>
+
+<p>首先涉及到的表式：movie_info，通过‘SELECT * FROM mrp.movie_info where movie_id=2459950;’，得到上面‘After Words’电影的相关信息如下：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_movie_info_ex.png" width="700" height="150" align="center" />  </p>
+
+<p>其中info_type_id不是很明白，找到info_type表，里面解释着各个id代表的含义：  </p>
+
+<ul>
+<li>id为3代表genres<br/></li>
+<li>id为8代表countries<br/></li>
+<li>id为4代表languages<br/></li>
+</ul>
+
+<p>结合截图select的结果，得知&#39;After Words&#39;的countries为USA，genres为Drama，languages为English  </p>
+
+<h3>movie_info_id</h3>
+
+<p>还有一些相关的info在movie_info_idx中，通过‘SELECT * FROM mrp.movie_info_idx where movie_id=2459950;’，得到如下结果：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_movie_info_idx_ex.png" width="680" height="150" align="center">  </p>
+
+<p>相应的：  </p>
+
+<ul>
+<li>info_type_id为99代表votes distribution（这个数据值我暂时没搞懂）<br/></li>
+<li>info_type_id为100代表votes<br/></li>
+<li>info_type_id为101代表rating<br/></li>
+</ul>
+
+<h3>movie_keywords</h3>
+
+<p>需要查找电影的keywords信息，就需要用到movie_keywords表了。‘SELECT * FROM mrp.movie_keyword where movie_id=2459950;’：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/movie_keywords_ex.png" width="350" height="200" align="center" />  </p>
+
+<p>这样就可以找到电影所有的keywords_id，然后使用keywords_id去keywords表中寻找具体的值，即可：  </p>
+
+<p>比如‘SELECT * FROM mrp.keyword where id=37348’得到的具体值为：costa-rica，这个和imdb官网是符合的，是正确的！  </p>
+
+<h3>cast_info</h3>
+
+<p>下面我们来找一下cast_info：cast, editor, writer, director, producer等，这些信息当然是在cast_info表中了，‘SELECT * FROM mrp.cast_info where movie_id=2459950;’:  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/cast_info_ex.png" width="700" height="700" align="center" />  </p>
+
+<p>里面同样有个role_id，查阅role_type表：  </p>
+
+<ul>
+<li>role_id为1和2，分别代表actor和actress<br/></li>
+<li>role_id为3，代表producer<br/></li>
+<li>role_id为4，代表writer<br/></li>
+<li>role_id为8，代表director<br/></li>
+<li>rile_id为9，代表editor<br/></li>
+</ul>
+
+<p>那么如何找到具体的人名呢？通过person_id和name表，不多说，你可以试一下，再对照官网，可以发现信息是完全吻合的  </p>
+
+<h3>movie_companies</h3>
+
+<p>下面我们来找一下电影的production_companies，涉及到表为movie_companies，‘SELECT * FROM mrp.movie_companies where movie_id=2459950;’，之后会得到company_id  </p>
+
+<p>拿着company_id去company_name里面即可找到具体公司名  </p>
+
+<p>这里不再累述  </p>
+
+<h3>额外信息</h3>
+
+<p>还有一些额外的信息我需要知道：有关评分的信息，包括1~10评分的分布，女性评分占多少，男性多少，年龄段评分多少等等  </p>
+
+<p>如<a href="http://www.imdb.com/title/tt2226630/ratings?ref_=tt_ov_rt">http://www.imdb.com/title/tt2226630/ratings?ref_=tt_ov_rt</a>所示  </p>
+
+<p>方法是通过Imdbpy这个开源库里面的一个核心的函数：update，来完成（感谢东南大学杨远溢同学），他在这方面已经研究出方案了，我只需要站在他的基础上，编写程序即可  </p>
+
+<h3>总结</h3>
+
+<p>IMDB提供数据的方式确实很独特，通过镜像的方式。通过分析所有的表结构，不难发现imdb数据库设计之好  </p>
+
+<p>好了，截止目前，imdb的未上映和已上映电影数据就都可以拿到了  </p>
+
+            ]]>
+        </content>
+    </entry>
+    
+    <entry>
+        <title><![CDATA[IMDB电影数据库]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/imdb-movies-crawl/"/>
+        <updated>2016-01-15T12:00:00Z</updated>
+        <published>2016-01-15T12:00:00Z</published>
+        <id>http://sukai.me/imdb-movies-crawl/</id>
+        <content type="html">
+            <![CDATA[
+             <p>IMDB拥有着全球最大的电影数据库，最近我也在研究如何获取到这些宝贵的电影数据资源  </p>
+
+<p>根据时间来划分，可以将所有的电影分为：已上映和未上映。下面我将分这两种情况，分别去寻找方案  </p>
+
+<h3>未上映电影数据</h3>
+
+<p>在IMDB官网，我找到了一些有趣的页面：<a href="http://www.imdb.com/movies-coming-soon/2016-01">http://www.imdb.com/movies-coming-soon/2016-01</a>，<a href="http://www.imdb.com/movies-coming-soon/2016-02">http://www.imdb.com/movies-coming-soon/2016-02</a>等等，通过分析url很容易发现：  </p>
+
+<p>url中的&#39;movies-coming-soon&#39;表示该页面的电影即将上映至影院，后面的日期为2016-xx，代表着该页面的电影预计2016年xx月上映  </p>
+
+<p>这样的话，我们就可以找到2016一整年的预映电影的入口页面  </p>
+
+<p>随意进入任何一个入口页面，里面陈列着该日期下所有预映电影的简短信息，包括指向某具体电影详情页面的link，随意点击某部电影，进入并得到link，比如：<a href="http://www.imdb.com/title/tt3460252/?ref_=cs_ov_tt">http://www.imdb.com/title/tt3460252/?ref_=cs_ov_tt</a>  </p>
+
+<p>其中?ref<em>=cs_ov_tt是多余的，可以省略，于是link精简为：<a href="http://www.imdb.com/title/tt3460252">http://www.imdb.com/title/tt3460252</a>，‘?ref</em>=cs_ov_tt’只是代表某些跳转信息（我猜的）  </p>
+
+<p>进入到电影详情页面，我们就可以抓取一切我们想要的数据了，原理很简单：  </p>
+
+<p>模拟http请求，然后解析HTML DOM树，主要用到了Python的request库和beautifulSoup4库，我还用到了阻塞队列Queue和多线程，解析电影详情页面的线程代码如下：  </p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">detail_thread</span><span class="p">():</span>  
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>  
+        <span class="k">try</span><span class="p">:</span>  
+            <span class="n">m_url</span> <span class="o">=</span> <span class="n">movie_url</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>  
+            <span class="k">print</span> <span class="s">&#39;detail_thread fetch: &#39;</span><span class="p">,</span> <span class="n">m_url</span>  
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">m_url</span><span class="p">)</span>  
+            <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>  
+            <span class="n">nMovie</span> <span class="o">=</span> <span class="n">newMovie</span><span class="p">()</span>  
+
+            <span class="c"># id  </span>
+            <span class="n">nMovie</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">m_url</span><span class="p">[</span><span class="n">m_url</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;/tt&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">3</span><span class="p">:]</span>  
+            <span class="c"># year  </span>
+            <span class="n">nMovie</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">year</span>  
+
+            <span class="c"># title  </span>
+            <span class="n">nMovie</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;h1&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;header&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;itemprop&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;name&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">text</span>  
+
+            <span class="n">title_details</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;titleDetails&#39;</span><span class="p">})</span>  
+            <span class="n">txt_block</span> <span class="o">=</span> <span class="n">title_details</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;txt-block&#39;</span><span class="p">})</span>  
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">txt_block</span><span class="p">:</span>  
+                <span class="k">try</span><span class="p">:</span>  
+                    <span class="c"># countries  </span>
+                    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;h4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s">&#39;Country:&#39;</span><span class="p">:</span>  
+                        <span class="n">c_links</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                            <span class="n">country</span> <span class="o">=</span> <span class="n">c_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">c_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                                <span class="n">country</span> <span class="o">=</span> <span class="n">country</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="n">nMovie</span><span class="o">.</span><span class="n">countries</span> <span class="o">=</span> <span class="n">country</span>  
+                    <span class="c"># languages  </span>
+                    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;h4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s">&#39;Language:&#39;</span><span class="p">:</span>  
+                        <span class="n">l_links</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                            <span class="n">lan</span> <span class="o">=</span> <span class="n">l_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">l_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                                <span class="n">lan</span> <span class="o">=</span> <span class="n">lan</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">l</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="n">nMovie</span><span class="o">.</span><span class="n">languages</span> <span class="o">=</span> <span class="n">lan</span>  
+                    <span class="c"># production_companies  </span>
+                    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;h4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s">&#39;Production Co:&#39;</span><span class="p">:</span>  
+                        <span class="n">p_c_links</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p_c_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                            <span class="n">p_companies</span> <span class="o">=</span> <span class="n">p_c_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="k">for</span> <span class="n">p_c</span> <span class="ow">in</span> <span class="n">p_c_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                                <span class="n">p_companies</span> <span class="o">=</span> <span class="n">p_companies</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">p_c</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="n">nMovie</span><span class="o">.</span><span class="n">production_companies</span> <span class="o">=</span> <span class="n">p_companies</span>  
+                <span class="k">except</span><span class="p">:</span>  
+                    <span class="k">continue</span>  
+                    <span class="c">#print &#39;detail_thread: txt_block find no h4 tag&#39;  </span>
+
+            <span class="c"># keywords  </span>
+            <span class="n">keywords</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;keywords&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;itemprop&#39;</span><span class="p">})</span>  
+            <span class="c">#print m_url, &#39; keywords:&#39;, len(keywords)  </span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keywords</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                <span class="n">key_words</span> <span class="o">=</span> <span class="n">keywords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                    <span class="n">key_words</span> <span class="o">=</span> <span class="n">key_words</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">text</span>  
+                <span class="n">nMovie</span><span class="o">.</span><span class="n">keywords</span> <span class="o">=</span> <span class="n">key_words</span>  
+
+            <span class="c"># genres  </span>
+            <span class="n">genres_div</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;see-more inline canwrap&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;genre&#39;</span><span class="p">})</span>  
+            <span class="k">if</span> <span class="n">genres_div</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>  
+                <span class="n">g_links</span> <span class="o">=</span> <span class="n">genres_div</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                <span class="c">#print m_url, &#39; genres:&#39;, len(g_links)  </span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">g_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                    <span class="n">genres</span> <span class="o">=</span> <span class="n">g_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">g_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                        <span class="n">genres</span> <span class="o">=</span> <span class="n">genres</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">g</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="c">#print genres  </span>
+                    <span class="n">nMovie</span><span class="o">.</span><span class="n">genres</span> <span class="o">=</span> <span class="n">genres</span>  
+
+            <span class="c"># cast  </span>
+            <span class="n">cast_td</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;actor&#39;</span><span class="p">})</span>  
+            <span class="c">#print m_url, &#39; cast:&#39;, len(cast_td)  </span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cast_td</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                <span class="n">casts</span> <span class="o">=</span> <span class="n">cast_td</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;itemprop&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;name&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">text</span>  
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cast_td</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                    <span class="n">casts</span> <span class="o">=</span> <span class="n">casts</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;itemprop&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;name&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">text</span>  
+                <span class="c">#print casts  </span>
+                <span class="n">nMovie</span><span class="o">.</span><span class="n">cast</span> <span class="o">=</span> <span class="n">casts</span>  
+
+            <span class="c"># ??  </span>
+            <span class="c"># editor  </span>
+            <span class="c"># producer  </span>
+
+            <span class="c"># writer  </span>
+            <span class="n">w_div</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;txt-block&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;creator&#39;</span><span class="p">})</span>  
+            <span class="k">if</span> <span class="n">w_div</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>  
+                <span class="n">w_links</span> <span class="o">=</span> <span class="n">w_div</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                <span class="c">#print m_url, &#39; writer:&#39;, len(w_links)  </span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                    <span class="n">writer</span> <span class="o">=</span> <span class="n">w_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">w_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                        <span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">w</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="n">nMovie</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span>  
+                <span class="c">#print nMovie.writer  </span>
+
+            <span class="c"># director  </span>
+            <span class="n">d_div</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;txt-block&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;director&#39;</span><span class="p">})</span>  
+            <span class="k">if</span> <span class="n">d_div</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>  
+                <span class="n">d_links</span> <span class="o">=</span> <span class="n">d_div</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                <span class="c">#print m_url, &#39; director:&#39;, len(d_links)  </span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                    <span class="n">director</span> <span class="o">=</span> <span class="n">d_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">d_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                        <span class="n">director</span> <span class="o">=</span> <span class="n">director</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="n">nMovie</span><span class="o">.</span><span class="n">director</span> <span class="o">=</span> <span class="n">director</span>  
+
+            <span class="n">entities</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">nMovie</span><span class="p">)</span>  
+            <span class="n">movie_url</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>  
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  
+            <span class="k">print</span> <span class="s">&#39;detail_thread: An {} exception occured&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+
+<p>当然，在运行detail_thread这个线程之前，肯定要开启另外一个线程，作用是将所有电影详情页面的url放入movie_url这个Queue中，否则，detail_thread永远阻塞至死。所以，总的来设计，我运用了多线程+多队列搭建起了‘多级生产者和消费者’模型：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_new_movie_crawl_model.png" width="400" height="400" align="center" />  </p>
+
+<p>index_thread生产所有入口页面，放入index_url阻塞队列；movie_thread从index_url队列取入口页面，生产电影详情页面url，放入movie_url；detail_thread从movie_url获取link，解析生成nMovie的实体，实体中保存着有关电影的详细信息，放入entitie队列；最后交由db_thread做入库持久化操作  </p>
+
+<p>运行时，可以视实际运行快慢，给其中的某些线程增加数量，增快其运行速度  </p>
+
+<p>总的代码，可以查看我的<a href="https://github.com/su-kaiyao/mrp/blob/master/dataSet/newMovieCrawl.py">Github&gt;newMovieCrawl.py</a>  </p>
+
+<p>我自己运行了一把，抓了141条新电影，查阅了所有入口页面（20116-01 ~ 2016-12），数了数是145个，少了4个，是因为那4个电影的详细信息太少了，被脚本过滤了  </p>
+
+<h3>已上映电影数据</h3>
+
+<p>移步：<a href="http://sukai.me/imdb-db-structure/">IMDB数据库结构</a>  </p>
+
+            ]]>
+        </content>
+    </entry>
     
     <entry>
         <title><![CDATA[Shadowsocks科学上网]]></title>
@@ -265,440 +551,6 @@
 <li><a href="https://docs.scipy.org/doc/numpy-dev/user/quickstart.html">Numpy.Quickstart tutorial</a><br/></li>
 <li>《机器学习实战》<br/></li>
 </ul>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[Machine Learning应用的几处建议]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/advice-for-applying-ml-svm/"/>
-        <updated>2015-12-07T16:30:00Z</updated>
-        <published>2015-12-07T16:30:00Z</published>
-        <id>http://sukai.me/advice-for-applying-ml-svm/</id>
-        <content type="html">
-            <![CDATA[
-             <p>ok，我又来继续总结cousera上的机器学习课程了。这次，我主要整理：应用机器学习过程中的几处建议点。本应该还要总结SVM（支持向量机）的，无奈，这部分我暂时还没搞懂，所以，先对这部分留有空白，未来回头在补充。截止本章，所有监督学习的内容差不多就先整理到这了  </p>
-
-<h3>一. 机器学习应用的一些建议</h3>
-
-<h4>1.1 如何评价一个学习算法的好坏？</h4>
-
-<p>当训练得到的模型参数泛化能力很弱的时候，下一步该做什么？  </p>
-
-<p>很多人认为 1. 增加训练样本，即可改进算法，所以把时间浪费在了收集样本上。通常，盲目地扩大训练样本于事无补  </p>
-
-<p>除了增加训练样本外，还有一些其余的改进方法：  </p>
-
-<p>2.尝试选择更少的特征集，防止过拟合<br/>
-3.尝试选择更多的特征集，防止欠拟合<br/>
-4.增加多项式特征，如x1-&gt;x1的平方<br/>
-5.减少或者增加正则化参数λ  </p>
-
-<p>当我们的模型参数泛化能力差时，这1~5中改进方法，我们选择哪一种？  </p>
-
-<p>通过机器学习诊断算法去帮助我们决定，下面会介绍  </p>
-
-<h4>1.2 如何评价假设函数？</h4>
-
-<p><strong>A. 如何判断一个假设函数是过拟合的？</strong>  </p>
-
-<p>我们先来介绍一个概念：Test Error（测试误差）  </p>
-
-<p>我们将所有样本按照7：3，分为：Training Set和Test Set  </p>
-
-<p>线性回归中，我们可以利用训练集得到的学习参数θ，去计算测试集的代价函数Jtest(θ)，作为测试误差：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/线性回归中的测试误差.png" width = "600" height = "200" align=center />  </p>
-
-<p>其中，mtest表示测试样本数量；(xtest(i), ytest(i))表示第i个测试样本  </p>
-
-<p>逻辑回归中，同样的道理，测试误差为：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归的测试误差.png" width = "720" height = "200" align=center />  </p>
-
-<p>除此之外，逻辑回归中还有一种更加直观的，用来表示测试误差的方式：误分类率，也叫0/1错分率  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归的误分类率.png" width = "740" height = "300" align=center />  </p>
-
-<p>其中，err(hθ(x), y)有两种值：  </p>
-
-<ul>
-<li>当hθ(x) &gt;= 0.5，y = 0；或者 hθ(x) &lt;= 0.5，y = 1时候，err值为1。这时都是没有正确预测的情况<br/></li>
-<li>其余情况，正确预测，err的值为0<br/></li>
-</ul>
-
-<p>此时的测试误差，就是测试集合的err总和的均值  </p>
-
-<p>这样，我们就可以通过<strong>测试误差</strong>去评价我们学习出来的预测函数（假设函数）了，也可以看出假设函数是否能很好的拟合测试数据  </p>
-
-<h4>1.3 模型选择和 训练/交叉验证/测试 集合</h4>
-
-<p>假设d表示我们要选择的多项式的次数，取值为[1, 10]，我们最终该选择何种模型，即d的取值选择多少，才能使得过拟合和欠拟合适中？  </p>
-
-<p>我们可以取d的值为1~10，10个值都分别去训练学习，得到相应取值d下的最优学习参数θ(1) &hellip; θ(10)，然后计算测试误差，得到Jtest(hθ(1)，Jtest(hθ(2)) &hellip; Jtest(hθ(10))  </p>
-
-<p>取最小的Jtest(hθ(i))，i为d的最优取值  </p>
-
-<p>我们用测试误差，去拟合d的值。但，这也不能确切地保证，假设函数在新样本中的泛化能力。我们需要改进我们的集合划分策略，将数据集分为三部分：  </p>
-
-<ul>
-<li>Training Set 60%<br/></li>
-<li>Cross Validation Set 20%<br/></li>
-<li>Test Set 20%<br/></li>
-</ul>
-
-<p>我们可以在三中样本上，定义三种误差，方法上面已经讲过：  </p>
-
-<ul>
-<li>Training Error<br/></li>
-<li>Cross Validation Error<br/></li>
-<li>Test Error<br/></li>
-</ul>
-
-<p>我们的多项式次数选择方法，改进如下：  </p>
-
-<p>我们转向去计算cv集上的误差：Jcv(hθ(1)，Jcv(hθ(2)) &hellip; Jcv(hθ(10))，取交叉测试集误差最小的d，比如d=4。最后在计算Jtest(θ(4))，来判断其与测试集有没有拟合  </p>
-
-<p>这样，可以回避测试集的嫌疑  </p>
-
-<h3>二. 偏差 VS 方差</h3>
-
-<h4>2.1 学会诊断偏差和方差</h4>
-
-<p>学习参数泛化不理想，无外乎两种情况：欠拟合和过拟合，前者对应着较大的偏差，后者对应着较大的方差，我们需要学会诊断什么是高方差，什么是高偏差，这样，才能帮助我们进行学习的改进  </p>
-
-<p>继续上面选择多项式次数d的例子，我们绘制出图形如下，横坐标为d，纵坐标为error：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/error-d图.png" width = "700" height = "400" align=center />  </p>
-
-<p>我们可以从图片中猜测，偏向左端的d值对应着欠拟合问题，偏向右端的d值对应着过拟合问题：  </p>
-
-<p>欠拟合出现，会产生高偏差：  </p>
-
-<ul>
-<li>Jtrain(θ) will be high<br/></li>
-<li>Jcv(θ) 约等于 Jtrain(θ)<br/></li>
-</ul>
-
-<p>过拟合出现，会产生高方差：  </p>
-
-<ul>
-<li>Jtrain(θ) will be low<br/></li>
-<li>Jcv(θ) &gt;&gt; Jtrain(θ) 远大于<br/></li>
-</ul>
-
-<p>这也是我们区别高偏差和高方差的方法  </p>
-
-<h4>2.2 正则化与偏差和方差</h4>
-
-<p>众所周知，正则化技术用来防止过拟合现象  </p>
-
-<p>正则化参数λ过大，模型参数θ将被大大惩罚，结果会导致θ值近似于0，并且h(θ)值也将趋近于0，出现欠拟合现象  </p>
-
-<p>正则化参数λ过小，会出现过拟合情况  </p>
-
-<p><strong>如何选择何止的参数λ？</strong>  </p>
-
-<p>按照之前遵循的方法，取λ值为0, 0.01, 0.02 &hellip; 10.24（一切我们想尝试的λ值），利用train set训练出相应λ值下得模型参数θ。之后，我们就可以用cv集评价假设函数和参数了，选择cv集误差最小的参数λ作为结果  </p>
-
-<p>最终，我们会得到这样的曲线图：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/λ和error曲线图.png" width = "600" height = "330" align=center />  </p>
-
-<p>我们可以根据绘制出的曲线图，选择合适的参数λ  </p>
-
-<h4>2.3 学习曲线</h4>
-
-<p>绘制学习曲线，有助于检查学习算法是否运行正常  </p>
-
-<p>正常情况下得学习曲线：Jtrain(0)随着训练样本数量m的增加，逐渐增大；而Jcv(0)逐渐减小  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/正常情况下得学习曲线.png" width = "600" height = "330" align=center />  </p>
-
-<p>欠拟合情况下，随着m增加，训练集误差和cv集误差趋近于相等，两者预测效果非常接近，都不理想：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/欠拟合的学习曲线.png" width = "600" height = "330" align=center />  </p>
-
-<p>此时，即使你增加训练样本的数目m，基本上不会起作用，因为cv集误差或者测试误差随着m增加，趋近于直线  </p>
-
-<p>过拟合情况下：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/过拟合的学习曲线.png" width = "600" height = "330" align=center />  </p>
-
-<p>此时，获取更多的样本容量，是起作用的：蓝色和红色曲线会慢慢靠近  </p>
-
-<h4>2.4 下一步，我们该做什么？</h4>
-
-<p>整理完前面的知识，一开始就介绍的五种改进学习算法的方法，它们对应的使用情况就明白了：  </p>
-
-<p>1.增加训练样本（fix high variance）<br/>
-2.尝试选择更少的特征集，防止过拟合（fix high variance）<br/>
-3.尝试选择更多的特征集，防止欠拟合（fix high bias）<br/>
-4.增加多项式特征，如x1-&gt;x1的平方（fix high bias）<br/>
-5.减少或者增加正则化参数λ（fix high bias/variance）  </p>
-
-<h3>三. 实战：机器学习系统设计</h3>
-
-<h4>3.1 误差分析</h4>
-
-<p>推荐的一种误差分析方法：  </p>
-
-<p>1.先从一种简单的学习算法入手，一种你能很快实现的算法。然后在cv集中测试该学习算法<br/>
-2.绘制学习曲线，决定：增加样本容量；增减特征；等等是否有用<br/>
-3.误差分析：手动检查那些cv集中出错的样本，发现系统性规律：那些样本是出错的，是否存在共性等等  </p>
-
-<h4>3.2 处理偏态数据</h4>
-
-<p>何为偏态数据（skewed data）：一个类的样本数比另一个类的样本数多很多  </p>
-
-<p>此时，假设函数如果总是预测y=0或者y=1，利用cv error评价该假设函数，会得到不错的评价结果  </p>
-
-<p>所以，我们针对偏态数据，必须寻找新的度量标准：  </p>
-
-<p>这里，我们将介绍Precision和Recall，查准率和召回率  </p>
-
-<p>首先，看图表：  </p>
-
-<table border="1">  
-<tr>  
-<th></th>  
-<th>样本实际值为1</th>  
-<th>| 样本实际值为0</th>  
-</tr>  
-<tr>  
-<td>预测值为1：</td>  
-<td>true positive</td>  
-<td>| flase positive</td>  
-</tr>  
-<tr>  
-<td>预测值为0：</td>  
-<td>false negativie</td>  
-<td>| true negative</td>  
-</tr>  
-</table>  
-  
-
-<p>基于上述图表，  </p>
-
-<ul>
-<li>查准率定义为：(True positive) / (Predict positive) = (True positive) / (True positive + False positive)，我们预测属于1分类的样本中，有多大比率，我们是正确<br/></li>
-<li>召回率定义为：(True positive) / (Actual positive) = (True positive) / (True positive + False negative)，样本中确实属于1分类的样本，有多大比率，我们正确地预测了<br/></li>
-</ul>
-
-<p>很容易理解  </p>
-
-<h4>3.3 权衡查准率和召回率</h4>
-
-<p>以预测病人是否得癌症为例：  </p>
-
-<p>当我们十分十分确定该病人患有癌症时，我们才预测y=1，此时满足：Higher Precision, lower Recall  </p>
-
-<p>当我们不想错过任何一个可能患有癌症的病人时，满足：Higher Recall, lower Precision  </p>
-
-<h4>3.4 如何比较Recall（R） / Precision（P）？</h4>
-
-<p>定义F1 = (2 * PR) / (P+R)  </p>
-
-<h3>四. SVM：支持向量机</h3>
-
-<p>略  </p>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[神经网络(Neural Networks)基础知识]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/ml-neural-networks/"/>
-        <updated>2015-12-03T22:35:00Z</updated>
-        <published>2015-12-03T22:35:00Z</published>
-        <id>http://sukai.me/ml-neural-networks/</id>
-        <content type="html">
-            <![CDATA[
-             <p>前几天，我们总结了线性回归，逻辑回归等相关的机器学习基础知识，今天我们来总结一下机器学习中一个古老而强大的学习模型：神经网络，主要涉及到：神经网络的模型；工作原理；应用；前向传播和后向传播算法  </p>
-
-<p>那么，开始吧！  </p>
-
-<h3>一. 神经网络模型</h3>
-
-<p>神经网络可以表达一个复杂且非线性的假设模型，其模型表示：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/neural-network-model.png" width = "680" height = "270" align=center />  </p>
-
-<p>最左边Layer 1称为<strong>输入层</strong>；Layer 2称为<strong>隐藏层</strong>；隐藏层每一个元素也叫做“神经元”，它是由前一层通过“激励函数”计算得来的；最后Layer 3称为<strong>输出层</strong>；该模型隐藏层比较少，绝大多数的数量不止一个  </p>
-
-<p>其中：ai(j)表示第j层的第i个神经元，也称为激励值；激励函数可以选择g(z)=1/(1 + e-z)   </p>
-
-<p>备注：激励函数是对类似的非线性函数g(z)的另一种称呼而已  </p>
-
-<p>那么：  </p>
-
-<ul>
-<li>a1(2) = g(Θ10(1)X0 + Θ11(1)x1 + Θ12(1)x2 + Θ13(1)x3)<br/></li>
-<li>a2(2) = g(Θ20(1)x0 + Θ21(1)x1 + Θ22(1)x2 + Θ23(1)x3)<br/></li>
-<li>a3(2) = g(Θ20(1)x0 + Θ31(1)x1 + Θ32(1)x2 + Θ33(1)x3)<br/></li>
-<li>hΘ(x) = a1(3) = g(Θ10(2)a0(2) + Θ11(2)a1(2) + Θ12(2)a2(2) + Θ13(2)a3(2))<br/></li>
-</ul>
-
-<p>其中 Θij(l) 是 第l层 第j个单元 与 第l+1层第i个单元之间的联接参数（其实就是连接线上的权重，注意标号顺序）  </p>
-
-<p>ok，一个简单的模型表示出来了，其实还可以精简一点表示：  </p>
-
-<p>重新定义如下：  </p>
-
-<ul>
-<li>a1(2) = g(z1(2))<br/></li>
-<li>a2(2) = g(z2(2))<br/></li>
-<li>a3(2) = g(z3(2))<br/></li>
-<li>hΘ(x) = a1(3) = g(z1(3))<br/></li>
-<li>z(2) = Θ(1)X<br/></li>
-</ul>
-
-<p>其中，z是x0, x1, x2, x3的加权线性组合  </p>
-
-<p>言而总之，我们从输入层的激励开始，然后进行<strong>前向传播</strong>给隐藏层计算，并进行隐藏层的激励，然后继续传播，计算输出层的激励  </p>
-
-<p>所以，神经网络的工作原理是：  </p>
-
-<p>其本质做的就是逻辑回归，但不直接用x1, x2, x3作为输入特征，而是用a1, a2, a3，而a1, a2, a3是由Θ(1)所决定的。即不直接使用输入特征来训练逻辑回归，而是自己训练逻辑回归的输入特征a1, a2, a3  </p>
-
-<p>Θ(1)不同，会训练出不同复杂而有趣的特征  </p>
-
-<h3>二. 神经网络的应用</h3>
-
-<h4>2.1 具体例子</h4>
-
-<p>使用神经网络实现x1 AND x2  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/neural-network-AND.png" width = "550" height = "370" align=center />  </p>
-
-<p>相应的，可以实现x1 OR x2; x1 XOR x2; x1 XNOR x2。只是，各自的参数权重不同而已  </p>
-
-<h4>2.2 多类型分类系统</h4>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/neural-network-app.png" width = "680" height = "270" align=center />  </p>
-
-<p>预测的输出值有多个，可以预测多种类型  </p>
-
-<h3>三. 反向传播算法</h3>
-
-<p>神经网络的模型已经被我们表示出来了，那么我们如何学习模型参数？利用反向传播算法  </p>
-
-<p>我们要先找到神经网络的代价函数，目的是min它  </p>
-
-<h4>3.1 神经网络的代价函数</h4>
-
-<p>先定义一些字母变量  </p>
-
-<ul>
-<li>L：神经网络中的层数<br/></li>
-<li>Sl：第l层神经单元的个数<br/></li>
-<li>k：输出单元数量；显然，Binary Classification的k为1，multi-class Classification的k就是k，k维向量<br/></li>
-</ul>
-
-<p>既然神经网络的本质就是逻辑回归，我们先来看看逻辑回归的代价函数：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/逻辑回归代价函数总式子.png" width = "630" height = "200" align=center />  </p>
-
-<p>只不过，在神经网络中，输出单元可能不止一个，那么神经网络的代价函数为：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/neural-network-cost-function.png" width = "630" height = "200" align=center />  </p>
-
-<h4>3.2 反向传播算法</h4>
-
-<p>为了计算导数项，我们将使用反向传播算法  </p>
-
-<p>反向传播算法某种意义上是对每一个结点计算这样的一项：δj(l)，即第l层第j个结点的误差  </p>
-
-<p>具体计算方法：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/反向传播算法-1.png" width = "630" height = "300" align=center />  </p>
-
-<p>让我们来整合一下，当我们拥有大量训练样本的时候，如何实现反向传播算法：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/反向传播算法-2.png" width = "630" height = "300" align=center />  </p>
-
-<p>好了，仔细看看上面两张图片，我们的最终目的是计算出了偏导数项。其实就是计算出梯度下降的方向  </p>
-
-<p>PS: 我操，步骤好多。参数好多。。  </p>
-
-<h3>四. 实际中如何使用反向传播算法</h3>
-
-<h4>4.1 梯度检查(Gradient Checking)</h4>
-
-<p>梯度检查，是为了避免反向传播算法实现过程中的小错误；当出现错误时，J(Θ)看似在减小，实则最终值会比没有错误时要高  </p>
-
-<p>其核心原理是J(θ)在θ处的偏导数可以约等于(J(θ+ε) - J(θ-ε)) / 2ε，其中ε要足够小，一般去10的-4次方：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/梯度检查原理.png" width = "630" height = "300" align=center />  </p>
-
-<p>这是高中就知道的知识点了，具体应用到梯度检查中就是：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/梯度检查算法" width = "630" height = "300" align=center />  </p>
-
-<p>上面图中，我们可以for循环1~n来计算代价函数在每个网络中的参数的偏导数的近似值，记为gradApprox  </p>
-
-<p>我们把反向传播算法计算得到的梯度记为DVec  </p>
-
-<p>这样，我们比较gradApprox和DVec是否近似相等（一般最多几位小数的差距）  </p>
-
-<p>ok，总结一下就是：  </p>
-
-<ul>
-<li>先实现反向传播算法，计算出DVec<br/></li>
-<li>实现数值梯度检查算法，计算出gradApprox<br/></li>
-<li>确定两者给出的值，是接近的<br/></li>
-<li>关闭梯度检查（梯度检查计算量相当大），使用反向传播进行神经网络的学习<br/></li>
-</ul>
-
-<p>所以，梯度检查是是用来验证你的方向传播的，不是用来学习参数的  </p>
-
-<h4>4.2 如何随机初始化Θ？</h4>
-
-<p>是否可以将Θ的每个参数都初始化为0？不可以！  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/神经网络初始化参数不能为0.png" width = "630" height = "300" align=center />  </p>
-
-<p>这会导致a1(2)永远等于a2(2)；所有的隐藏单元都会通过完全相同的输入函数计算出来，这完全是多余的  </p>
-
-<p>正确的姿势是：打破这种对称的权重  </p>
-
-<p>随机初始化Θij(l)在[-ε, +ε]之间即可，之间的任何一个数  </p>
-
-<h3>五. 总结回顾</h3>
-
-<p>神经网络的知识点还是比较复杂，需要来一波总结  </p>
-
-<h4>5.1 如何选择神经网络的框架</h4>
-
-<p>该选择多少个隐藏层？每个隐藏层拥有多少个神经元？  </p>
-
-<p>一般默认  </p>
-
-<ul>
-<li>一个隐藏层<br/></li>
-<li>或者多于一个隐藏层，每个隐藏层应具备同样数目的神经元（神经元数量并不是越多越好，越多，计算量也越大），最好能和输入特征的维度匹配<br/></li>
-</ul>
-
-<p>比如：3，5，4 或 3，5，5，4 或 3，5，5，5，4  </p>
-
-<h4>5.2 总结神经网络训练模型的步骤</h4>
-
-<p>1.随机初始化权重（即参数）<br/>
-2.对于训练集中的每一个x(i)，使用前向传播算法得到hΘ(x(i))<br/>
-3.计算代价函数J(Θ)<br/>
-4.实现反向传播算法，计算J(Θ)在Θj处的偏导数<br/>
-5.使用梯度检查算法，确保反向传播算法无差错工作；之后，关闭该算法<br/>
-6.使用梯度下降算法或者其余高级算法（结合反向传播算法），minmizeJ(Θ)，得到最优的模型参数Θ  </p>
-
-<p>反向传播的目的是为了计算梯度下降的方向  </p>
-
-<hr/>
-
-<p>就暂时整理这么多，过几天继续往后整理</p>
 
             ]]>
         </content>

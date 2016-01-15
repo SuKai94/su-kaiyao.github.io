@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>
-Linux | 苏苏
+IMDB数据库结构 | 苏苏
 </title>
   <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
   <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=1e95ba6faa198e6a41a982206ce4c4ab" type="text/css" />
@@ -34,106 +34,154 @@ Linux | 苏苏
       <div class="am-g am-g-fixed blog-g-fixed">
         <div class="am-u-md-9">
         
-<h1>Linux 标签下的文章</h1>
-<!-- blog list -->
-<div class="blog-list">
-  <!--样本 开始-->
-  
-  <article class="blog-main">
+<article class="post-main" id="post-font">
+  <header class="blog-header">
     <span class="round-date">
-      <span class="month">11月</span>
-      <span class="day">04</span>
+      <span class="month">01月</span>
+      <span class="day">15</span>
     </span>
-    <header class="blog-header">
-      <p class="blog-title">
-        <a href="http://sukai.me/linux-five-io-models/">Unix五种I/O模型对比</a>
-      </p>
-      <p class="blog-meta">
-        <i class="am-icon-calendar"></i> 发表于 Nov 04, 2015 • 
-        <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
-        <!--<i class="am-icon-bookmark"></i> 0条评论-->
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Linux/">Linux</a>
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/I/O/">I/O</a>
-        
-      </p>
-    </header>
-    <section class="blog-content">
-      <h3>一. 总览</h3>
+    <p class="blog-title">IMDB数据库结构</p>
+    <p class="blog-meta">
+      <i class="am-icon-calendar"></i> Published at Jan 15, 2016 • 
+      <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
+      <!--<i class="am-icon-bookmark"></i> 0条评论-->
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/IMDB/">IMDB</a>
+      
+    </p>
 
-<p>先来说一下，<strong>Unix平台有哪几种I/O模型：</strong>  </p>
+  </header>
+  <section class="blog-content">
+    <p>想要获取IMDB已上映电影的相关信息数据，我立马想到的两点就是：Restful API和爬虫，但就在我google方案的过程中，我意外收获到了其他的东西：  </p>
+
+<p>其中一个，是使用Python语言开发的<a href="http://imdbpy.sourceforge.net/index.html">IMDbPY</a>，它的作用就是帮助开发者取回和管理IMDb的电影数据库  </p>
+
+<p>另外一个就是，IMDB网站其实提供了所有电影的数据库镜像：<a href="http://www.imdb.com/interfaces/">http://www.imdb.com/interfaces</a>  </p>
+
+<p>顺着IMDbPy的文档，会发现一个非常实用的脚本：<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">imdbpy2sql.py</a>，它的作用就是将镜像文件转换为本地的数据库  </p>
+
+<p>第一次使用，就顺着文档<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">http://imdbpy.sourceforge.net/docs/README.sqldb.txt</a>一步一步来，运行完脚本后，本地数据库（我用的Mysql）会得到这样一些表：  </p>
+
+<p>可以看出：IMDB数据库设计的很好，数据高度结构化，数据表无冗余（PS：说来惭愧，平时我做开发，很喜欢一张表，这样写sql语句很方便，但是缺点真的很多），下面来分析下IMDB的数据库结构吧：  </p>
+
+<h3>title</h3>
+
+<p>首先，最想找的就是电影名称了吧，它存储title表里的title字段中，除此之外，title表还有些重要的信息：id和kind_id，production_year，id代表该电影的全局唯一标识，production_year表示电影上映的年份，kind_id暂时不知道，那么可以找到kind_type表，  </p>
+
+<p>kind_type表的信息如下：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_db_kind_type.png" width="170" height="200" align="center">  </p>
+
+<p>我需要的是电影信息，那么就对应着kind_type为1的数据  </p>
+
+<p>以id为2459950的电影为例子吧，在title中的数据如下：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_title_table_ex.png"  height="100" align="center" />  </p>
+
+<p>从图中可以看到select出来的结果为：id为249950的电影名为After Words，上映时间为2015年  </p>
+
+<p>在imdb网站搜索下该电影，链接为：<a href="http://www.imdb.com/title/tt2226630/">http://www.imdb.com/title/tt2226630/</a>  </p>
+
+<h3>movie_info</h3>
+
+<p>之后，我需要电影相关的info，比如：countries, languages, genres, votes, rating  </p>
+
+<p>首先涉及到的表式：movie_info，通过‘SELECT * FROM mrp.movie_info where movie_id=2459950;’，得到上面‘After Words’电影的相关信息如下：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_movie_info_ex.png" width="700" height="150" align="center" />  </p>
+
+<p>其中info_type_id不是很明白，找到info_type表，里面解释着各个id代表的含义：  </p>
 
 <ul>
-<li>阻塞I/O（blocking I/O）<br/><
-    </section>
-    <a class="am-badge am-badge-secondary am-radius blog-content-more" href="http://sukai.me/linux-five-io-models/">阅读全文</a>
-  </article>
-  
-  <article class="blog-main">
-    <span class="round-date">
-      <span class="month">09月</span>
-      <span class="day">09</span>
-    </span>
-    <header class="blog-header">
-      <p class="blog-title">
-        <a href="http://sukai.me/My-Vim/">我的Vim配置</a>
-      </p>
-      <p class="blog-meta">
-        <i class="am-icon-calendar"></i> 发表于 Sep 09, 2014 • 
-        <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
-        <!--<i class="am-icon-bookmark"></i> 0条评论-->
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Linux/">Linux</a>
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Vim/">Vim</a>
-        
-      </p>
-    </header>
-    <section class="blog-content">
-      <h3>Plugin Manager &mdash; <a href="https://github.com/gmarik/Vundle.vim">Vundle</a></h3>
+<li>id为3代表genres<br/></li>
+<li>id为8代表countries<br/></li>
+<li>id为4代表languages<br/></li>
+</ul>
 
-<p>Vundle
-    </section>
-    <a class="am-badge am-badge-secondary am-radius blog-content-more" href="http://sukai.me/My-Vim/">阅读全文</a>
-  </article>
-  
-  <article class="blog-main">
-    <span class="round-date">
-      <span class="month">08月</span>
-      <span class="day">14</span>
-    </span>
-    <header class="blog-header">
-      <p class="blog-title">
-        <a href="http://sukai.me/tmux/">ubuntu中Tmux快捷键备忘录</a>
-      </p>
-      <p class="blog-meta">
-        <i class="am-icon-calendar"></i> 发表于 Aug 14, 2014 • 
-        <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
-        <!--<i class="am-icon-bookmark"></i> 0条评论-->
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Linux/">Linux</a>
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Tmux/">Tmux</a>
-        
-      </p>
-    </header>
-    <section class="blog-content">
-      <p>本文将持续更新&hellip;  </p>
+<p>结合截图select的结果，得知&#39;After Words&#39;的countries为USA，genres为Drama，languages为English  </p>
 
-<p>声明：在本文中，CTRL-b为Tmux的前缀健，用于激活控制台  </p>
+<h3>movie_info_id</h3>
 
-<h3>面板操作</h3>
+<p>还有一些相关的info在movie_info_idx中，通过‘SELECT * FROM mrp.movie_info_idx where movie_id=2459950;’，得到如下结果：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_movie_info_idx_ex.png" width="680" height="150" align="center">  </p>
+
+<p>相应的：  </p>
 
 <ul>
-<li>&ldquo; 
-    </section>
-    <a class="am-badge am-badge-secondary am-radius blog-content-more" href="http://sukai.me/tmux/">阅读全文</a>
-  </article>
+<li>info_type_id为99代表votes distribution（这个数据值我暂时没搞懂）<br/></li>
+<li>info_type_id为100代表votes<br/></li>
+<li>info_type_id为101代表rating<br/></li>
+</ul>
+
+<h3>movie_keywords</h3>
+
+<p>需要查找电影的keywords信息，就需要用到movie_keywords表了。‘SELECT * FROM mrp.movie_keyword where movie_id=2459950;’：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/movie_keywords_ex.png" width="350" height="200" align="center" />  </p>
+
+<p>这样就可以找到电影所有的keywords_id，然后使用keywords_id去keywords表中寻找具体的值，即可：  </p>
+
+<p>比如‘SELECT * FROM mrp.keyword where id=37348’得到的具体值为：costa-rica，这个和imdb官网是符合的，是正确的！  </p>
+
+<h3>cast_info</h3>
+
+<p>下面我们来找一下cast_info：cast, editor, writer, director, producer等，这些信息当然是在cast_info表中了，‘SELECT * FROM mrp.cast_info where movie_id=2459950;’:  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/cast_info_ex.png" width="700" height="700" align="center" />  </p>
+
+<p>里面同样有个role_id，查阅role_type表：  </p>
+
+<ul>
+<li>role_id为1和2，分别代表actor和actress<br/></li>
+<li>role_id为3，代表producer<br/></li>
+<li>role_id为4，代表writer<br/></li>
+<li>role_id为8，代表director<br/></li>
+<li>rile_id为9，代表editor<br/></li>
+</ul>
+
+<p>那么如何找到具体的人名呢？通过person_id和name表，不多说，你可以试一下，再对照官网，可以发现信息是完全吻合的  </p>
+
+<h3>movie_companies</h3>
+
+<p>下面我们来找一下电影的production_companies，涉及到表为movie_companies，‘SELECT * FROM mrp.movie_companies where movie_id=2459950;’，之后会得到company_id  </p>
+
+<p>拿着company_id去company_name里面即可找到具体公司名  </p>
+
+<p>这里不再累述  </p>
+
+<h3>额外信息</h3>
+
+<p>还有一些额外的信息我需要知道：有关评分的信息，包括1~10评分的分布，女性评分占多少，男性多少，年龄段评分多少等等  </p>
+
+<p>如<a href="http://www.imdb.com/title/tt2226630/ratings?ref_=tt_ov_rt">http://www.imdb.com/title/tt2226630/ratings?ref_=tt_ov_rt</a>所示  </p>
+
+<p>方法是通过Imdbpy这个开源库里面的一个核心的函数：update，来完成（感谢东南大学杨远溢同学），他在这方面已经研究出方案了，我只需要站在他的基础上，编写程序即可  </p>
+
+<h3>总结</h3>
+
+<p>IMDB提供数据的方式确实很独特，通过镜像的方式。通过分析所有的表结构，不难发现imdb数据库设计之好  </p>
+
+<p>好了，截止目前，imdb的未上映和已上映电影数据就都可以拿到了  </p>
+
+  </section>
   
-  <!--样本 结束-->
-</div>
-<!-- blog list -->
+    
+        
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+				var disqus_title = "";
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://sukaime.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        
+        
+    
+
+</article>
 
         </div>
 

@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>
+IMDB电影数据库 | 苏苏
+</title>
+  <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
+  <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=1e95ba6faa198e6a41a982206ce4c4ab" type="text/css" />
+  <link rel="stylesheet" href="http://sukai.me/static/css/pygments_style.css?v=f52807bdba7d67ebabc3ce287f67bf67" type="text/css" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- header-->
+    <header class="header-wrapper">
+      <div class="header-container">
+        <nav>
+          <ul class="header-nav">
+            <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
+            <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
+            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>History</a></li>
+            <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
+            <li><a href="http://sukai.me/archive/index.html"><span class="am-icon-sm am-icon-archive" id="nav-icon"></span>Archives</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- header -->
+
+    <!-- conetent -->
+    <div class="content-wrapper">
+      <div class="am-g am-g-fixed blog-g-fixed">
+        <div class="am-u-md-9">
+        
+<article class="post-main" id="post-font">
+  <header class="blog-header">
+    <span class="round-date">
+      <span class="month">01月</span>
+      <span class="day">15</span>
+    </span>
+    <p class="blog-title">IMDB电影数据库</p>
+    <p class="blog-meta">
+      <i class="am-icon-calendar"></i> Published at Jan 15, 2016 • 
+      <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
+      <!--<i class="am-icon-bookmark"></i> 0条评论-->
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/IMDB/">IMDB</a>
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Crawler/">Crawler</a>
+      
+    </p>
+
+  </header>
+  <section class="blog-content">
+    <p>IMDB拥有着全球最大的电影数据库，最近我也在研究如何获取到这些宝贵的电影数据资源  </p>
+
+<p>根据时间来划分，可以将所有的电影分为：已上映和未上映。下面我将分这两种情况，分别去寻找方案  </p>
+
+<h3>未上映电影数据</h3>
+
+<p>在IMDB官网，我找到了一些有趣的页面：<a href="http://www.imdb.com/movies-coming-soon/2016-01">http://www.imdb.com/movies-coming-soon/2016-01</a>，<a href="http://www.imdb.com/movies-coming-soon/2016-02">http://www.imdb.com/movies-coming-soon/2016-02</a>等等，通过分析url很容易发现：  </p>
+
+<p>url中的&#39;movies-coming-soon&#39;表示该页面的电影即将上映至影院，后面的日期为2016-xx，代表着该页面的电影预计2016年xx月上映  </p>
+
+<p>这样的话，我们就可以找到2016一整年的预映电影的入口页面  </p>
+
+<p>随意进入任何一个入口页面，里面陈列着该日期下所有预映电影的简短信息，包括指向某具体电影详情页面的link，随意点击某部电影，进入并得到link，比如：<a href="http://www.imdb.com/title/tt3460252/?ref_=cs_ov_tt">http://www.imdb.com/title/tt3460252/?ref_=cs_ov_tt</a>  </p>
+
+<p>其中?ref<em>=cs_ov_tt是多余的，可以省略，于是link精简为：<a href="http://www.imdb.com/title/tt3460252">http://www.imdb.com/title/tt3460252</a>，‘?ref</em>=cs_ov_tt’只是代表某些跳转信息（我猜的）  </p>
+
+<p>进入到电影详情页面，我们就可以抓取一切我们想要的数据了，原理很简单：  </p>
+
+<p>模拟http请求，然后解析HTML DOM树，主要用到了Python的request库和beautifulSoup4库，我还用到了阻塞队列Queue和多线程，解析电影详情页面的线程代码如下：  </p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">detail_thread</span><span class="p">():</span>  
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>  
+        <span class="k">try</span><span class="p">:</span>  
+            <span class="n">m_url</span> <span class="o">=</span> <span class="n">movie_url</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>  
+            <span class="k">print</span> <span class="s">&#39;detail_thread fetch: &#39;</span><span class="p">,</span> <span class="n">m_url</span>  
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">m_url</span><span class="p">)</span>  
+            <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>  
+            <span class="n">nMovie</span> <span class="o">=</span> <span class="n">newMovie</span><span class="p">()</span>  
+
+            <span class="c"># id  </span>
+            <span class="n">nMovie</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">m_url</span><span class="p">[</span><span class="n">m_url</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;/tt&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">3</span><span class="p">:]</span>  
+            <span class="c"># year  </span>
+            <span class="n">nMovie</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">year</span>  
+
+            <span class="c"># title  </span>
+            <span class="n">nMovie</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;h1&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;header&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;itemprop&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;name&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">text</span>  
+
+            <span class="n">title_details</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;titleDetails&#39;</span><span class="p">})</span>  
+            <span class="n">txt_block</span> <span class="o">=</span> <span class="n">title_details</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;txt-block&#39;</span><span class="p">})</span>  
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">txt_block</span><span class="p">:</span>  
+                <span class="k">try</span><span class="p">:</span>  
+                    <span class="c"># countries  </span>
+                    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;h4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s">&#39;Country:&#39;</span><span class="p">:</span>  
+                        <span class="n">c_links</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                            <span class="n">country</span> <span class="o">=</span> <span class="n">c_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">c_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                                <span class="n">country</span> <span class="o">=</span> <span class="n">country</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="n">nMovie</span><span class="o">.</span><span class="n">countries</span> <span class="o">=</span> <span class="n">country</span>  
+                    <span class="c"># languages  </span>
+                    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;h4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s">&#39;Language:&#39;</span><span class="p">:</span>  
+                        <span class="n">l_links</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                            <span class="n">lan</span> <span class="o">=</span> <span class="n">l_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">l_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                                <span class="n">lan</span> <span class="o">=</span> <span class="n">lan</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">l</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="n">nMovie</span><span class="o">.</span><span class="n">languages</span> <span class="o">=</span> <span class="n">lan</span>  
+                    <span class="c"># production_companies  </span>
+                    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;h4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s">&#39;Production Co:&#39;</span><span class="p">:</span>  
+                        <span class="n">p_c_links</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p_c_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                            <span class="n">p_companies</span> <span class="o">=</span> <span class="n">p_c_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="k">for</span> <span class="n">p_c</span> <span class="ow">in</span> <span class="n">p_c_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                                <span class="n">p_companies</span> <span class="o">=</span> <span class="n">p_companies</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">p_c</span><span class="o">.</span><span class="n">text</span>  
+                            <span class="n">nMovie</span><span class="o">.</span><span class="n">production_companies</span> <span class="o">=</span> <span class="n">p_companies</span>  
+                <span class="k">except</span><span class="p">:</span>  
+                    <span class="k">continue</span>  
+                    <span class="c">#print &#39;detail_thread: txt_block find no h4 tag&#39;  </span>
+
+            <span class="c"># keywords  </span>
+            <span class="n">keywords</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;keywords&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;itemprop&#39;</span><span class="p">})</span>  
+            <span class="c">#print m_url, &#39; keywords:&#39;, len(keywords)  </span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keywords</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                <span class="n">key_words</span> <span class="o">=</span> <span class="n">keywords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                    <span class="n">key_words</span> <span class="o">=</span> <span class="n">key_words</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">text</span>  
+                <span class="n">nMovie</span><span class="o">.</span><span class="n">keywords</span> <span class="o">=</span> <span class="n">key_words</span>  
+
+            <span class="c"># genres  </span>
+            <span class="n">genres_div</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;see-more inline canwrap&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;genre&#39;</span><span class="p">})</span>  
+            <span class="k">if</span> <span class="n">genres_div</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>  
+                <span class="n">g_links</span> <span class="o">=</span> <span class="n">genres_div</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                <span class="c">#print m_url, &#39; genres:&#39;, len(g_links)  </span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">g_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                    <span class="n">genres</span> <span class="o">=</span> <span class="n">g_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">g_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                        <span class="n">genres</span> <span class="o">=</span> <span class="n">genres</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">g</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="c">#print genres  </span>
+                    <span class="n">nMovie</span><span class="o">.</span><span class="n">genres</span> <span class="o">=</span> <span class="n">genres</span>  
+
+            <span class="c"># cast  </span>
+            <span class="n">cast_td</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;actor&#39;</span><span class="p">})</span>  
+            <span class="c">#print m_url, &#39; cast:&#39;, len(cast_td)  </span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cast_td</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                <span class="n">casts</span> <span class="o">=</span> <span class="n">cast_td</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;itemprop&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;name&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">text</span>  
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cast_td</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                    <span class="n">casts</span> <span class="o">=</span> <span class="n">casts</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;itemprop&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;name&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">text</span>  
+                <span class="c">#print casts  </span>
+                <span class="n">nMovie</span><span class="o">.</span><span class="n">cast</span> <span class="o">=</span> <span class="n">casts</span>  
+
+            <span class="c"># ??  </span>
+            <span class="c"># editor  </span>
+            <span class="c"># producer  </span>
+
+            <span class="c"># writer  </span>
+            <span class="n">w_div</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;txt-block&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;creator&#39;</span><span class="p">})</span>  
+            <span class="k">if</span> <span class="n">w_div</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>  
+                <span class="n">w_links</span> <span class="o">=</span> <span class="n">w_div</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                <span class="c">#print m_url, &#39; writer:&#39;, len(w_links)  </span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                    <span class="n">writer</span> <span class="o">=</span> <span class="n">w_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">w_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                        <span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">w</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="n">nMovie</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span>  
+                <span class="c">#print nMovie.writer  </span>
+
+            <span class="c"># director  </span>
+            <span class="n">d_div</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;txt-block&#39;</span><span class="p">,</span> <span class="s">&#39;itemprop&#39;</span><span class="p">:</span> <span class="s">&#39;director&#39;</span><span class="p">})</span>  
+            <span class="k">if</span> <span class="n">d_div</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>  
+                <span class="n">d_links</span> <span class="o">=</span> <span class="n">d_div</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>  
+                <span class="c">#print m_url, &#39; director:&#39;, len(d_links)  </span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+                    <span class="n">director</span> <span class="o">=</span> <span class="n">d_links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">d_links</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>  
+                        <span class="n">director</span> <span class="o">=</span> <span class="n">director</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">text</span>  
+                    <span class="n">nMovie</span><span class="o">.</span><span class="n">director</span> <span class="o">=</span> <span class="n">director</span>  
+
+            <span class="n">entities</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">nMovie</span><span class="p">)</span>  
+            <span class="n">movie_url</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>  
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  
+            <span class="k">print</span> <span class="s">&#39;detail_thread: An {} exception occured&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+
+<p>当然，在运行detail_thread这个线程之前，肯定要开启另外一个线程，作用是将所有电影详情页面的url放入movie_url这个Queue中，否则，detail_thread永远阻塞至死。所以，总的来设计，我运用了多线程+多队列搭建起了‘多级生产者和消费者’模型：  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_new_movie_crawl_model.png" width="400" height="400" align="center" />  </p>
+
+<p>index_thread生产所有入口页面，放入index_url阻塞队列；movie_thread从index_url队列取入口页面，生产电影详情页面url，放入movie_url；detail_thread从movie_url获取link，解析生成nMovie的实体，实体中保存着有关电影的详细信息，放入entitie队列；最后交由db_thread做入库持久化操作  </p>
+
+<p>运行时，可以视实际运行快慢，给其中的某些线程增加数量，增快其运行速度  </p>
+
+<p>总的代码，可以查看我的<a href="https://github.com/su-kaiyao/mrp/blob/master/dataSet/newMovieCrawl.py">Github&gt;newMovieCrawl.py</a>  </p>
+
+<p>我自己运行了一把，抓了141条新电影，查阅了所有入口页面（20116-01 ~ 2016-12），数了数是145个，少了4个，是因为那4个电影的详细信息太少了，被脚本过滤了  </p>
+
+<h3>已上映电影数据</h3>
+
+<p>移步：<a href="http://sukai.me/imdb-db-structure/">IMDB数据库结构</a>  </p>
+
+  </section>
+  
+    
+        
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+				var disqus_title = "";
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://sukaime.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        
+        
+    
+
+</article>
+
+        </div>
+
+        <div class="sidebar">
+          <div class="am-u-md-3">
+            <!-- about me -->
+            <div class="panel about-me">
+              <div class="about-me-bg"></div>
+              <div class="about-me-content">
+                <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/avatar.one.jpg"></img></a>
+                <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">苏苏</a></h5>
+                <p class="about-me-words">Strive To Be Full Stack..</p>
+                <ul class="about-me-ul">
+                  <li class="about-me-li">
+                    <a class="about-me-li-content" href="http://sukai.me/archive/index.html">
+                      日志
+                      <h5 class="about-me-li-h5">28</h5>
+                    </a>
+                  </li>
+                  <li class="about-me-li">
+                    <a class="about-me-li-content" href="http://sukai.me/tag/index.html">
+                      标签
+                      <h5 class="about-me-li-h5">32</h5>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- about me -->
+            <!-- contact-me -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Follow Me</h5>
+              <div class="contact-me-icons">
+                <a href="https://github.com/su-kaiyao" title="github" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
+                <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="weibo" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
+                <a href="https://twitter.com/SuKai_Coding" title="twitter" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
+                <a id="weixin-icon">
+                  <i class="am-icon-weixin am-icon-md"></i>
+                  <div id="weixin-info">
+                    <br/>
+                    <p>扫扫二维码，多交一枚盆友~</p>
+                    <img src="http://7xl2fd.com1.z0.glb.clouddn.com/weixin-qrcode.png">
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <!-- contact-me-->
+            <!-- email-me -->
+            <div class="panel-two">
+              <h3 class="panel-title">Contact Me</h5>
+              <img src="http://7xl2fd.com1.z0.glb.clouddn.com/sukai.email.gif">
+            </div>
+            <!-- email-me-->
+            <!-- recently -->
+            <div class="shuoshuo panel-two">
+              <h5 class="panel-title">博主说说</h5>
+              <div class="shuoshuo-content">
+                互联网的水太深，仍有很多要学，却总是学不会
+              </div>
+              <div class="shuoshuo-content">
+                即使再忙，每天也要最少活动一小时
+              </div>
+              <div class="shuoshuo-content">
+                2016，新的开始~
+              </div>
+            </div>
+            <!-- recently -->
+            <!-- Linux Cn -->
+            <div class="contact-me panel-two">
+              <h3 class="panel-title">Member Of <a href="https://github.com/LCTT">LCTT</a></h5>
+              <span>
+                <img src="http://7xl2fd.com1.z0.glb.clouddn.com/LCTT.png">
+                <a href="http://sukai.me/MyTrans/">Click For More...</a>
+              </span>
+            </div>
+            <!-- Linux Cn -->
+            <!--friends -->
+            <div class="friends panel-two">
+              <h3 class="panel-title">Friends<small><a href="http://sukai.me/friend/">.More</a></small></h5>
+              <ul class="friends-ul">
+                <li>
+                  <a href="http://www.findspace.name/" title="Findspace" target="_blank">Findspace</a>
+                </li>
+                <li>
+                  <a href="http://www.fddcn.cn/" title="奋斗的承诺" target="_blank">奋斗的承诺</a>
+                </li>
+                <li>
+                  <a href="https://www.anotherhome.net/" title="当时只道是寻常" target="_blank">当时只道是寻常</a>
+                </li>
+                <li>
+                  <a href="http://www.llwjy.com/" title="小鸡慢慢" target="_blank">小鸡慢慢</a>
+                </li>
+                <li>
+                  <a href="http://ming.today/" title="Ming YIN" target="_blank">Ming YIN</a>
+                </li>
+                <li>
+                  <a href="http://nextearn.me/" title="NextEarn" target="_blank">NextEarn</a>
+                </li>
+                <li>
+                  <a href="https://xitu.io/" title="稀土" target="_blank">稀土</a>
+                </li>
+                <li>
+                  <a href="http://stomach-ache.github.io/" title="Wei Tong" target="_blank">Wei Tong</a>
+                </li>
+                <li>
+                  <a href="http://kirosummer.github.io/" title="Kiro's Blog" target="_blank">Kiro's Blog</a>
+                </li>
+              </ul>
+            </div>
+            <!--friends -->
+            <!-- copyright -->
+            <div class="about-copyright panel-two">
+              ©Powered by<a href="https://github.com/whtsky/Catsup"> Catsup</a>. Designed by<a href="https://github.com/su-kaiyao/catsup-theme-final"> KaiSu</a>
+            </div>
+            <!-- Linux Cn -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- conetent -->
+  </div>
+
+<!--<script src="blog_files/amazeui.js"></script>
+<script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+-->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?564d3a351e5dd8c80c238f900c479ab3";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70406244-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+</body>
+</html>
