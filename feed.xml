@@ -23,9 +23,67 @@
 
 <p>顺着IMDbPy的文档，会发现一个非常实用的脚本：<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">imdbpy2sql.py</a>，它的作用就是将镜像文件转换为本地的数据库  </p>
 
-<p>第一次使用，就顺着文档<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">http://imdbpy.sourceforge.net/docs/README.sqldb.txt</a>一步一步来，运行完脚本后，本地数据库（我用的Mysql）会得到这样一些表：  </p>
+<p>第一次使用，就顺着文档<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">http://imdbpy.sourceforge.net/docs/README.sqldb.txt</a>一步一步来，运行完脚本后，本地数据库（我用的Mysql）会得到一些IMDB的表和数据  </p>
 
-<p>可以看出：IMDB数据库设计的很好，数据高度结构化，数据表无冗余（PS：说来惭愧，平时我做开发，很喜欢一张表，这样写sql语句很方便，但是缺点真的很多），下面来分析下IMDB的数据库结构吧：  </p>
+<p>PS：下载所需的镜像文件，并运行imdbpy2sql.py脚本，我全部写成了自动化程序：  </p>
+<div class="highlight"><pre><span class="c">#!/usr/bin/env python  </span>
+<span class="c"># -*- coding: utf-8 -*-  </span>
+
+<span class="kn">import</span> <span class="nn">subprocess</span>  
+<span class="kn">import</span> <span class="nn">os</span>  
+<span class="kn">import</span> <span class="nn">imdb</span>  
+
+<span class="n">location</span> <span class="o">=</span> <span class="s">&#39;./dbfiles&#39;</span>  
+<span class="n">imdb_script</span> <span class="o">=</span> <span class="s">&#39;./code/bin/imdbpy2sql.py&#39;</span>  
+<span class="n">base_download_url</span> <span class="o">=</span> <span class="s">&#39;ftp://ftp.fu-berlin.de/pub/misc/movies/database/&#39;</span>  
+<span class="n">to_download_files</span> <span class="o">=</span> <span class="p">[</span>  
+    <span class="s">&#39;movie-links.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;keywords.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;directors.list.gz&#39;</span><span class="p">,</span>  
+    <span class="s">&#39;editors.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;genres.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;language.list.gz&#39;</span><span class="p">,</span>  
+    <span class="s">&#39;movies.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;producers.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;production-companies.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;ratings.list.gz&#39;</span><span class="p">,</span>  
+    <span class="s">&#39;writers.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;countries.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;complete-cast.list.gz&#39;</span><span class="p">]</span>  
+
+<span class="n">mysql_ip</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span>  
+<span class="n">mysql_user</span> <span class="o">=</span> <span class="s">&#39;root&#39;</span>  
+<span class="n">mysql_passwd</span> <span class="o">=</span> <span class="s">&#39;1227401054&#39;</span>  
+<span class="n">mysql_db</span> <span class="o">=</span> <span class="s">&#39;mrp&#39;</span>  
+
+<span class="k">def</span> <span class="nf">download_db_files</span><span class="p">():</span>  
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">to_download_files</span><span class="p">:</span>  
+        <span class="n">url</span> <span class="o">=</span> <span class="n">base_download_url</span> <span class="o">+</span> <span class="nb">file</span>  
+        <span class="k">print</span> <span class="s">&#39;Downloading &#39;</span><span class="p">,</span> <span class="n">url</span>  
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;wget&#39;</span><span class="p">,</span> <span class="s">&#39;-P&#39;</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">url</span><span class="p">]</span>  
+        <span class="n">t_pro</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>  
+        <span class="c"># block model too slow  </span>
+        <span class="c">#t_pro.wait()  </span>
+
+
+<span class="k">def</span> <span class="nf">trans_db_to_local</span><span class="p">():</span>  
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>  
+        <span class="n">allDone</span> <span class="o">=</span> <span class="bp">True</span>  
+        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">to_download_files</span><span class="p">:</span>  
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">location</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">file</span><span class="p">):</span>  
+                <span class="c">#print &#39;need file: &#39;, location+file  </span>
+                <span class="n">allDone</span> <span class="o">=</span> <span class="bp">False</span>  
+                <span class="k">break</span>  
+        <span class="k">if</span> <span class="n">allDone</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>  
+            <span class="k">break</span>  
+
+    <span class="k">print</span> <span class="s">&#39;Running imdbpy2sql.py begin&#39;</span>  
+    <span class="c"># mysql://user:password@host/database  </span>
+    <span class="n">mysql_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;mysql://&#39;</span><span class="p">,</span> <span class="n">mysql_user</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">mysql_passwd</span><span class="p">,</span> <span class="s">&#39;@&#39;</span><span class="p">,</span> <span class="n">mysql_ip</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="n">mysql_db</span><span class="p">]</span>  
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">imdb_script</span> <span class="o">+</span> <span class="s">&#39; -d &#39;</span> <span class="o">+</span> <span class="n">location</span> <span class="o">+</span> <span class="s">&#39; -u &#39;</span> <span class="o">+</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mysql_list</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; --mysql-force-myisam&#39;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  
+    <span class="k">print</span> <span class="s">&#39;Running imdbpy2sql.py. over&#39;</span>  
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>  
+    <span class="n">download_db_files</span><span class="p">()</span>  
+    <span class="n">trans_db_to_local</span><span class="p">()</span>  
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>  
+    <span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+<p>下面将分析IMDB的数据库结构，从中我们可以看出IMDB数据库设计的很好，数据高度结构化，数据表无冗余（PS：说来惭愧，平时我做开发，很喜欢一张表，这样写sql语句很方便，但是缺点真的很多），  </p>
 
 <h3>title</h3>
 
@@ -120,6 +178,42 @@
 <p>如<a href="http://www.imdb.com/title/tt2226630/ratings?ref_=tt_ov_rt">http://www.imdb.com/title/tt2226630/ratings?ref_=tt_ov_rt</a>所示  </p>
 
 <p>方法是通过Imdbpy这个开源库里面的一个核心的函数：update，来完成（感谢东南大学杨远溢同学），他在这方面已经研究出方案了，我只需要站在他的基础上，编写程序即可  </p>
+
+<p>实例程序如下：（搜索&quot;A Father&#39;s Journey&quot;电影，并获取评分信息）  </p>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">imdb</span>  
+
+<span class="k">def</span> <span class="nf">init_db</span><span class="p">():</span>  
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;A Father&#39;s Journey&quot;</span>  
+    <span class="n">ia</span> <span class="o">=</span> <span class="n">imdb</span><span class="o">.</span><span class="n">IMDb</span><span class="p">()</span>  
+    <span class="n">s_result</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">search_movie</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>  
+    <span class="sd">&#39;&#39;&#39;  </span>
+<span class="sd">    for item in s_result:  </span>
+<span class="sd">        print item[&#39;title&#39;]  </span>
+<span class="sd">    &#39;&#39;&#39;</span>  
+    <span class="n">the_unt</span> <span class="o">=</span> <span class="n">s_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  
+    <span class="n">ia</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">the_unt</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;vote details&#39;</span><span class="p">))</span>  
+    <span class="k">if</span> <span class="n">the_unt</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;rating&#39;</span><span class="p">):</span>  
+        <span class="k">print</span> <span class="n">the_unt</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span>  
+    <span class="k">if</span> <span class="n">the_unt</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;number of votes&#39;</span><span class="p">):</span>  
+        <span class="n">number_votes</span> <span class="o">=</span> <span class="n">the_unt</span><span class="p">[</span><span class="s">&#39;number of votes&#39;</span><span class="p">]</span>  
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>  
+            <span class="k">print</span> <span class="s">&#39;R&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">number_votes</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>  
+    <span class="k">if</span> <span class="n">the_unt</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;demographic&#39;</span><span class="p">):</span>  
+        <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span>  
+            <span class="s">&#39;males&#39;</span><span class="p">,</span> <span class="s">&#39;females&#39;</span><span class="p">,</span>  
+            <span class="s">&#39;aged under 18&#39;</span><span class="p">,</span> <span class="s">&#39;males under 18&#39;</span><span class="p">,</span> <span class="s">&#39;females under 18&#39;</span><span class="p">,</span>  
+            <span class="s">&#39;aged 18-29&#39;</span><span class="p">,</span> <span class="s">&#39;males aged 18-29&#39;</span><span class="p">,</span> <span class="s">&#39;females aged 18-29&#39;</span><span class="p">,</span>  
+            <span class="s">&#39;aged 30-44&#39;</span><span class="p">,</span> <span class="s">&#39;males aged 30-44&#39;</span><span class="p">,</span> <span class="s">&#39;females aged 30-44&#39;</span><span class="p">,</span>  
+            <span class="s">&#39;aged 45+&#39;</span><span class="p">,</span> <span class="s">&#39;males aged 45+&#39;</span><span class="p">,</span> <span class="s">&#39;females aged 45+&#39;</span><span class="p">,</span>  
+            <span class="s">&#39;imdb staff&#39;</span><span class="p">,</span> <span class="s">&#39;top 1000 voters&#39;</span><span class="p">,</span>  
+            <span class="s">&#39;us users&#39;</span><span class="p">,</span><span class="s">&#39;non-us users&#39;</span>  
+        <span class="p">]</span>  
+        <span class="n">demo_value</span> <span class="o">=</span> <span class="n">the_unt</span><span class="p">[</span><span class="s">&#39;demographic&#39;</span><span class="p">]</span>  
+        <span class="k">print</span> <span class="s">&#39;get&#39;</span>  
+        <span class="k">for</span> <span class="n">in_fo</span> <span class="ow">in</span> <span class="n">infos</span><span class="p">:</span>  
+            <span class="k">if</span> <span class="n">demo_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">in_fo</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>  
+                <span class="k">print</span> <span class="n">in_fo</span><span class="p">,</span> <span class="n">demo_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">in_fo</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">demo_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">in_fo</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
 
 <h3>总结</h3>
 
