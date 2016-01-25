@@ -1,3 +1,4 @@
+http://sukai.me/make-friends-with-time/
 http://sukai.me/imdb-db-structure/
 http://sukai.me/imdb-movies-crawl/
 http://sukai.me/shadowsocks/
@@ -36,6 +37,7 @@ http://sukai.me/tag/Machine-Learning/
 http://sukai.me/tag/Cousera/
 http://sukai.me/tag/Linux/
 http://sukai.me/tag/IMDB/
+http://sukai.me/tag/Reading/
 http://sukai.me/tag/Douban/
 http://sukai.me/tag/Life/
 http://sukai.me/tag/JSP/
@@ -46,7 +48,6 @@ http://sukai.me/tag/WeiXin/
 http://sukai.me/tag/Cache/
 http://sukai.me/tag/Blog/
 http://sukai.me/tag/DuoShuo/
-http://sukai.me/tag/Reading/
 http://sukai.me/tag/Vim/
 http://sukai.me/tag/Hibernate/
 http://sukai.me/tag/Tornado/
