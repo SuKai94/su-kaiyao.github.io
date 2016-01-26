@@ -1,3 +1,4 @@
+http://sukai.me/alfred-user-guide/
 http://sukai.me/make-friends-with-time/
 http://sukai.me/imdb-db-structure/
 http://sukai.me/imdb-movies-crawl/
@@ -44,6 +45,7 @@ http://sukai.me/tag/JSP/
 http://sukai.me/tag/Github/
 http://sukai.me/tag/Crawler/
 http://sukai.me/tag/Java/
+http://sukai.me/tag/Alfred/
 http://sukai.me/tag/WeiXin/
 http://sukai.me/tag/Cache/
 http://sukai.me/tag/Blog/
@@ -64,6 +66,7 @@ http://sukai.me/tag/NIO/
 http://sukai.me/tag/Sql-Server/
 http://sukai.me/tag/GFW/
 http://sukai.me/tag/Tmux/
+http://sukai.me/tag/MAC/
 http://sukai.me/tag/index.html
 http://sukai.me/archive/2016/
 http://sukai.me/archive/2015/

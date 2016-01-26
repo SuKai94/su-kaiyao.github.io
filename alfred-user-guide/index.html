@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>
-Github马拉松进行作弊 | 苏苏
+Alfred使用指南 | 苏苏
 </title>
   <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
   <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=a1263822c57181687a8e6f980111098e" type="text/css" />
@@ -38,38 +38,66 @@ Github马拉松进行作弊 | 苏苏
 <article class="post-main" id="post-font">
   <header class="blog-header">
     <span class="round-date">
-      <span class="month">12月</span>
-      <span class="day">12</span>
+      <span class="month">01月</span>
+      <span class="day">26</span>
     </span>
-    <p class="blog-title">Github马拉松进行作弊</p>
+    <p class="blog-title">Alfred使用指南</p>
     <p class="blog-meta">
-      <i class="am-icon-calendar"></i> Published at Dec 12, 2014 • 
+      <i class="am-icon-calendar"></i> Published at Jan 26, 2016 • 
       <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
       <!--<i class="am-icon-bookmark"></i> 0条评论-->
       
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Github/">Github</a>
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/MAC/">MAC</a>
       
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Python/">Python</a>
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Alfred/">Alfred</a>
       
     </p>
 
   </header>
   <section class="blog-content">
-    <p>这件事起源于，我的一次重装系统。程序猿，肯定要玩ubuntu的，当时装ubuntu没有正确设置系统时间，一次github仓库提交发现，灰色格子没有点绿  </p>
+    <p>Alfred是公认MAC端的神兵利器，它不仅是快速搜索工具，快速启动工具，甚至还能操作许多系统的功能。熟练使用之，完全可以抛弃鼠标，再结合MAC超强的触摸板，能节省许多时间，并提高效率  </p>
 
-<p>排查原因：github git commit时间是根据你本地git仓库的（即ubuntu系统时间）。然后，邪恶了一下，随意改ubuntu系统时间，再git commit，发现相应日期的github灰色格子都会被点绿。实在想不出这篇博客取啥标题名，好像和github马拉松“有关”吧，就取“Github马拉松如何作弊”吧  </p>
+<p>今日Google之，搜索出许多详细的教程，深深感叹其高效牛逼。我参考的教程是：  </p>
 
-<p>这是我当时发现这个问题后发的微博  </p>
+<ul>
+<li><a href="http://wellsnake.com/jekyll/update/2014/06/15/001/">《丢掉鼠标－Mac神软Alfred使用手册1》</a><br/></li>
+<li><a href="http://wellsnake.com/jekyll/update/2014/08/16/001/">《杀手级功能WorkFlows介绍(1)-Alfred使用手册2》</a><br/></li>
+</ul>
 
-<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/weibo.png" alt="github git commit时间"/>  </p>
+<h3>一. Alfred免费版feature</h3>
 
-<p>感谢Linux中国的转发&hellip;  </p>
+<p>看完上面的第一条链接，对于Alfred所有免费的feature就能全部掌握了，所有免费的feature有：  </p>
 
-<p>后来又邪恶了，准备写个python脚本，自动完成github commit“断签补签”的任务。无非就是用python执行ubuntu命令嘛，代码逻辑很简单。准备用python subprocess模块执行shell命令  </p>
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/alfred-free-feature.png" alt="alfred-free-feature"/>  </p>
 
-<p>这里面涉及到一个问题：使用ubuntu date命令修改时间，是需要sudo权限的，所以待会运行.py文件时，也要用sudo python xxx.py；跟着这一步，执行git push origin master命令时，为了躲避输入github用户名和密码的麻烦，需要把公钥传到github，这里必须是你ubuntu root用户的公钥，因为你刚刚是以root身份运行python文件的嘛  </p>
+<p>功能不多说，上面的第一条链接介绍的很全面了。我记忆犹新的功能是：File Search&amp;&amp;Web Search  </p>
 
-<p>脚本很简单，纯粹是娱乐的目的写的，想看的话可以参考我的<a href="https://github.com/su-kaiyao/Python-Practice/tree/master/githubShua">github仓库</a></p>
+<h3>二. Alfred收费的WorkFlows</h3>
+
+<p>WorkFlows是Alfred的核心功能，只有亲身用之，才能体会到无比的强大。其核心理念是：  </p>
+
+<p><strong>From quick file filters to advanced scripts, you can control your Mac, other applications, web services and more.</strong>  </p>
+
+<p>我们大可不必搞清WorkFlows的原理，对于小白用户，已经有一个收集平台为我们收集了所有可用的WorkFlow：<a href="http://www.alfredworkflow.com/">http://www.alfredworkflow.com/</a>  </p>
+
+<p>比如，前往该平台网站，下载了我最想扩展的“搜索豆瓣电影、图书、音乐”功能：<strong>Douban (豆瓣)</strong>，下载下来的文件是：“Douban.alfredworkflow”，双击安装并import即可使用，使用效果如下：  </p>
+
+<p>我使用“book 机器学习实战”，来控制我的MAC去<a href="http://book.douban.com">http://book.douban.com</a>搜索《机器学习实战》这本书，之后MAC会使用默认浏览器打开《机器学习实战》的douban链接  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/douban-alfred-workflow.png" alt="douban-alfred-workflow"/>  </p>
+
+<p>除此之外，还有很多优秀的WorkFlow供你选择，你能想到的基本都已经有了，你会感叹到程序猿真的是这个世界上伟大的动物  </p>
+
+<p>当然，你突然想到某个新颖的功能，想开发自己的WorkFlow，这也不是什么难事，难得是一个好的idea。WorkFlows可以通过用户自己写脚本语言来定制搜索和其它一些高级功能，其支持bash、zsh、php、ruby、python、perl、osascript等脚本语言，具体的这篇文章不介绍了，自行Google吧  </p>
+
+<hr/>
+
+<p>参考资料：  </p>
+
+<ul>
+<li><a href="http://sspai.com/27854">少数派.Alfred的5个实用扩展推荐（一）</a><br/></li>
+<li><a href="http://sspai.com/27929">少数派.Alfred的5个实用扩展推荐（二）</a></li>
+</ul>
 
   </section>
   
