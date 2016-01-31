@@ -74,4 +74,8 @@ http://sukai.me/archive/2014/
 http://sukai.me/archive/index.html
 http://sukai.me/feed.xml
 http://sukai.me/
+http://sukai.me/page/2/
+http://sukai.me/page/3/
+http://sukai.me/page/4/
+http://sukai.me/page/5/
 http://sukai.me/404.html
