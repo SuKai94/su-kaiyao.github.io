@@ -191,6 +191,11 @@ section, article {
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
 }
 
+#palm-logo {
+  height: 99px;
+  width: 109px;;
+}
+
 .panel-two {
   margin-bottom: 22px;
   background-color: #FFF;
