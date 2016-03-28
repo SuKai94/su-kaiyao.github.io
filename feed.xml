@@ -3,8 +3,88 @@
     <title>苏苏</title>
     <link href="" rel="self" />
     <link href="http://sukai.me/" />
-    <updated>2016-01-26T15:30:00Z</updated>
+    <updated>2016-03-27T20:30:00Z</updated>
     <id>http://sukai.me/</id>
+    
+    <entry>
+        <title><![CDATA[GIL:Python多线程模型的核心]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/python-multi-thread-model/"/>
+        <updated>2016-03-27T20:30:00Z</updated>
+        <published>2016-03-27T20:30:00Z</published>
+        <id>http://sukai.me/python-multi-thread-model/</id>
+        <content type="html">
+            <![CDATA[
+             <h3>前言</h3>
+
+<p>很久之前就时常听说Python GIL问题，有关这方面的资料一直没有认真整理下来，比较容易遗忘。最近在网上瞄到GIL相关字眼，既然GIL是python多线程模型的核心，那么不如趁此机会好好总结一次（内容非原创分析，主要参考《Python源码分析》一书）  </p>
+
+<p>首先，GIL是什么，不多说。<a href="http://cenalulu.github.io/python/gil-in-python/" title="gil-in-python" target="_blank">Python的GIL是什么鬼，多线程性能究竟如何</a>  </p>
+
+<p>总而言之，在python中，同一时间只有一个线程能访问Python C API，能执行机器码  </p>
+
+<p>如何绕过GIL，或者说如何提高Python多核的利用效率，也有很多些文章总结得很好了，请读者移步。<a href="http://zhuoqiang.me/python-thread-gil-and-ctypes.html" target="_blank">python 线程，GIL 和 ctypes</a>  </p>
+
+<p>下面将围绕线程的创建，调度，状态保护机制等方面，并结合GIL谈谈对python多线程模型的认识  </p>
+
+<h3>Python中线程的调度机制</h3>
+
+<p>线程的调度机制主要解决两方面问题：  </p>
+
+<ul>
+<li>1.何时挂起当前线程，选择下一个处于等待状态的线程？<br/></li>
+<li>2.选择激活哪一个等待状态中的线程？<br/></li>
+</ul>
+
+<p>问题1，即线程的调度问题，python中主要采用标准调度和阻塞调度两种方式  </p>
+
+<h4>标准调度</h4>
+
+<p>Python通过软件模拟时钟中断来激活调度。时钟中断是指：每个线程执行到第N条指令时，将释放GIL，引起线程调度  </p>
+
+<p>N可以通过<code>sys.getcheckintercal()</code>获取  </p>
+
+<h4>阻塞调度</h4>
+
+<p>若当前线程通过等待输入，睡眠等方法将自身阻塞，那么python就将等待GIL的其余线程唤醒，进行一次调度  </p>
+
+<p>阻塞调度是不会重置前一个执行线程的指令执行计数的  </p>
+
+<p>那么对于问题2，python是直接将调度权利交由操作系统，由操作系统的线程调度机制决定，至于选择谁，天知道呢  </p>
+
+<p>也由此可以看出，Python的线程调度和os的线程调度的粘合关键就是GIL  </p>
+
+<h3>Python线程的创建</h3>
+
+<p>当用户创建线程时，python才会初始化多线程环境（主要就是创建GIL以及支持多线程的数据结构）。所以，python启动后，并不支持多线程，那些支持多线程的数据结构以及GIL都未被创建  </p>
+
+<p>采用这种方式的原因也是合理的：倘若激活了多线程机制，即多线程环境已初始化，那么N条指令之后，Python虚拟机都会同样激活一次调度，这对于单线程的程序是完全没有必要的。生活和工作中，当然还是单线程的脚本程序多一些，所以，完全没有必要一开始就激活多线程机制，而是有用户程序自行决定  </p>
+
+<h3>Pyhton中线程的状态保护和线程切换</h3>
+
+<p>线程调度必然引起线程的切换，以及线程上下文的保护和恢复。Python中如何存储线程的状态（上下文）呢？  </p>
+
+<p>答案是：每一个线程都会有一个线程状态对象与之对应，该对象是一个C 结构体，记录着有关线程所独有的一些信息：比如线程id等等  </p>
+
+<p>所有线程的全部这些状态对象通过单向链表的方式组合起来，Python虚拟机只需要遍历链表，即可获取相关信息  </p>
+
+<h3>后续</h3>
+
+<p>基于这么些的线程模型，Python封装出了两个线程类库：Thread和Threading。前者由C实现，提供的接口很少，后者则为方便用户使用，属于更高层的接口  </p>
+
+<hr/>
+
+<p>参考：  </p>
+
+<ul>
+<li>《Python源码分析》<br/></li>
+<li><a href="http://zhuoqiang.me/python-thread-gil-and-ctypes.html" target="_blank">python 线程，GIL 和 ctypes</a><br/></li>
+<li><a href="http://cenalulu.github.io/python/gil-in-python/" title="gil-in-python" target="_blank">Python的GIL是什么鬼，多线程性能究竟如何</a></li>
+</ul>
+
+            ]]>
+        </content>
+    </entry>
     
     <entry>
         <title><![CDATA[Alfred使用指南]]></title>
@@ -482,50 +562,6 @@
 <h3>已上映电影数据</h3>
 
 <p>移步：<a href="http://sukai.me/imdb-db-structure/">IMDB数据库结构</a>  </p>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[Shadowsocks科学上网]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/shadowsocks/"/>
-        <updated>2016-01-05T14:00:00Z</updated>
-        <published>2016-01-05T14:00:00Z</published>
-        <id>http://sukai.me/shadowsocks/</id>
-        <content type="html">
-            <![CDATA[
-             <p>GFW，想必大家都不陌生  </p>
-
-<p>针对GFW，渴求真理和自由的程序员们绞尽脑汁，创造出了许多梯子工具。本人在大二的时候尝试翻墙，用过免费VPN，用过GoAgent等等，这些都不算是自食其力式梯子，直到后来了解到了Shadowsocks，提到Shadowsocks，大家一定不陌生这句话：<strong>“Removed according to regulations.”</strong>  </p>
-
-<p>当然，我在写这篇文章之前，已经使用Shadowsocks快一年了，见证了ss从未封杀到被封杀。写这篇文章，是因为：  </p>
-
-<ul>
-<li>1.翻墙对我很重要，我要将“Shadowsocks科学上网”的方案备份下来，我的生活已离不开翻墙<br/></li>
-<li>2.这几天很多人问我借ss账号，我有必要告诉他人如何科学上网<br/></li>
-</ul>
-
-<p>申明：扯了那么多，我其实并不会讲如何利用shadowsocks科学上网，因为这些教程随意Google一大堆（当然，Baidu是不可以的，因为根据相关法律&hellip;&hellip;）。可能你们又会说，我既然不能翻墙，我怎么google，这不是一个死循环吗？ok，我直接贴出一篇教程出来：  </p>
-
-<p><a href="http://www.findspace.name/res/956">FindSpace：SHADOWSOCKS科学上网</a>  </p>
-
-<p>FindeSpace是我的博客友链，我当时也是因为搜索到了Findspace的教程，搞定了ss，和他交了朋友  </p>
-
-<p>所以，当时，按照他的教程：  </p>
-
-<p>我在host1plus上买了一个最最便宜的vps（美国洛杉矶节点），一个月10+RMB，然后在vps上装了ubuntu系统，ssh上去安装了python和shadowsocks（pip install），最后编写了json格式的配置文件，并使用nohup ssserver命令在后台启动服务。 最后在本地也同样安装shadowsocks，以及配置配置文件，使用sslocal启动服务。 我是为了翻墙才买的vps，所以，最终用firefox代理插件，配置本地的shadowsocks代理端口，即可科学上网了（现在换了MAC，不需要任何代理插件了，也不需要命令行启动ss客户端了）。 需要说明的是，ios和android都是有shadowsocks客户端的，所以，科学上网不仅限于PC机端。还有，买个vps跑个shadowsocks，未免太浪费了，还可以跑跑其他程序的，很多人都用vps建站搭博客等。 前前后后不到一小时搞定  </p>
-
-<p>再给大家列举一些资源列表：  </p>
-
-<ul>
-<li><a href="https://github.com/Long-live-shadowsocks">long-live-shadowsocks</a>：仅仅用来备份 shadowsocks 相关项目（re-uploaded because I can）<br/></li>
-</ul>
-
-<p>这个仓库很强大，ios，android，mac，win的ss客户端都有，快去下载吧  </p>
-
-<p>Best Wishes!!</p>
 
             ]]>
         </content>

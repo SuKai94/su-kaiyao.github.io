@@ -1,3 +1,4 @@
+http://sukai.me/python-multi-thread-model/
 http://sukai.me/alfred-user-guide/
 http://sukai.me/make-friends-with-time/
 http://sukai.me/imdb-db-structure/
@@ -78,4 +79,5 @@ http://sukai.me/page/2/
 http://sukai.me/page/3/
 http://sukai.me/page/4/
 http://sukai.me/page/5/
+http://sukai.me/page/6/
 http://sukai.me/404.html
