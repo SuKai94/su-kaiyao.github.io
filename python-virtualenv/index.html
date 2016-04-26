@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>
-Vim | 苏苏
+virtualenv小实践 | 苏苏
 </title>
   <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.2/css/amazeui.min.css">
   <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=1d305aa773609b9b4b711d87b369deda" type="text/css" />
@@ -35,42 +35,68 @@ Vim | 苏苏
       <div class="am-g am-g-fixed blog-g-fixed">
         <div class="am-u-md-9">
         
-<h1>Vim 标签下的文章</h1>
-<!-- blog list -->
-<div class="blog-list">
-  <!--样本 开始-->
-  
-  <article class="blog-main">
+<article class="post-main" id="post-font">
+  <header class="blog-header">
     <span class="round-date">
-      <span class="month">09月</span>
-      <span class="day">09</span>
+      <span class="month">04月</span>
+      <span class="day">26</span>
     </span>
-    <header class="blog-header">
-      <p class="blog-title">
-        <a href="http://sukai.me/My-Vim/">我的Vim配置</a>
-      </p>
-      <p class="blog-meta">
-        <i class="am-icon-calendar"></i> 发表于 Sep 09, 2014 • 
-        <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
-        <!--<i class="am-icon-bookmark"></i> 0条评论-->
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Linux/">Linux</a>
-        
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Vim/">Vim</a>
-        
-      </p>
-    </header>
-    <section class="blog-content">
-      <h3>Plugin Manager &mdash; <a href="https://github.com/gmarik/Vundle.vim">Vundle</a></h3>
+    <p class="blog-title">virtualenv小实践</p>
+    <p class="blog-meta">
+      <i class="am-icon-calendar"></i> Published at Apr 26, 2016 • 
+      <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
+      <!--<i class="am-icon-bookmark"></i> 0条评论-->
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Python/">Python</a>
+      
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/virtualenv/">virtualenv</a>
+      
+    </p>
 
-<p>Vundle
-    </section>
-    <a class="am-badge am-badge-secondary am-radius blog-content-more" href="http://sukai.me/My-Vim/">阅读全文</a>
-  </article>
+  </header>
+  <section class="blog-content">
+    <p>说来也巧，前几天想在mac上同时安装python2.x和3.4，当时为了省事没有使用virtualenv，直接采用了Homebrew Install。这几天遇到了不同application需要依赖不用版本tornado的问题，本想采用docker解决的，想想没必要，直接使用virtualenv更轻量级些  </p>
+
+<p>注：<a href="https://link.zhihu.com/?target=https%3A//www.quora.com/Whats-the-best-way-to-set-up-Python-2-7-and-3-4-in-parallel-on-a-Mac">Homebrew Install</a>安装python2.x和3.4  </p>
+
+<p>简而言之：我的某个app，<a href="https://github.com/whtsky/Catsup">catsup</a>博客系统需要3.2版本的tornado，而tornado3.2不能应用于本人制作的毕设网站，需要最新tornado版本4.x。所以采用virtualenv方便又简单，当然docker也是可以解决的哦~  </p>
+
+<p>关于virtualenv的概念，作用，安装，使用，就不说了，我主要参考了以下user guide  </p>
+
+<ul>
+<li><a href="http://lcblog-wordpress.stor.sinaapp.com/uploads/2015/10/virtualenv%E6%95%99%E7%A8%8B.pdf">virtualenv教程</a><br/></li>
+<li><a href="http://virtualenv.readthedocs.org/en/latest/userguide.html">virtual user guide</a><br/></li>
+<li><a href="http://qicheng0211.blog.51cto.com/3958621/1561685">使用virtualenv搭建独立的Python环境</a><br/></li>
+</ul>
+
+<p>总的来说，just use some simple commands：  </p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">virtualenv</span>  
+<span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python2</span><span class="o">.</span><span class="mi">7</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span> <span class="n">ENV2</span><span class="o">.</span><span class="mi">7</span>  
+<span class="n">cd</span> <span class="n">ENV2</span><span class="o">.</span><span class="mi">7</span>  
+<span class="n">pip</span> <span class="n">install</span> <span class="n">catsup</span>  
+<span class="n">catup</span> <span class="n">server</span>
+</pre></div>
+
+<p>简单地记录下，之后关于virtualenv方面的使用心得，再进行补充</p>
+
+  </section>
   
-  <!--样本 结束-->
-</div>
-<!-- blog list -->
+    
+        
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+				var disqus_title = "";
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://sukaime.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        
+        
+    
+
+</article>
 
         </div>
 

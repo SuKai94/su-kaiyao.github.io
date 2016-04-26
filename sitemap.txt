@@ -1,3 +1,4 @@
+http://sukai.me/python-virtualenv/
 http://sukai.me/sorting-in-python/
 http://sukai.me/python-multi-thread-model/
 http://sukai.me/alfred-user-guide/
@@ -53,6 +54,7 @@ http://sukai.me/tag/Cache/
 http://sukai.me/tag/Blog/
 http://sukai.me/tag/DuoShuo/
 http://sukai.me/tag/Vim/
+http://sukai.me/tag/virtualenv/
 http://sukai.me/tag/Hibernate/
 http://sukai.me/tag/Tornado/
 http://sukai.me/tag/BigData/

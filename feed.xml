@@ -3,8 +3,45 @@
     <title>苏苏</title>
     <link href="" rel="self" />
     <link href="http://sukai.me/" />
-    <updated>2016-04-19T16:30:00Z</updated>
+    <updated>2016-04-26T12:35:00Z</updated>
     <id>http://sukai.me/</id>
+    
+    <entry>
+        <title><![CDATA[virtualenv小实践]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/python-virtualenv/"/>
+        <updated>2016-04-26T12:35:00Z</updated>
+        <published>2016-04-26T12:35:00Z</published>
+        <id>http://sukai.me/python-virtualenv/</id>
+        <content type="html">
+            <![CDATA[
+             <p>说来也巧，前几天想在mac上同时安装python2.x和3.4，当时为了省事没有使用virtualenv，直接采用了Homebrew Install。这几天遇到了不同application需要依赖不用版本tornado的问题，本想采用docker解决的，想想没必要，直接使用virtualenv更轻量级些  </p>
+
+<p>注：<a href="https://link.zhihu.com/?target=https%3A//www.quora.com/Whats-the-best-way-to-set-up-Python-2-7-and-3-4-in-parallel-on-a-Mac">Homebrew Install</a>安装python2.x和3.4  </p>
+
+<p>简而言之：我的某个app，<a href="https://github.com/whtsky/Catsup">catsup</a>博客系统需要3.2版本的tornado，而tornado3.2不能应用于本人制作的毕设网站，需要最新tornado版本4.x。所以采用virtualenv方便又简单，当然docker也是可以解决的哦~  </p>
+
+<p>关于virtualenv的概念，作用，安装，使用，就不说了，我主要参考了以下user guide  </p>
+
+<ul>
+<li><a href="http://lcblog-wordpress.stor.sinaapp.com/uploads/2015/10/virtualenv%E6%95%99%E7%A8%8B.pdf">virtualenv教程</a><br/></li>
+<li><a href="http://virtualenv.readthedocs.org/en/latest/userguide.html">virtual user guide</a><br/></li>
+<li><a href="http://qicheng0211.blog.51cto.com/3958621/1561685">使用virtualenv搭建独立的Python环境</a><br/></li>
+</ul>
+
+<p>总的来说，just use some simple commands：  </p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">virtualenv</span>  
+<span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python2</span><span class="o">.</span><span class="mi">7</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span> <span class="n">ENV2</span><span class="o">.</span><span class="mi">7</span>  
+<span class="n">cd</span> <span class="n">ENV2</span><span class="o">.</span><span class="mi">7</span>  
+<span class="n">pip</span> <span class="n">install</span> <span class="n">catsup</span>  
+<span class="n">catup</span> <span class="n">server</span>
+</pre></div>
+
+<p>简单地记录下，之后关于virtualenv方面的使用心得，再进行补充</p>
+
+            ]]>
+        </content>
+    </entry>
     
     <entry>
         <title><![CDATA[Python中的排序总结]]></title>
@@ -501,225 +538,6 @@ sorted_x = sorted(x.items(), key=operator.itemgetter(0)</code></pre>
 <p>PS：  </p>
 
 <p>今日读完李笑来的《把时间当作朋友》，有感而发，遂写此博客</p>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[IMDB数据库结构]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/imdb-db-structure/"/>
-        <updated>2016-01-15T17:00:00Z</updated>
-        <published>2016-01-15T17:00:00Z</published>
-        <id>http://sukai.me/imdb-db-structure/</id>
-        <content type="html">
-            <![CDATA[
-             <p>想要获取IMDB已上映电影的相关信息数据，我立马想到的两点就是：Restful API和爬虫，但就在我google方案的过程中，我意外收获到了其他的东西：  </p>
-
-<p>其中一个，是使用Python语言开发的<a href="http://imdbpy.sourceforge.net/index.html">IMDbPY</a>，它的作用就是帮助开发者取回和管理IMDb的电影数据库  </p>
-
-<p>另外一个就是，IMDB网站其实提供了所有电影的数据库镜像：<a href="http://www.imdb.com/interfaces/">http://www.imdb.com/interfaces</a>  </p>
-
-<p>顺着IMDbPy的文档，会发现一个非常实用的脚本：<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">imdbpy2sql.py</a>，它的作用就是将镜像文件转换为本地的数据库  </p>
-
-<p>第一次使用，就顺着文档<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">http://imdbpy.sourceforge.net/docs/README.sqldb.txt</a>一步一步来，运行完脚本后，本地数据库（我用的Mysql）会得到一些IMDB的表和数据  </p>
-
-<p>PS：下载所需的镜像文件，并运行imdbpy2sql.py脚本，我全部写成了自动化程序：  </p>
-<div class="highlight"><pre><span class="c">#!/usr/bin/env python  </span>
-<span class="c"># -*- coding: utf-8 -*-  </span>
-
-<span class="kn">import</span> <span class="nn">subprocess</span>  
-<span class="kn">import</span> <span class="nn">os</span>  
-<span class="kn">import</span> <span class="nn">imdb</span>  
-
-<span class="n">location</span> <span class="o">=</span> <span class="s">&#39;./dbfiles&#39;</span>  
-<span class="n">imdb_script</span> <span class="o">=</span> <span class="s">&#39;./code/bin/imdbpy2sql.py&#39;</span>  
-<span class="n">base_download_url</span> <span class="o">=</span> <span class="s">&#39;ftp://ftp.fu-berlin.de/pub/misc/movies/database/&#39;</span>  
-<span class="n">to_download_files</span> <span class="o">=</span> <span class="p">[</span>  
-    <span class="s">&#39;movie-links.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;keywords.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;directors.list.gz&#39;</span><span class="p">,</span>  
-    <span class="s">&#39;editors.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;genres.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;language.list.gz&#39;</span><span class="p">,</span>  
-    <span class="s">&#39;movies.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;producers.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;production-companies.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;ratings.list.gz&#39;</span><span class="p">,</span>  
-    <span class="s">&#39;writers.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;countries.list.gz&#39;</span><span class="p">,</span> <span class="s">&#39;complete-cast.list.gz&#39;</span><span class="p">]</span>  
-
-<span class="n">mysql_ip</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span>  
-<span class="n">mysql_user</span> <span class="o">=</span> <span class="s">&#39;root&#39;</span>  
-<span class="n">mysql_passwd</span> <span class="o">=</span> <span class="s">&#39;1227401054&#39;</span>  
-<span class="n">mysql_db</span> <span class="o">=</span> <span class="s">&#39;mrp&#39;</span>  
-
-<span class="k">def</span> <span class="nf">download_db_files</span><span class="p">():</span>  
-    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">to_download_files</span><span class="p">:</span>  
-        <span class="n">url</span> <span class="o">=</span> <span class="n">base_download_url</span> <span class="o">+</span> <span class="nb">file</span>  
-        <span class="k">print</span> <span class="s">&#39;Downloading &#39;</span><span class="p">,</span> <span class="n">url</span>  
-        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;wget&#39;</span><span class="p">,</span> <span class="s">&#39;-P&#39;</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">url</span><span class="p">]</span>  
-        <span class="n">t_pro</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>  
-        <span class="c"># block model too slow  </span>
-        <span class="c">#t_pro.wait()  </span>
-
-
-<span class="k">def</span> <span class="nf">trans_db_to_local</span><span class="p">():</span>  
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>  
-        <span class="n">allDone</span> <span class="o">=</span> <span class="bp">True</span>  
-        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">to_download_files</span><span class="p">:</span>  
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">location</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">file</span><span class="p">):</span>  
-                <span class="c">#print &#39;need file: &#39;, location+file  </span>
-                <span class="n">allDone</span> <span class="o">=</span> <span class="bp">False</span>  
-                <span class="k">break</span>  
-        <span class="k">if</span> <span class="n">allDone</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>  
-            <span class="k">break</span>  
-
-    <span class="k">print</span> <span class="s">&#39;Running imdbpy2sql.py begin&#39;</span>  
-    <span class="c"># mysql://user:password@host/database  </span>
-    <span class="n">mysql_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;mysql://&#39;</span><span class="p">,</span> <span class="n">mysql_user</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">mysql_passwd</span><span class="p">,</span> <span class="s">&#39;@&#39;</span><span class="p">,</span> <span class="n">mysql_ip</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="n">mysql_db</span><span class="p">]</span>  
-    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">imdb_script</span> <span class="o">+</span> <span class="s">&#39; -d &#39;</span> <span class="o">+</span> <span class="n">location</span> <span class="o">+</span> <span class="s">&#39; -u &#39;</span> <span class="o">+</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mysql_list</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; --mysql-force-myisam&#39;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  
-    <span class="k">print</span> <span class="s">&#39;Running imdbpy2sql.py. over&#39;</span>  
-
-
-<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>  
-    <span class="n">download_db_files</span><span class="p">()</span>  
-    <span class="n">trans_db_to_local</span><span class="p">()</span>  
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>  
-    <span class="n">run</span><span class="p">()</span>
-</pre></div>
-
-<p>下面将分析IMDB的数据库结构，从中我们可以看出IMDB数据库设计的很好，数据高度结构化，数据表无冗余（PS：说来惭愧，平时我做开发，很喜欢一张表，这样写sql语句很方便，但是缺点真的很多），  </p>
-
-<h3>title</h3>
-
-<p>首先，最想找的就是电影名称了吧，它存储title表里的title字段中，除此之外，title表还有些重要的信息：id和kind_id，production_year，id代表该电影的全局唯一标识，production_year表示电影上映的年份，kind_id暂时不知道，那么可以找到kind_type表，  </p>
-
-<p>kind_type表的信息如下：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_db_kind_type.png" width="170" height="200" align="center">  </p>
-
-<p>我需要的是电影信息，那么就对应着kind_type为1的数据  </p>
-
-<p>以id为2459950的电影为例子吧，在title中的数据如下：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_title_table_ex.png"  height="100" align="center" />  </p>
-
-<p>从图中可以看到select出来的结果为：id为249950的电影名为After Words，上映时间为2015年  </p>
-
-<p>在imdb网站搜索下该电影，链接为：<a href="http://www.imdb.com/title/tt2226630/">http://www.imdb.com/title/tt2226630/</a>  </p>
-
-<h3>movie_info</h3>
-
-<p>之后，我需要电影相关的info，比如：countries, languages, genres, votes, rating  </p>
-
-<p>首先涉及到的表式：movie_info，通过‘SELECT * FROM mrp.movie_info where movie_id=2459950;’，得到上面‘After Words’电影的相关信息如下：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_movie_info_ex.png" width="700" height="150" align="center" />  </p>
-
-<p>其中info_type_id不是很明白，找到info_type表，里面解释着各个id代表的含义：  </p>
-
-<ul>
-<li>id为3代表genres<br/></li>
-<li>id为8代表countries<br/></li>
-<li>id为4代表languages<br/></li>
-</ul>
-
-<p>结合截图select的结果，得知&#39;After Words&#39;的countries为USA，genres为Drama，languages为English  </p>
-
-<h3>movie_info_id</h3>
-
-<p>还有一些相关的info在movie_info_idx中，通过‘SELECT * FROM mrp.movie_info_idx where movie_id=2459950;’，得到如下结果：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/imdb_movie_info_idx_ex.png" width="680" height="150" align="center">  </p>
-
-<p>相应的：  </p>
-
-<ul>
-<li>info_type_id为99代表votes distribution（这个数据值我暂时没搞懂）<br/></li>
-<li>info_type_id为100代表votes<br/></li>
-<li>info_type_id为101代表rating<br/></li>
-</ul>
-
-<h3>movie_keywords</h3>
-
-<p>需要查找电影的keywords信息，就需要用到movie_keywords表了。‘SELECT * FROM mrp.movie_keyword where movie_id=2459950;’：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/movie_keywords_ex.png" width="350" height="200" align="center" />  </p>
-
-<p>这样就可以找到电影所有的keywords_id，然后使用keywords_id去keywords表中寻找具体的值，即可：  </p>
-
-<p>比如‘SELECT * FROM mrp.keyword where id=37348’得到的具体值为：costa-rica，这个和imdb官网是符合的，是正确的！  </p>
-
-<h3>cast_info</h3>
-
-<p>下面我们来找一下cast_info：cast, editor, writer, director, producer等，这些信息当然是在cast_info表中了，‘SELECT * FROM mrp.cast_info where movie_id=2459950;’:  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/cast_info_ex.png" width="700" height="700" align="center" />  </p>
-
-<p>里面同样有个role_id，查阅role_type表：  </p>
-
-<ul>
-<li>role_id为1和2，分别代表actor和actress<br/></li>
-<li>role_id为3，代表producer<br/></li>
-<li>role_id为4，代表writer<br/></li>
-<li>role_id为8，代表director<br/></li>
-<li>rile_id为9，代表editor<br/></li>
-</ul>
-
-<p>那么如何找到具体的人名呢？通过person_id和name表，不多说，你可以试一下，再对照官网，可以发现信息是完全吻合的  </p>
-
-<h3>movie_companies</h3>
-
-<p>下面我们来找一下电影的production_companies，涉及到表为movie_companies，‘SELECT * FROM mrp.movie_companies where movie_id=2459950;’，之后会得到company_id  </p>
-
-<p>拿着company_id去company_name里面即可找到具体公司名  </p>
-
-<p>这里不再累述  </p>
-
-<h3>额外信息</h3>
-
-<p>还有一些额外的信息我需要知道：有关评分的信息，包括1~10评分的分布，女性评分占多少，男性多少，年龄段评分多少等等  </p>
-
-<p>如<a href="http://www.imdb.com/title/tt2226630/ratings?ref_=tt_ov_rt">http://www.imdb.com/title/tt2226630/ratings?ref_=tt_ov_rt</a>所示  </p>
-
-<p>方法是通过Imdbpy这个开源库里面的一个核心的函数：update，来完成（感谢东南大学杨远溢同学），他在这方面已经研究出方案了，我只需要站在他的基础上，编写程序即可  </p>
-
-<p>实例程序如下：（搜索&quot;A Father&#39;s Journey&quot;电影，并获取评分信息）  </p>
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">imdb</span>  
-
-<span class="k">def</span> <span class="nf">init_db</span><span class="p">():</span>  
-    <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;A Father&#39;s Journey&quot;</span>  
-    <span class="n">ia</span> <span class="o">=</span> <span class="n">imdb</span><span class="o">.</span><span class="n">IMDb</span><span class="p">()</span>  
-    <span class="n">s_result</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">search_movie</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>  
-    <span class="sd">&#39;&#39;&#39;  </span>
-<span class="sd">    for item in s_result:  </span>
-<span class="sd">        print item[&#39;title&#39;]  </span>
-<span class="sd">    &#39;&#39;&#39;</span>  
-    <span class="n">the_unt</span> <span class="o">=</span> <span class="n">s_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  
-    <span class="n">ia</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">the_unt</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;vote details&#39;</span><span class="p">))</span>  
-    <span class="k">if</span> <span class="n">the_unt</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;rating&#39;</span><span class="p">):</span>  
-        <span class="k">print</span> <span class="n">the_unt</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span>  
-    <span class="k">if</span> <span class="n">the_unt</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;number of votes&#39;</span><span class="p">):</span>  
-        <span class="n">number_votes</span> <span class="o">=</span> <span class="n">the_unt</span><span class="p">[</span><span class="s">&#39;number of votes&#39;</span><span class="p">]</span>  
-        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>  
-            <span class="k">print</span> <span class="s">&#39;R&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">number_votes</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>  
-    <span class="k">if</span> <span class="n">the_unt</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;demographic&#39;</span><span class="p">):</span>  
-        <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span>  
-            <span class="s">&#39;males&#39;</span><span class="p">,</span> <span class="s">&#39;females&#39;</span><span class="p">,</span>  
-            <span class="s">&#39;aged under 18&#39;</span><span class="p">,</span> <span class="s">&#39;males under 18&#39;</span><span class="p">,</span> <span class="s">&#39;females under 18&#39;</span><span class="p">,</span>  
-            <span class="s">&#39;aged 18-29&#39;</span><span class="p">,</span> <span class="s">&#39;males aged 18-29&#39;</span><span class="p">,</span> <span class="s">&#39;females aged 18-29&#39;</span><span class="p">,</span>  
-            <span class="s">&#39;aged 30-44&#39;</span><span class="p">,</span> <span class="s">&#39;males aged 30-44&#39;</span><span class="p">,</span> <span class="s">&#39;females aged 30-44&#39;</span><span class="p">,</span>  
-            <span class="s">&#39;aged 45+&#39;</span><span class="p">,</span> <span class="s">&#39;males aged 45+&#39;</span><span class="p">,</span> <span class="s">&#39;females aged 45+&#39;</span><span class="p">,</span>  
-            <span class="s">&#39;imdb staff&#39;</span><span class="p">,</span> <span class="s">&#39;top 1000 voters&#39;</span><span class="p">,</span>  
-            <span class="s">&#39;us users&#39;</span><span class="p">,</span><span class="s">&#39;non-us users&#39;</span>  
-        <span class="p">]</span>  
-        <span class="n">demo_value</span> <span class="o">=</span> <span class="n">the_unt</span><span class="p">[</span><span class="s">&#39;demographic&#39;</span><span class="p">]</span>  
-        <span class="k">print</span> <span class="s">&#39;get&#39;</span>  
-        <span class="k">for</span> <span class="n">in_fo</span> <span class="ow">in</span> <span class="n">infos</span><span class="p">:</span>  
-            <span class="k">if</span> <span class="n">demo_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">in_fo</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>  
-                <span class="k">print</span> <span class="n">in_fo</span><span class="p">,</span> <span class="n">demo_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">in_fo</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">demo_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">in_fo</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-</pre></div>
-
-<h3>总结</h3>
-
-<p>IMDB提供数据的方式确实很独特，通过镜像的方式。通过分析所有的表结构，不难发现imdb数据库设计之好  </p>
-
-<p>好了，截止目前，imdb的未上映和已上映电影数据就都可以拿到了  </p>
 
             ]]>
         </content>
