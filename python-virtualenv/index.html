@@ -59,7 +59,7 @@ virtualenv小实践 | 苏苏
 
 <p>注：<a href="https://link.zhihu.com/?target=https%3A//www.quora.com/Whats-the-best-way-to-set-up-Python-2-7-and-3-4-in-parallel-on-a-Mac">Homebrew Install</a>安装python2.x和3.4  </p>
 
-<p>简而言之：我的某个app，<a href="https://github.com/whtsky/Catsup">catsup</a>博客系统需要3.2版本的tornado，而tornado3.2不能应用于本人制作的毕设网站，需要最新tornado版本4.x。所以采用virtualenv方便又简单，当然docker也是可以解决的哦~  </p>
+<p>简而言之：我的某个app，<a href="https://github.com/whtsky/Catsup">catsup</a>博客系统需要3.2版本的tornado，而tornado3.2不能应用于本人制作的毕设网站，需要最新tornado版本4.x。所以采用virtualenv虚拟环境方便又简单，当然docker也是可以解决的哦~  </p>
 
 <p>关于virtualenv的概念，作用，安装，使用，就不说了，我主要参考了以下user guide  </p>
 
@@ -71,10 +71,20 @@ virtualenv小实践 | 苏苏
 
 <p>总的来说，just use some simple commands：  </p>
 <div class="highlight"><pre><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">virtualenv</span>  
+<span class="c"># 创建虚拟环境ENV2.7，ENV2.7只是虚拟环境名，可任意取  </span>
 <span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python2</span><span class="o">.</span><span class="mi">7</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span> <span class="n">ENV2</span><span class="o">.</span><span class="mi">7</span>  
+<span class="c"># 进入虚拟环境  </span>
 <span class="n">cd</span> <span class="n">ENV2</span><span class="o">.</span><span class="mi">7</span>  
+<span class="c"># 激活虚拟环境  </span>
+<span class="n">source</span> <span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>  
+<span class="c"># 在虚拟环境中可以进行任何单独的操作，库安装。此时不影响本机全局环境  </span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">catsup</span>  
-<span class="n">catup</span> <span class="n">server</span>
+<span class="c"># 进入源代码目录，xxx目录下面的源代码依赖ENV2.7 虚拟环境  </span>
+<span class="n">cd</span> <span class="n">xxx</span>  
+<span class="c"># 进行操作  </span>
+<span class="n">catup</span> <span class="n">server</span>  
+<span class="c"># 关闭虚拟环境  </span>
+<span class="n">source</span> <span class="nb">bin</span><span class="o">/</span><span class="n">deactivate</span>
 </pre></div>
 
 <p>简单地记录下，之后关于virtualenv方面的使用心得，再进行补充</p>
@@ -157,13 +167,7 @@ virtualenv小实践 | 苏苏
             <div class="shuoshuo panel-two">
               <h5 class="panel-title">Tweeting</h5>
               <div class="shuoshuo-content">
-                互联网的水太深，仍有很多要学，却总是学不会
-              </div>
-              <div class="shuoshuo-content">
-                即使再忙，每天也要最少活动一小时
-              </div>
-              <div class="shuoshuo-content">
-                2016，新的开始~
+                我有一个梦想，我想跨越人工智能低能儿时期
               </div>
             </div>
             <!-- recently -->

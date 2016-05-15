@@ -305,7 +305,7 @@ section, article {
 }
 
 .friends-ul {
-  height: 201px;
+  height: 230px;
   overflow-y: auto;
   list-style: outside none none;
   padding-left: 2px;
