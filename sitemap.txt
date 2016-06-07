@@ -35,6 +35,7 @@ http://sukai.me/Board/
 http://sukai.me/friend/
 http://sukai.me/MyHistory/
 http://sukai.me/MyTrans/
+http://sukai.me/wiki/
 http://sukai.me/tag/Python/
 http://sukai.me/tag/Machine-Learning/
 http://sukai.me/tag/Cousera/
