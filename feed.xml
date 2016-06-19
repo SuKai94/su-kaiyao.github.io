@@ -3,8 +3,78 @@
     <title>苏苏</title>
     <link href="" rel="self" />
     <link href="http://sukai.me/" />
-    <updated>2016-06-19T00:32:00Z</updated>
+    <updated>2016-06-20T16:30:00Z</updated>
     <id>http://sukai.me/</id>
+    
+    <entry>
+        <title><![CDATA[2016上半年书单]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/2016-fist-half-booklists/"/>
+        <updated>2016-06-20T16:30:00Z</updated>
+        <published>2016-06-20T16:30:00Z</published>
+        <id>http://sukai.me/2016-fist-half-booklists/</id>
+        <content type="html">
+            <![CDATA[
+             <p>大概是3月份入手了Kindle PaperWhite 3，发现真的很喜欢这个电子阅读器。所以平时的阅读习惯就变成了从readcolor.com和readfree.me下载许多mobi书籍存在Kindle上。有时候下载些epub的在果6的多看阅读上浏览  </p>
+
+<p>我上半年似乎看了不少小说（：逃，下面就粗略地从自己的评分由高往低简单记录下  </p>
+
+<ul>
+<li><strong>《孤独小说家》</strong>：书名虽然叫作“孤独小说家”，讲的是一位小说家青田耕平坚持写作十年，才收获梦想拿到直本奖。但给我留下最深刻印象的是耕平丧妻后仍不浮躁、坚守内心纯真孤独的那份难得可贵<br/></li>
+<li><strong>《岛上书店》</strong>：本以为玛雅的出现拯救了A.J.，没想到结局还是不尽人意，这就是生活<br/></li>
+<li><strong>《时间简史：从大爆炸到黑洞》</strong>：这是本只有全球5%的人才能看懂的书，可惜我不是那5%。但这又是一本让你有些熟悉的书，里面有部分结论在高中物理，大学物理都有所涉及，里面还有部分结论和猜想被众多科幻片引入。有机会会翻阅第二遍<br/></li>
+<li><strong>《统计学习方法》</strong>：机器学习入门经典书籍<br/></li>
+<li><strong>《机器学习实战》</strong>：理论看多了，来点代码非常不错<br/></li>
+<li><strong>《高效能程序员的修炼》</strong>：教你如何做一名敏捷式程序员，和《高效程序员的45个习惯》有重合观点<br/></li>
+<li><strong>《把时间当作朋友》</strong>：非常好的一本书，不多说<br/></li>
+<li><strong>《奇特的一生》</strong>：李笑来推荐的书。柳比歇夫一直在算自己每天的24小时都花在了什么地方，相当自律的一个人，警告自己珍惜时间<br/></li>
+<li><strong>《富爸爸穷爸爸》</strong>：坚定了自己未来要给自己打工的决心<br/></li>
+<li><strong>《深入浅出统计学》</strong>：回顾“统计学”的一本好书<br/></li>
+<li><strong>《拉伸：最好的运动》</strong>：作为一名程序员，拉伸很有必要。书里附送了一张拉伸教程表，可以学习下<br/></li>
+<li><strong>《Python科学计算》</strong>：不错的一本工具书。教你如何利用Python进行科研<br/></li>
+<li><strong>《重来：更为简单有效的商业思维》</strong>：有关创业的<br/></li>
+<li><strong>《从0到1：开启商业与未来的秘密》</strong>：另一本有关创业的<br/></li>
+<li><strong>《你今天真好看》</strong>：很好看的漫画，很萌<br/></li>
+<li><strong>《父与子全集》</strong>：又一本萌萌哒的漫画，父与子之间的故事<br/></li>
+<li><strong>《赤裸裸的统计学》</strong>：结合实际案例讲述的入门级统计学科普书，不推荐你逐字逐句去细读<br/></li>
+<li><strong>《台湾这些年所知道的祖国》</strong><br/></li>
+<li><strong>《不要等到毕业以后》</strong>：里面相当多的观点深有体会<br/></li>
+<li><strong>《别告诉我你会记笔记》</strong>：有些关于做笔记的建议还是值得采纳的。特别是将脑袋中瞬息的灵感记在本子上，并写写画画，思绪更容易被激发<br/></li>
+<li><strong>《4点起床》</strong>：这本书最大的收获就是提醒你珍惜时间，尤其是早晨上半午的时间<br/></li>
+<li><strong>《考拉小巫的英语学习笔记》</strong>：作者的执行力很强，令人佩服。自己是自愧不如了<br/></li>
+<li><strong>《Automate the Boring Stuff with Python》</strong>：教你如何利用Python帮你处理一些繁琐的事<br/></li>
+<li><strong>《少有人走得路》</strong>：偏心理学的书。书中讲：大部分人不愿意正视“人生苦难重重”，总会选择先享受，然后逃避问题和痛苦，这句说得太好了。所以每个工作日的早晨都应该推迟满足感，首先在工作的第一个钟头去解决那些最麻烦的事情，即先吃苦再享受<br/></li>
+<li><strong>《天才在左，疯子在右》</strong>：若不是书名的提醒，你不会发现这本书是记录精神病患者的。那些精神病患者的想象力、智力似乎都比正常人惊人的高，令人吃惊<br/></li>
+<li><strong>《Introducing Github》</strong>：介绍Github的一本书<br/></li>
+<li><strong>《Think Python》</strong><br/></li>
+<li><strong>《绿皮火车》</strong>：为什么读起来很费力，不轻松<br/></li>
+<li><strong>《哪来的天才？》</strong>：keep practiceing<br/></li>
+<li><strong>《创业时，我们在知乎聊什么？》</strong>：如果自己真的创业了，回来会仔细品读的<br/></li>
+<li><strong>《深入浅出数据分析》</strong>：个人觉着不如《深入浅出统计学》<br/></li>
+<li><strong>《重新定义公司》</strong>：Google发展史，里面有一章讲google为什么退出中国市场的<br/></li>
+<li><strong>《创京东</strong>》：京东发展史，没有细看。很佩服刘强东，事业有成，还有奶茶妹妹，人生赢家<br/></li>
+<li><strong>《敏感的人：如何面对外界的压力》</strong><br/></li>
+<li><strong>《轻松学会独立思考》</strong><br/></li>
+<li><strong>《我们台湾这些年》</strong>：流水账文章，比不上《台湾这些年所知道的祖国》<br/></li>
+<li><strong>《大数据时代》</strong>：泛泛而谈的一本书<br/></li>
+<li><strong>《大教堂与集市》</strong>：看得翻译本，不是很能懂<br/></li>
+<li><strong>《中国人，你为什么不快乐》</strong><br/></li>
+<li><strong>《沉默的大多数》</strong><br/></li>
+<li><strong>《那些男孩教我的事》</strong><br/></li>
+<li><strong>《黑客：计算机革命的英雄》</strong><br/></li>
+<li><strong>《我这个普通人的生活》</strong><br/></li>
+<li><strong>《十四岁》</strong>：日本人14岁的时候就开始找女生援交了？<br/></li>
+<li><strong>《互联网+：从IT到DT》</strong><br/></li>
+<li><strong>《年轻时做过的那些荒唐事儿》</strong><br/></li>
+<li><strong>《生命中最简单又困难的事》</strong><br/></li>
+<li><strong>《当你生病时，你会想起谁？》</strong><br/></li>
+</ul>
+
+<p>总共48本，下半年继续坚持</p>
+
+            ]]>
+        </content>
+    </entry>
     
     <entry>
         <title><![CDATA[毕业了]]></title>
@@ -475,63 +545,6 @@ sorted_x = sorted(x.items(), key=operator.itemgetter(0)</code></pre>
 <li>《Python源码分析》<br/></li>
 <li><a href="http://zhuoqiang.me/python-thread-gil-and-ctypes.html" target="_blank">python 线程，GIL 和 ctypes</a><br/></li>
 <li><a href="http://cenalulu.github.io/python/gil-in-python/" title="gil-in-python" target="_blank">Python的GIL是什么鬼，多线程性能究竟如何</a></li>
-</ul>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[Alfred使用指南]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/alfred-user-guide/"/>
-        <updated>2016-01-26T15:30:00Z</updated>
-        <published>2016-01-26T15:30:00Z</published>
-        <id>http://sukai.me/alfred-user-guide/</id>
-        <content type="html">
-            <![CDATA[
-             <p>Alfred是公认MAC端的神兵利器，它不仅是快速搜索工具，快速启动工具，甚至还能操作许多系统的功能。熟练使用之，完全可以抛弃鼠标，再结合MAC超强的触摸板，能节省许多时间，并提高效率  </p>
-
-<p>今日Google之，搜索出许多详细的教程，深深感叹其高效牛逼。我参考的教程是：  </p>
-
-<ul>
-<li><a href="http://wellsnake.com/jekyll/update/2014/06/15/001/">《丢掉鼠标－Mac神软Alfred使用手册1》</a><br/></li>
-<li><a href="http://wellsnake.com/jekyll/update/2014/08/16/001/">《杀手级功能WorkFlows介绍(1)-Alfred使用手册2》</a><br/></li>
-</ul>
-
-<h3>一. Alfred免费版feature</h3>
-
-<p>看完上面的第一条链接，对于Alfred所有免费的feature就能全部掌握了，所有免费的feature有：  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/alfred-free-feature.png" alt="alfred-free-feature"/>  </p>
-
-<p>功能不多说，上面的第一条链接介绍的很全面了。我记忆犹新的功能是：File Search&amp;&amp;Web Search  </p>
-
-<h3>二. Alfred收费的WorkFlows</h3>
-
-<p>WorkFlows是Alfred的核心功能，只有亲身用之，才能体会到无比的强大。其核心理念是：  </p>
-
-<p><strong>From quick file filters to advanced scripts, you can control your Mac, other applications, web services and more.</strong>  </p>
-
-<p>我们大可不必搞清WorkFlows的原理，对于小白用户，已经有一个收集平台为我们收集了所有可用的WorkFlow：<a href="http://www.alfredworkflow.com/">http://www.alfredworkflow.com/</a>  </p>
-
-<p>比如，前往该平台网站，下载了我最想扩展的“搜索豆瓣电影、图书、音乐”功能：<strong>Douban (豆瓣)</strong>，下载下来的文件是：“Douban.alfredworkflow”，双击安装并import即可使用，使用效果如下：  </p>
-
-<p>我使用“book 机器学习实战”，来控制我的MAC去<a href="http://book.douban.com">http://book.douban.com</a>搜索《机器学习实战》这本书，之后MAC会使用默认浏览器打开《机器学习实战》的douban链接  </p>
-
-<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/douban-alfred-workflow.png" alt="douban-alfred-workflow"/>  </p>
-
-<p>除此之外，还有很多优秀的WorkFlow供你选择，你能想到的基本都已经有了，你会感叹到程序猿真的是这个世界上伟大的动物  </p>
-
-<p>当然，你突然想到某个新颖的功能，想开发自己的WorkFlow，这也不是什么难事，难得是一个好的idea。WorkFlows可以通过用户自己写脚本语言来定制搜索和其它一些高级功能，其支持bash、zsh、php、ruby、python、perl、osascript等脚本语言，具体的这篇文章不介绍了，自行Google吧  </p>
-
-<hr/>
-
-<p>参考资料：  </p>
-
-<ul>
-<li><a href="http://sspai.com/27854">少数派.Alfred的5个实用扩展推荐（一）</a><br/></li>
-<li><a href="http://sspai.com/27929">少数派.Alfred的5个实用扩展推荐（二）</a></li>
 </ul>
 
             ]]>
