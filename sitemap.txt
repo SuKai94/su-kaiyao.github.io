@@ -1,4 +1,4 @@
-http://sukai.me/2016-fist-half-booklists/
+http://sukai.me/2016-first-half-booklists/
 http://sukai.me/bachelor-degree/
 http://sukai.me/python-virtualenv/
 http://sukai.me/sorting-in-python/
