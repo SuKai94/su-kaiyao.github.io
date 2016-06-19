@@ -1,3 +1,4 @@
+http://sukai.me/bachelor-degree/
 http://sukai.me/python-virtualenv/
 http://sukai.me/sorting-in-python/
 http://sukai.me/python-multi-thread-model/
@@ -9,7 +10,6 @@ http://sukai.me/shadowsocks/
 http://sukai.me/bye-2015-hello-2016/
 http://sukai.me/python-linear-regerssion/
 http://sukai.me/advice-for-applying-ml-svm/
-http://sukai.me/bachelor-degree/
 http://sukai.me/ml-neural-networks/
 http://sukai.me/wx-gsdata/
 http://sukai.me/ml-cousera-one/
