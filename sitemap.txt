@@ -1,3 +1,4 @@
+http://sukai.me/you-just-seem-to-be-working-hard/
 http://sukai.me/2016-first-half-booklists/
 http://sukai.me/bachelor-degree/
 http://sukai.me/python-virtualenv/
@@ -39,9 +40,9 @@ http://sukai.me/MyHistory/
 http://sukai.me/MyTrans/
 http://sukai.me/wiki/
 http://sukai.me/tag/Python/
+http://sukai.me/tag/Reading/
 http://sukai.me/tag/Machine-Learning/
 http://sukai.me/tag/Cousera/
-http://sukai.me/tag/Reading/
 http://sukai.me/tag/Linux/
 http://sukai.me/tag/IMDB/
 http://sukai.me/tag/Douban/
