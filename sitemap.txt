@@ -1,3 +1,4 @@
+http://sukai.me/algorithms-order-statistic/
 http://sukai.me/you-just-seem-to-be-working-hard/
 http://sukai.me/2016-first-half-booklists/
 http://sukai.me/bachelor-degree/
@@ -65,6 +66,7 @@ http://sukai.me/tag/四轴飞行器/
 http://sukai.me/tag/Stored-Procedure/
 http://sukai.me/tag/Unit-Test/
 http://sukai.me/tag/Project/
+http://sukai.me/tag/Algorithms/
 http://sukai.me/tag/APM/
 http://sukai.me/tag/Docker/
 http://sukai.me/tag/Shadowsocks/
