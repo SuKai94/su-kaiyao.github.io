@@ -35,10 +35,13 @@ http://sukai.me/renren-crawler/
 http://sukai.me/three-underutilized-python-commands/
 http://sukai.me/tiandifei-control-apm/
 http://sukai.me/AboutMe/
+http://sukai.me/algorithms-wiki/
 http://sukai.me/Board/
+http://sukai.me/deeplearning-wiki/
 http://sukai.me/friend/
 http://sukai.me/MyHistory/
 http://sukai.me/MyTrans/
+http://sukai.me/reading-wiki/
 http://sukai.me/wiki/
 http://sukai.me/tag/Python/
 http://sukai.me/tag/Reading/
