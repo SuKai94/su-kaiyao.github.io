@@ -38,6 +38,7 @@ http://sukai.me/AboutMe/
 http://sukai.me/algorithms-wiki/
 http://sukai.me/Board/
 http://sukai.me/deeplearning-wiki/
+http://sukai.me/face-alignment-wiki/
 http://sukai.me/friend/
 http://sukai.me/MyHistory/
 http://sukai.me/MyTrans/
