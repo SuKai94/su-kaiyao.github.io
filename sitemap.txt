@@ -42,6 +42,7 @@ http://sukai.me/face-alignment-wiki/
 http://sukai.me/friend/
 http://sukai.me/MyHistory/
 http://sukai.me/MyTrans/
+http://sukai.me/program-wiki/
 http://sukai.me/reading-wiki/
 http://sukai.me/wiki/
 http://sukai.me/tag/Python/
