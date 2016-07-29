@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>
-Java NIO初探 | KaiSu
+CPython Beat PyPy | KaiSu
 </title>
   <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.7.0/css/amazeui.min.css">
   <link rel="stylesheet" href="http://sukai.me/static/css/style.css?v=69f73cf7d858209a9412a0fb2aa1bfa4" type="text/css" />
@@ -39,161 +39,32 @@ Java NIO初探 | KaiSu
 <article class="post-main" id="post-font">
   <header class="blog-header">
     <span class="round-date">
-      <span class="month">08月</span>
-      <span class="day">13</span>
+      <span class="month">07月</span>
+      <span class="day">29</span>
     </span>
-    <p class="blog-title">Java NIO初探</p>
+    <p class="blog-title">CPython Beat PyPy</p>
     <p class="blog-meta">
-      <i class="am-icon-calendar"></i> Published at Aug 13, 2014 • 
+      <i class="am-icon-calendar"></i> Published at Jul 29, 2016 • 
       <!--<i class="am-icon-binoculars"></i> 87 次围观 • -->
       <!--<i class="am-icon-bookmark"></i> 0条评论-->
       
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Java/">Java</a>
-      
-        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/NIO/">NIO</a>
+        <a class="am-badge am-badge-primary am-radius" href="http://sukai.me/tag/Python/">Python</a>
       
     </p>
 
   </header>
   <section class="blog-content">
-    <p>有人称NIO为<strong>New IO</strong>，有人称其为<strong>non-blocking IO</strong>，两个都算是NIO的特征表现  </p>
+    <div class="highlight"><pre><span class="k">class</span> <span class="nc">LoadCities</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  
 
-<p>NIO有两个版本，下面内容基于版本１  </p>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>  
 
-<p>NIO Version 1是JDK提供的标准库，让你突破标准阻塞IO的瓶颈，实现非阻塞的IO执行操作。它将多个IO的阻塞复用在同一个selector上（俗称：IO多路复用技术），使得单线程也能够处理多个client对server的请求，有效避免了大量线程的资源开销，能承受较大的并发量  </p>
-
-<p>下面，借助socket学习一下NIO的基础知识  </p>
-
-<h3>Blocking versus non-blocing IO</h3>
-
-<p>看两张图，分别是阻塞IO的工作方式和非阻塞IO的工作方式（图片摘自《Netty in Action》）  </p>
-
-<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/bIO.png" alt="blocking IO"/>  </p>
-
-<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/nbIO.png" alt="non-blocking IO"/>  </p>
-
-<p>比较：  </p>
-
-<ul>
-<li>IO面向流&lt;-&gt;NIO面向通道与缓冲：IO从流中读取数据直至读完，读取的数据没有缓存；NIO从通道读取数据到buffer，灵活性加强，但处理容易出错<br/></li>
-<li>阻塞IO&lt;-&gt;非阻塞IO：阻塞IO中线程请求读写操作时，处于阻塞状态，直至数据读取操作完成前，不能进行其余事件；而NIO的一个线程从一个通道请求读取数据后，处于非阻塞模式，无需等待数据读取完成，而是利用这段空闲时间，线程去进行其余通道的IO操作<br/></li>
-</ul>
-
-<h3>NIO的核心</h3>
-
-<ul>
-<li>Channels<br/></li>
-<li>Buffers<br/></li>
-<li>Selectors<br/></li>
-</ul>
-
-<p>NIO基于Channel和Buffer进行工作，数据在Channel和Buffer之间进行传递  </p>
-
-<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/cb.png" alt="Channel-Buffer"/>  </p>
-
-<p>Selector用于监听许许多多的Channel，是IO多路复用的关键（见上图）  </p>
-
-<h3>Channel</h3>
-
-<p>Java NIO有哪些通道？  </p>
-
-<ul>
-<li>FileChannel：File<br/></li>
-<li>DatagramChannel：UDP<br/></li>
-<li>ScoketChannel：TCP<br/></li>
-<li>ServerSocketChannel：监听TCP连接<br/></li>
-</ul>
-
-<h3>Buffer</h3>
-
-<p>Buffer内部结构：（图片拷贝自<a href="http://ifeve.com/">并发编程网站</a>），图非常好！  </p>
-
-<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/buffer.png" alt="Buufer"/>  </p>
-
-<ul>
-<li>capacity：标志Buffer的存储大小，若Buffer数据存储已满，需要及时清除<br/></li>
-<li>limit：写模式下代表还能往里面写多少数据，读模式代表最多能读到多少数据<br/></li>
-<li>position：写数据时候position是当前位置，读数据时候看情况：可以从特定位置读取，还有从写模式切换到读模式，position就被重置为0<br/></li>
-</ul>
-
-<p>有许多Buffer类型，说一下ByteBuffer（其余类似）  </p>
-
-<p>典型用法：  </p>
-
-<ul>
-<li>写data到ByteBuffer<br/></li>
-<li>ByteBuffer.flip（），将Buffer从写模式到读模式<br/></li>
-<li>从ByteBuffer读数据<br/></li>
-<li>ByteBuffer.clear()或者ByteBuffer.compact()（前一种是清楚Buffer中所有数据，后一种是清楚已读数据，将未读数据拷贝到ByteBuffer起始位置）<br/></li>
-</ul>
-
-<p>还有两个方法值得一提：  </p>
-
-<ul>
-<li><strong>ByteBuffer.allocate(1024)：</strong>对Buffer对象进行分配，这里分配了1024字节<br/></li>
-<li><strong>ByteBuffer.duplicate()：</strong>对ByteBuffer对象复制，返回值是复制后的ByteBuffer<br/></li>
-</ul>
-
-<p>还有一种创建ByteBuffer的方法：ByteBuffer,allocateDirect(int)，这是在JVM heap外申请内存，使得ByteBuffer突破JVM内存限制，调用系统直接分配的内存，此时ByteBuffer不为JVM相关工具所管理，JVM垃圾回收机制不作用于ByteBuffer，所以监控ByteBuffer很困难，内存泄漏定位不清晰，可以用GC机制强行垃圾回收。当使用较大数据块的时候，就能提高效率  </p>
-
-<h3>Selector</h3>
-
-<p>线程的花销很大，selector帮助开发者突破IO的瓶颈，是处理多个Channel的组件，管理着channel的连接，数据读写等操作！  </p>
-
-<p>典型用法：  </p>
-
-<ul>
-<li>创建selector：<code>Selector selector = Selector.open()</code><br/></li>
-<li>将通道注册进Selector：此时为了与Selector一起使用，需将Channel设为非阻塞模式：<code>channel.configureBlocking(false)</code>，然后将Channel注册进去：<code>channel.register(selector, SelectionKey.OP_ACCEPT)</code><br/></li>
-<li>当channel被注册，你需要指定你感兴趣的监听事件：<strong>OP_ACCEPT,OP_CONNECT,OP_READ,OP_WRITE</strong><br/></li>
-<li>运行Selector.select()进入阻塞，直到某个事件发生<br/></li>
-<li>如果某些通道准备就绪，select()方法就非阻塞，通过selector的selectedkeys()方法获取所有<strong>SelectionKey(集合)</strong>，之后遍历key集合，进行你想要的操作<br/></li>
-</ul>
-<div class="highlight"><pre><span class="n">Set</span> <span class="n">selectedKeys</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="na">selectedKeys</span><span class="o">();</span>  
-<span class="n">Iterator</span> <span class="n">keyIterator</span> <span class="o">=</span> <span class="n">selectedKeys</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>  
-<span class="k">while</span><span class="o">(</span><span class="n">keyIterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span>   
-<span class="o">{</span>  
-    <span class="n">SelectionKey</span> <span class="n">key</span> <span class="o">=</span> <span class="n">keyIterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>  
-    <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isAcceptable</span><span class="o">())</span>   
-    <span class="o">{</span>  
-        <span class="c1">// TODO  </span>
-    <span class="o">}</span>  
-    <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isConnectable</span><span class="o">())</span>   
-    <span class="o">{</span>  
-        <span class="c1">// TODO   </span>
-    <span class="o">}</span>  
-    <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isReadable</span><span class="o">())</span>  
-    <span class="o">{</span>  
-        <span class="c1">// TODO  </span>
-    <span class="o">}</span>  
-    <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isWritable</span><span class="o">())</span>  
-    <span class="o">{</span>  
-        <span class="c1">// TODO  </span>
-    <span class="o">}</span>  
-<span class="o">}</span>
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>  
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">handle</span><span class="p">:</span>  
+                <span class="n">city</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>  
+                <span class="k">yield</span> <span class="n">city</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
 </pre></div>
-
-<p>值得一提：可以将数据attach到SelectionKey上，就可以让Channel拥有自己专属的ByteBuffer  </p>
-
-<ul>
-<li>将数据附加到key：<strong>selectionKey.attch(ByteBuffer)</strong><br/></li>
-<li>将key上附加的数据取出：<strong>ByteBuffer a = (ByteBuffer)selectionKey.attachment()</strong><br/></li>
-</ul>
-
-<h3>NIO problems</h3>
-
-<ul>
-<li>跨平台兼容性问题：在linux下正常使用NIO，不代表windows下同样如此<br/></li>
-<li>ByteBuffer无扩展性：如果你想尽量减少内存拷贝，想用ByteBuffer数组扩容，来代替先前的ByteBuffer,这是不可能的，JDK NIO的ByteBuffer有一个私有的构造函数，我们无法去扩展ByteBuffer<br/></li>
-<li>分散和收集机制可能会导致内存泄漏<br/></li>
-<li>epoll bug：如果没有事件发生，那你的<code>selector.select()</code>语句将一直在while(true)中阻塞，有吃掉内存的隐患<br/></li>
-</ul>
-
-<p>&hellip;  </p>
-
-<p>Those are reasons why we choose Netty  </p>
-
-<p>接下来有空就学习下Netty吧</p>
 
   </section>
   
