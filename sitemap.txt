@@ -1,4 +1,3 @@
-http://sukai.me/cpython-beat-pypy/
 http://sukai.me/algorithms-order-statistic/
 http://sukai.me/you-just-seem-to-be-working-hard/
 http://sukai.me/2016-first-half-booklists/
@@ -94,5 +93,4 @@ http://sukai.me/page/3/
 http://sukai.me/page/4/
 http://sukai.me/page/5/
 http://sukai.me/page/6/
-http://sukai.me/page/7/
 http://sukai.me/404.html

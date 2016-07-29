@@ -3,24 +3,8 @@
     <title>KaiSu</title>
     <link href="" rel="self" />
     <link href="http://sukai.me/" />
-    <updated>2016-07-29T12:40:00Z</updated>
+    <updated>2016-06-30T18:00:00Z</updated>
     <id>http://sukai.me/</id>
-    
-    <entry>
-        <title><![CDATA[CPython Beat PyPy]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/cpython-beat-pypy/"/>
-        <updated>2016-07-29T12:40:00Z</updated>
-        <published>2016-07-29T12:40:00Z</published>
-        <id>http://sukai.me/cpython-beat-pypy/</id>
-        <content type="html">
-            <![CDATA[
-             
-<pre><code>To Be Continue...</code></pre>
-
-            ]]>
-        </content>
-    </entry>
     
     <entry>
         <title><![CDATA[读:中位数和顺序统计量]]></title>
@@ -398,6 +382,53 @@
 <p>正如熊思东校长在毕业典礼上的提问：“如果再给在座的各位一次机会，你们还会选择苏大吗？”，我还会在现场同大家一同吼出：“愿意”  </p>
 
 <p>附：<a href="http://mp.weixin.qq.com/s?__biz=MzA5NzQwMzYwMA==&mid=2650117556&idx=1&sn=ca8d95bfe596779af56a214667d3fa86&scene=23&srcid=0626HWaVPU8r0LDpN4Orgwwt#rd/" target="_blank">苏州大学校长熊思东的部分演讲</a></p>
+
+            ]]>
+        </content>
+    </entry>
+    
+    <entry>
+        <title><![CDATA[virtualenv小实践]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/python-virtualenv/"/>
+        <updated>2016-04-26T12:35:00Z</updated>
+        <published>2016-04-26T12:35:00Z</published>
+        <id>http://sukai.me/python-virtualenv/</id>
+        <content type="html">
+            <![CDATA[
+             <p>说来也巧，前几天想在mac上同时安装python2.x和3.4，当时为了省事没有使用virtualenv，直接采用了Homebrew Install。这几天遇到了不同application需要依赖不用版本tornado的问题，本想采用docker解决的，想想没必要，直接使用virtualenv更轻量级些  </p>
+
+<p>注：<a href="https://link.zhihu.com/?target=https%3A//www.quora.com/Whats-the-best-way-to-set-up-Python-2-7-and-3-4-in-parallel-on-a-Mac">Homebrew Install</a>安装python2.x和3.4  </p>
+
+<p>简而言之：我的某个app，<a href="https://github.com/whtsky/Catsup">catsup</a>博客系统需要3.2版本的tornado，而tornado3.2不能应用于本人制作的毕设网站，需要最新tornado版本4.x。所以采用virtualenv虚拟环境方便又简单，当然docker也是可以解决的哦~  </p>
+
+<p>关于virtualenv的概念，作用，安装，使用，就不说了，我主要参考了以下user guide  </p>
+
+<ul>
+<li><a href="http://lcblog-wordpress.stor.sinaapp.com/uploads/2015/10/virtualenv%E6%95%99%E7%A8%8B.pdf">virtualenv教程</a><br/></li>
+<li><a href="http://virtualenv.readthedocs.org/en/latest/userguide.html">virtual user guide</a><br/></li>
+<li><a href="http://qicheng0211.blog.51cto.com/3958621/1561685">使用virtualenv搭建独立的Python环境</a><br/></li>
+</ul>
+
+<p>总的来说，just use some simple commands：  </p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">virtualenv</span>  
+<span class="c"># 创建虚拟环境ENV2.7，ENV2.7只是虚拟环境名，可任意取  </span>
+<span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python2</span><span class="o">.</span><span class="mi">7</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span> <span class="n">ENV2</span><span class="o">.</span><span class="mi">7</span>  
+<span class="c"># 进入虚拟环境  </span>
+<span class="n">cd</span> <span class="n">ENV2</span><span class="o">.</span><span class="mi">7</span>  
+<span class="c"># 激活虚拟环境  </span>
+<span class="n">source</span> <span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>  
+<span class="c"># 在虚拟环境中可以进行任何单独的操作，库安装。此时不影响本机全局环境  </span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">catsup</span>  
+<span class="c"># 进入源代码目录，xxx目录下面的源代码依赖ENV2.7 虚拟环境  </span>
+<span class="n">cd</span> <span class="n">xxx</span>  
+<span class="c"># 进行操作  </span>
+<span class="n">catup</span> <span class="n">server</span>  
+<span class="c"># 关闭虚拟环境  </span>
+<span class="n">deactivate</span>
+</pre></div>
+
+<p>简单地记录下，之后关于virtualenv方面的使用心得，再进行补充</p>
 
             ]]>
         </content>
