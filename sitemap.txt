@@ -1,3 +1,4 @@
+http://sukai.me/2016-summer/
 http://sukai.me/algorithms-order-statistic/
 http://sukai.me/you-just-seem-to-be-working-hard/
 http://sukai.me/2016-first-half-booklists/
@@ -49,10 +50,10 @@ http://sukai.me/tag/Python/
 http://sukai.me/tag/Reading/
 http://sukai.me/tag/Machine-Learning/
 http://sukai.me/tag/Cousera/
+http://sukai.me/tag/Life/
 http://sukai.me/tag/Linux/
 http://sukai.me/tag/IMDB/
 http://sukai.me/tag/Douban/
-http://sukai.me/tag/Life/
 http://sukai.me/tag/JSP/
 http://sukai.me/tag/Github/
 http://sukai.me/tag/Crawler/
@@ -93,4 +94,5 @@ http://sukai.me/page/3/
 http://sukai.me/page/4/
 http://sukai.me/page/5/
 http://sukai.me/page/6/
+http://sukai.me/page/7/
 http://sukai.me/404.html

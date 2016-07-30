@@ -103,7 +103,7 @@ section, article {
 }
 
 .blog-main:hover .blog-title a {
-  color: #03a7eb;
+  /*color: #03a7eb;*/
 }
 
 .round-date {
@@ -183,6 +183,18 @@ section, article {
 
 .blog-content-more {
   margin: 0px auto;
+  text-align: center;
+}
+
+.blog-content-more a{
+  background-color: #92C0EF;
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+.blog-tag {
+  background-color: #92C0EF;
 }
 
 .blog-footer {
@@ -384,7 +396,7 @@ post.html
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
   text-align: center;
   font-size: 1em;
-  padding: 8px 8px;
+  padding: 7px 8px;
 }
 
 .pagination a {
