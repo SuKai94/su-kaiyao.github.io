@@ -41,6 +41,7 @@ http://sukai.me/Board/
 http://sukai.me/deeplearning-wiki/
 http://sukai.me/face-alignment-wiki/
 http://sukai.me/friend/
+http://sukai.me/machine-learning-wiki/
 http://sukai.me/MyHistory/
 http://sukai.me/MyTrans/
 http://sukai.me/program-wiki/
