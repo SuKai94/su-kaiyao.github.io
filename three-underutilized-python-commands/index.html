@@ -57,20 +57,26 @@
   <section class="blog-content">
     <p>今天将讨论的三个Python命令，很简单，但很高效：  </p>
 
-<h4>1. 在你的当前工作目录启动一个简单的web server来共享你的文件</h4>
+<ol>
+<li>在你的当前工作目录启动一个简单的web server来共享你的文件<br/></li>
+</ol>
 <div class="highlight"><pre>~<span class="nv">$ </span>python -m SimpleHTTPServer  
 Serving HTTP on 0.0.0.0 port 8000 ...
 </pre></div>
 
 <p>这个命令既不安全，也不是可扩展的。但是，如果你想在某个目录下快速地测试一些东西，那，这就对你很方便了  </p>
 
-<h4>2. 测试邮件</h4>
+<ol>
+<li>测试邮件<br/></li>
+</ol>
 <div class="highlight"><pre>~<span class="nv">$ </span>python -m smtpd -n -c DebuggingServer
 </pre></div>
 
 <p>在1025端口开启一个虚设的SMTP服务。当你想在一个不允许可插拔电子邮件后端的系统上测试邮件时，这就派上用场了  </p>
 
-<h4>3. 漂亮地打印出json</h4>
+<ol>
+<li>漂亮地打印出json<br/></li>
+</ol>
 
 <pre><code>echo &#39;{&quot;2legs&quot;:&quot;Better&quot;, &quot;4Legs&quot;: &quot;Good&quot;, &quot;6Legs&quot;: &quot;Spider&quot;}&#39; | python -m json.tool</code></pre>
 
