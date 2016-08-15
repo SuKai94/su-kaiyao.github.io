@@ -20,7 +20,7 @@
           <ul class="header-nav">
             <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
             <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
-            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li>
+           <!--  <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li> -->
             <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
             <li><a href="http://sukai.me/friend/"><span class="am-icon-sm am-icon-link" id="nav-icon"></span>Links</a></li>
             <li><a href="http://sukai.me/archive/index.html"><span class="am-icon-sm am-icon-archive" id="nav-icon"></span>Archives</a></li>
@@ -57,15 +57,15 @@
 
   </header>
   <section class="blog-content">
-    <h3>Plugin Manager &mdash; <a href="https://github.com/gmarik/Vundle.vim">Vundle</a></h3>
+    <h3>Plugin Manager &mdash; <a href = "https://github.com/gmarik/Vundle.vim" target = "_blank">Vundle</a></h3>
 
-<p>Vundle, a Plugin Manager, makes Plugin Install&amp;Update&amp;Search&amp;Clean easier.   </p>
+<p>Vundle, a Plugin Manager, makes Plugin Install&amp;Update&amp;Search&amp;Clean easier  </p>
 
-<h4>1.Set Up</h4>
+<h4>1. Set Up</h4>
 
 <p><code>$ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim</code>  </p>
 
-<h4>2.Configure</h4>
+<h4>2. Configure</h4>
 
 <p>在你的<code>.vimrc</code>首部添加如下信息：  </p>
 <div class="highlight"><pre><span class="nb">set </span>nocompatible              <span class="s2">&quot; be iMproved, required    </span>
@@ -112,9 +112,9 @@ call vundle#end<span class="o">()</span>            <span class="s2">&quot; requ
 <span class="err">&quot;</span> Put your non-Plugin stuff after this line
 </pre></div>
 
-<h4>3.Install Plugin</h4>
+<h4>3. Install Plugin</h4>
 
-<p>如果欲安装的插件在Github上有其仓库，比如<a href="https://github.com/plasticboy/vim-markdown">vim-markdown</a>.  </p>
+<p>如果欲安装的插件在Github上有其仓库，比如<a href = "https://github.com/plasticboy/vim-markdown" target = "_blank">vim-markdown</a>  </p>
 
 <p>只需vim your <code>.vimrc</code>, 在里头添加一行Plugin &#39;plasticboy/vim-markdown&#39;  </p>
 
@@ -122,7 +122,9 @@ call vundle#end<span class="o">()</span>            <span class="s2">&quot; requ
 
 <p>（当然安装插件也支持非Github库，具体看刚刚粘帖的配置文件，以及无用插件清除:PluginClean等命令都可以在刚刚的配置文件中查看）  </p>
 
-<h3>Vim配色-Molokai</h3>
+<h3>部分插件介绍</h3>
+
+<h4>Vim配色-Molokai</h4>
 
 <p>将下载的molokai.vim放入~/.vim/colors  </p>
 
@@ -132,7 +134,7 @@ call vundle#end<span class="o">()</span>            <span class="s2">&quot; requ
 colorscheme molokai
 </pre></div>
 
-<p>代码缩进显示-<a href="https://github.com/nathanaelkane/vim-indent-guides">vim-indent-guides</a>  </p>
+<p>代码缩进显示<a href = "https://github.com/nathanaelkane/vim-indent-guides" target = "_blank">vim-indent-guides</a>  </p>
 
 <p>安装见Github链接，看一下<code>.vimrc</code>下的配置：  </p>
 <div class="highlight"><pre><span class="err">&quot;</span> vim-indent-guides  
@@ -145,7 +147,7 @@ hi IndentGuidesOdd <span class="nv">guibg</span><span class="o">=</span>red <spa
 hi IndentGuidesEven <span class="nv">guibg</span><span class="o">=</span>green <span class="nv">ctermbg</span><span class="o">=</span>4
 </pre></div>
 
-<h3>目录树插件-NERDTree</h3>
+<h4>目录树插件-NERDTree</h4>
 
 <p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/NERDTree.png" alt="Vim目录树插件"/>  </p>
 
@@ -153,13 +155,11 @@ hi IndentGuidesEven <span class="nv">guibg</span><span class="o">=</span>green <
 
 <h3>Vim补全</h3>
 
-<p>网络上都推荐YCM代码补全超级插件,安装和配置都好繁琐,而且平时不写C-Family代码,Vim主要用来写py,所以用了安装简便的<a href="https://github.com/davidhalter/jedi-vim">jedi-vim</a>  </p>
+<p>网络上都推荐YCM代码补全超级插件,安装和配置都好繁琐,而且平时不写C-Family代码,Vim主要用来写py,所以用了安装简便的<a href = "https://github.com/davidhalter/jedi-vim" target = "_blank">jedi-vim</a>  </p>
 
 <p>当然可以用Vundle安装,而且也不需要<code>.vimrc</code>的配置  </p>
 
-<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/jedi-vim.png" alt="Vim代码补全"/>  </p>
-
-<p>(全文完-2014-09-09)</p>
+<p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/jedi-vim.png" alt="Vim代码补全"/></p>
 
   </section>
   
@@ -190,18 +190,18 @@ hi IndentGuidesEven <span class="nv">guibg</span><span class="o">=</span>green <
               <div class="about-me-content">
                 <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/12.png"></img></a>
                 <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">KaiSu</a></h5>
-                <p class="about-me-words">M.Sc stdudent in #AI at <a href="http://palm.seu.edu.cn" target="_blank">seu palm</a>.I code in Python, Java.</p>
+                <p class="about-me-words">A Programmer. I code in Python, Java.</p>
                 <ul class="about-me-ul">
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/archive/index.html">
                       Articles
-                      <h5 class="about-me-li-h5">37</h5>
+                      <h5 class="about-me-li-h5">31</h5>
                     </a>
                   </li>
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/tag/index.html">
                       Tags
-                      <h5 class="about-me-li-h5">36</h5>
+                      <h5 class="about-me-li-h5">33</h5>
                     </a>
                   </li>
                 </ul>
@@ -216,14 +216,14 @@ hi IndentGuidesEven <span class="nv">guibg</span><span class="o">=</span>green <
                 <a href="https://github.com/su-kaiyao" title="github" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
                 <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="weibo" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
                 <a href="https://twitter.com/SuKai_Coding" title="twitter" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
-                <a id="weixin-icon">
+                <!-- <a id="weixin-icon">
                   <i class="am-icon-weixin am-icon-md"></i>
                   <div id="weixin-info">
                     <br/>
                     <p>扫扫二维码，多交一枚盆友~</p>
                     <img src="http://7xl2fd.com1.z0.glb.clouddn.com/weixin-qrcode.png">
                   </div>
-                </a>
+                </a> -->
               </div>
             </div>
             <!-- contact-me-->

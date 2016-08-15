@@ -20,7 +20,7 @@ IMDB数据库结构 | SuKai
           <ul class="header-nav">
             <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
             <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
-            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li>
+           <!--  <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li> -->
             <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
             <li><a href="http://sukai.me/friend/"><span class="am-icon-sm am-icon-link" id="nav-icon"></span>Links</a></li>
             <li><a href="http://sukai.me/archive/index.html"><span class="am-icon-sm am-icon-archive" id="nav-icon"></span>Archives</a></li>
@@ -55,15 +55,15 @@ IMDB数据库结构 | SuKai
 
   </header>
   <section class="blog-content">
-    <p>想要获取IMDB已上映电影的相关信息数据，我立马想到的两点就是：Restful API和爬虫，但就在我google方案的过程中，我意外收获到了其他的东西：  </p>
+    <p>想要获取IMDB已上映电影的相关信息数据，我立马想到的两点就是：Restful API和爬虫，但就在我Google方案的过程中，我意外收获到了其他的东西：  </p>
 
-<p>其中一个，是使用Python语言开发的<a href="http://imdbpy.sourceforge.net/index.html">IMDbPY</a>，它的作用就是帮助开发者取回和管理IMDb的电影数据库  </p>
+<p>其中一个，是使用Python语言开发的<a href="http://imdbpy.sourceforge.net/index.html" target="_blank">IMDbPY</a>，它的作用就是帮助开发者取回和管理IMDb的电影数据库  </p>
 
-<p>另外一个就是，IMDB网站其实提供了所有电影的数据库镜像：<a href="http://www.imdb.com/interfaces/">http://www.imdb.com/interfaces</a>  </p>
+<p>另外一个就是，IMDB网站其实提供了所有电影的数据库镜像：<a href="http://www.imdb.com/interfaces" target="_blank"><a href="http://www.imdb.com/interfaces/">http://www.imdb.com/interfaces/</a></a>  </p>
 
-<p>顺着IMDbPy的文档，会发现一个非常实用的脚本：<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">imdbpy2sql.py</a>，它的作用就是将镜像文件转换为本地的数据库  </p>
+<p>顺着IMDbPy的文档，会发现一个非常实用的脚本：<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt" target="_blank">imdbpy2sql.py</a>，它的作用就是将镜像文件转换为本地的数据库  </p>
 
-<p>第一次使用，就顺着文档<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">http://imdbpy.sourceforge.net/docs/README.sqldb.txt</a>一步一步来，运行完脚本后，本地数据库（我用的Mysql）会得到一些IMDB的表和数据  </p>
+<p>第一次使用，就顺着文档<a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt" target="_blank"><a href="http://imdbpy.sourceforge.net/docs/README.sqldb.txt">http://imdbpy.sourceforge.net/docs/README.sqldb.txt</a></a>一步一步来，运行完脚本后，本地数据库（我用的Mysql）会得到一些IMDB的表和数据  </p>
 
 <p>PS：下载所需的镜像文件，并运行imdbpy2sql.py脚本，我全部写成了自动化程序：  </p>
 <div class="highlight"><pre><span class="c">#!/usr/bin/env python  </span>
@@ -259,7 +259,7 @@ IMDB数据库结构 | SuKai
 
 <p>IMDB提供数据的方式确实很独特，通过镜像的方式。通过分析所有的表结构，不难发现imdb数据库设计之好  </p>
 
-<p>好了，截止目前，imdb的未上映和已上映电影数据就都可以拿到了  </p>
+<p>好了，截止目前，imdb未上映和已上映电影数据就都可以拿到了</p>
 
   </section>
   
@@ -290,18 +290,18 @@ IMDB数据库结构 | SuKai
               <div class="about-me-content">
                 <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/12.png"></img></a>
                 <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">KaiSu</a></h5>
-                <p class="about-me-words">M.Sc stdudent in #AI at <a href="http://palm.seu.edu.cn" target="_blank">seu palm</a>.I code in Python, Java.</p>
+                <p class="about-me-words">A Programmer. I code in Python, Java.</p>
                 <ul class="about-me-ul">
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/archive/index.html">
                       Articles
-                      <h5 class="about-me-li-h5">37</h5>
+                      <h5 class="about-me-li-h5">31</h5>
                     </a>
                   </li>
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/tag/index.html">
                       Tags
-                      <h5 class="about-me-li-h5">36</h5>
+                      <h5 class="about-me-li-h5">33</h5>
                     </a>
                   </li>
                 </ul>
@@ -316,14 +316,14 @@ IMDB数据库结构 | SuKai
                 <a href="https://github.com/su-kaiyao" title="github" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
                 <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="weibo" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
                 <a href="https://twitter.com/SuKai_Coding" title="twitter" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
-                <a id="weixin-icon">
+                <!-- <a id="weixin-icon">
                   <i class="am-icon-weixin am-icon-md"></i>
                   <div id="weixin-info">
                     <br/>
                     <p>扫扫二维码，多交一枚盆友~</p>
                     <img src="http://7xl2fd.com1.z0.glb.clouddn.com/weixin-qrcode.png">
                   </div>
-                </a>
+                </a> -->
               </div>
             </div>
             <!-- contact-me-->

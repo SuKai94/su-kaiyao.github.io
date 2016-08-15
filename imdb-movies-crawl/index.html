@@ -20,7 +20,7 @@ IMDB电影数据库 | SuKai
           <ul class="header-nav">
             <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
             <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
-            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li>
+           <!--  <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li> -->
             <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
             <li><a href="http://sukai.me/friend/"><span class="am-icon-sm am-icon-link" id="nav-icon"></span>Links</a></li>
             <li><a href="http://sukai.me/archive/index.html"><span class="am-icon-sm am-icon-archive" id="nav-icon"></span>Archives</a></li>
@@ -63,15 +63,15 @@ IMDB电影数据库 | SuKai
 
 <h3>未上映电影数据</h3>
 
-<p>在IMDB官网，我找到了一些有趣的页面：<a href="http://www.imdb.com/movies-coming-soon/2016-01">http://www.imdb.com/movies-coming-soon/2016-01</a>，<a href="http://www.imdb.com/movies-coming-soon/2016-02">http://www.imdb.com/movies-coming-soon/2016-02</a>等等，通过分析url很容易发现：  </p>
+<p>在IMDB官网，可以找到一些爬虫入口页面：<a href="http://www.imdb.com/movies-coming-soon/2016-01" target="_blank"><a href="http://www.imdb.com/movies-coming-soon/2016-01">http://www.imdb.com/movies-coming-soon/2016-01</a></a>，<a href="http://www.imdb.com/movies-coming-soon/2016-02" target="_blank"><a href="http://www.imdb.com/movies-coming-soon/2016-02">http://www.imdb.com/movies-coming-soon/2016-02</a></a>等等，通过分析url很容易发现：  </p>
 
 <p>url中的&#39;movies-coming-soon&#39;表示该页面的电影即将上映至影院，后面的日期为2016-xx，代表着该页面的电影预计2016年xx月上映  </p>
 
 <p>这样的话，我们就可以找到2016一整年的预映电影的入口页面  </p>
 
-<p>随意进入任何一个入口页面，里面陈列着该日期下所有预映电影的简短信息，包括指向某具体电影详情页面的link，随意点击某部电影，进入并得到link，比如：<a href="http://www.imdb.com/title/tt3460252/?ref_=cs_ov_tt">http://www.imdb.com/title/tt3460252/?ref_=cs_ov_tt</a>  </p>
+<p>随意进入任何一个入口页面，里面陈列着该日期下所有预映电影的简短信息，包括指向某具体电影详情页面的link，随意点击某部电影，进入并得到link，比如：<a href="http://www.imdb.com/title/tt3460252/?ref_=cs_ov_tt" target="_blank"><a href="http://www.imdb.com/title/tt3460252/?ref_=cs_ov_tt">http://www.imdb.com/title/tt3460252/?ref_=cs_ov_tt</a></a>  </p>
 
-<p>其中?ref<em>=cs_ov_tt是多余的，可以省略，于是link精简为：<a href="http://www.imdb.com/title/tt3460252">http://www.imdb.com/title/tt3460252</a>，‘?ref</em>=cs_ov_tt’只是代表某些跳转信息（我猜的）  </p>
+<p>其中?ref<em>=cs_ov_tt是多余的，可以省略，于是link精简为：<a href="http://www.imdb.com/title/tt3460252" target="_blank"><a href="http://www.imdb.com/title/tt3460252">http://www.imdb.com/title/tt3460252</a></a>，‘?ref</em>=cs_ov_tt’只是代表某些跳转信息（我猜的）  </p>
 
 <p>进入到电影详情页面，我们就可以抓取一切我们想要的数据了，原理很简单：  </p>
 
@@ -197,13 +197,13 @@ IMDB电影数据库 | SuKai
 
 <p>运行时，可以视实际运行快慢，给其中的某些线程增加数量，增快其运行速度  </p>
 
-<p>总的代码，可以查看我的<a href="https://github.com/su-kaiyao/mrp/blob/master/dataSet/newMovieCrawl.py">Github&gt;newMovieCrawl.py</a>  </p>
+<p>总的代码，可以查看我的<a href="https://github.com/su-kaiyao/mrp/blob/master/dataSet/newMovieCrawl.py" target="_blank">Github &gt; newMovieCrawl.py</a>  </p>
 
 <p>我自己运行了一把，抓了141条新电影，查阅了所有入口页面（2016-01 ~ 2016-12），数了数是145个，少了4个，是因为那4个电影的详细信息太少了，被脚本过滤了  </p>
 
 <h3>已上映电影数据</h3>
 
-<p>移步：<a href="http://sukai.me/imdb-db-structure/">IMDB数据库结构</a>  </p>
+<p>移步：<a href="http://sukai.me/imdb-db-structure/" target="_blank">IMDB数据库结构</a></p>
 
   </section>
   
@@ -234,18 +234,18 @@ IMDB电影数据库 | SuKai
               <div class="about-me-content">
                 <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/12.png"></img></a>
                 <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">KaiSu</a></h5>
-                <p class="about-me-words">M.Sc stdudent in #AI at <a href="http://palm.seu.edu.cn" target="_blank">seu palm</a>.I code in Python, Java.</p>
+                <p class="about-me-words">A Programmer. I code in Python, Java.</p>
                 <ul class="about-me-ul">
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/archive/index.html">
                       Articles
-                      <h5 class="about-me-li-h5">37</h5>
+                      <h5 class="about-me-li-h5">31</h5>
                     </a>
                   </li>
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/tag/index.html">
                       Tags
-                      <h5 class="about-me-li-h5">36</h5>
+                      <h5 class="about-me-li-h5">33</h5>
                     </a>
                   </li>
                 </ul>
@@ -260,14 +260,14 @@ IMDB电影数据库 | SuKai
                 <a href="https://github.com/su-kaiyao" title="github" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
                 <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="weibo" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
                 <a href="https://twitter.com/SuKai_Coding" title="twitter" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
-                <a id="weixin-icon">
+                <!-- <a id="weixin-icon">
                   <i class="am-icon-weixin am-icon-md"></i>
                   <div id="weixin-info">
                     <br/>
                     <p>扫扫二维码，多交一枚盆友~</p>
                     <img src="http://7xl2fd.com1.z0.glb.clouddn.com/weixin-qrcode.png">
                   </div>
-                </a>
+                </a> -->
               </div>
             </div>
             <!-- contact-me-->

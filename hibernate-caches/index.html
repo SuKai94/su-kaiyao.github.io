@@ -20,7 +20,7 @@ Hibernate中的缓存机制 | SuKai
           <ul class="header-nav">
             <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
             <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
-            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li>
+           <!--  <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li> -->
             <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
             <li><a href="http://sukai.me/friend/"><span class="am-icon-sm am-icon-link" id="nav-icon"></span>Links</a></li>
             <li><a href="http://sukai.me/archive/index.html"><span class="am-icon-sm am-icon-archive" id="nav-icon"></span>Archives</a></li>
@@ -57,20 +57,28 @@ Hibernate中的缓存机制 | SuKai
 
   </header>
   <section class="blog-content">
-    <h3>什么是缓存？</h3>
+    <h4>什么是缓存？</h4>
 
-<p><a href="http://baike.baidu.com/view/2273788.htm">百度百科</a>说得好：缓存是介于应用程序和物理数据源之间，其作用是为了降低应用程序对物理数据源访问的频次，从而提高了应用的运行性能。缓存内的数据是对物理数据源中的数据的复制，应用程序在运行时从缓存读写数据，在特定的时刻或事件会同步缓存和物理数据源的数据。  </p>
+<blockquote>
+<p>“<br/>
+    缓存是介于应用程序和物理数据源之间，其作用是为了降低应用程序对物理数据源访问的频次，从而提高了应用的运行性能。缓存内的数据是对物理数据源中的数据的复制，应用程序在运行时从缓存读写数据，在特定的时刻或事件会同步缓存和物理数据源的数据。<br/>
+”  </p>
+</blockquote>
 
-<p>缓存的介质一般是内存，所以读写速度很快。但如果缓存中存放的数据量非常大时，也会用硬盘作为缓存介质。Hibernate缓存包括Session缓存和SessionFactory缓存。  </p>
+<p>摘自<a href = "http://baike.baidu.com/view/2273788.htm" target = "_blank">BaiKe</a>  </p>
+
+<p>缓存的介质一般是内存，所以读写速度很快。但如果缓存中存放的数据量非常大时，也会用硬盘作为缓存介质  </p>
+
+<p>Hibernate缓存包括Session缓存和SessionFactory缓存  </p>
 
 <ul>
-<li><p>一级缓存：session缓存，内置缓存，无法卸载  </p></li>
-<li><p>二级缓存：sessionFactory缓存，需要第三方组件支持(比如EHcache)，使用磁盘作为存储介质  </p></li>
+<li>一级缓存：session缓存，内置缓存，无法卸载<br/></li>
+<li>二级缓存：sessionFactory缓存，需要第三方组件支持(比如EHcache)，使用磁盘作为存储介质<br/></li>
 </ul>
 
 <p><img src="https://raw.githubusercontent.com/su-kaiyao/record/master/others/imgs/hibernate%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6.png" alt="Hibernate缓存视图"/>  </p>
 
-<h3>自己实现一个缓存</h3>
+<h4>自己实现一个缓存</h4>
 <div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Cache</span> <span class="o">{</span>  
 
     <span class="kd">static</span> <span class="n">Map</span> <span class="n">cache</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>  
@@ -98,7 +106,7 @@ Hibernate中的缓存机制 | SuKai
 
 <p>上述代码中, <code>getUser()</code>功能是根据id值查询User信息，它的第一步是从cache中查询，如果缓存命中，就将缓存中的User信息返回;否则就调用<code>getFromDB()</code>从数据库查询此id的User信息  </p>
 
-<h3>Hibernate一级缓存</h3>
+<h4>Hibernate一级缓存</h4>
 
 <p>这是强制性缓存，每个数据请求都会经历一级缓存，缓存命中，就取出缓存数据信息;否则就连接数据库进行查询。session对象负责管理实体对象，当你更新多个对象数据时，hibernate会尽可能延迟更新数据对象的时间，以做到减少sql语句发送数量。一旦session被关闭，所有在此session旗下的缓存全部消失。  </p>
 
@@ -181,7 +189,7 @@ Hibernate中的缓存机制 | SuKai
 
 <p>二级缓存存储的是对象，如果你只查询对象中的某些属性，是不会加入到二级缓存中去的  </p>
 
-<h3>Hibernate查询缓存</h3>
+<h4>Hibernate查询缓存</h4>
 
 <p>要使用hibernate查询缓存功能，首先得在hibernate.cfg.xml中设置：  </p>
 <div class="highlight"><pre>&lt;!-- 开启查询缓存 --&gt;  
@@ -196,9 +204,7 @@ Hibernate中的缓存机制 | SuKai
 <span class="n">SessionFactory</span><span class="o">.</span><span class="na">closeSession</span><span class="o">();</span>
 </pre></div>
 
-<p>当然，查询缓存也是sessionFactory级别，而且只有当hql语句完全相同时，查询缓存才产生效果，也就是说hql的参数设置也要相同  </p>
-
-<p>Over  </p>
+<p>当然，查询缓存也是sessionFactory级别，而且只有当hql语句完全相同时，查询缓存才产生效果，也就是说hql的参数设置也要相同</p>
 
   </section>
   
@@ -229,18 +235,18 @@ Hibernate中的缓存机制 | SuKai
               <div class="about-me-content">
                 <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/12.png"></img></a>
                 <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">KaiSu</a></h5>
-                <p class="about-me-words">M.Sc stdudent in #AI at <a href="http://palm.seu.edu.cn" target="_blank">seu palm</a>.I code in Python, Java.</p>
+                <p class="about-me-words">A Programmer. I code in Python, Java.</p>
                 <ul class="about-me-ul">
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/archive/index.html">
                       Articles
-                      <h5 class="about-me-li-h5">37</h5>
+                      <h5 class="about-me-li-h5">31</h5>
                     </a>
                   </li>
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/tag/index.html">
                       Tags
-                      <h5 class="about-me-li-h5">36</h5>
+                      <h5 class="about-me-li-h5">33</h5>
                     </a>
                   </li>
                 </ul>
@@ -255,14 +261,14 @@ Hibernate中的缓存机制 | SuKai
                 <a href="https://github.com/su-kaiyao" title="github" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
                 <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="weibo" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
                 <a href="https://twitter.com/SuKai_Coding" title="twitter" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
-                <a id="weixin-icon">
+                <!-- <a id="weixin-icon">
                   <i class="am-icon-weixin am-icon-md"></i>
                   <div id="weixin-info">
                     <br/>
                     <p>扫扫二维码，多交一枚盆友~</p>
                     <img src="http://7xl2fd.com1.z0.glb.clouddn.com/weixin-qrcode.png">
                   </div>
-                </a>
+                </a> -->
               </div>
             </div>
             <!-- contact-me-->

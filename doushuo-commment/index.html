@@ -20,7 +20,7 @@
           <ul class="header-nav">
             <li><a href="http://sukai.me/"><span class="am-icon-sm am-icon-home" id="nav-icon"></span>Home</a></li>
             <li><a href="http://sukai.me/Board/"><span class="am-icon-sm am-icon-heart" id="nav-icon"></span>Board</a></li>
-            <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li>
+           <!--  <li><a href="http://sukai.me/MyHistory/"><span class="am-icon-sm am-icon-history" id="nav-icon"></span>TimeLine</a></li> -->
             <li><a href="http://sukai.me/AboutMe/"><span class="am-icon-sm am-icon-user-secret" id="nav-icon"></span>About</a></li>
             <li><a href="http://sukai.me/friend/"><span class="am-icon-sm am-icon-link" id="nav-icon"></span>Links</a></li>
             <li><a href="http://sukai.me/archive/index.html"><span class="am-icon-sm am-icon-archive" id="nav-icon"></span>Archives</a></li>
@@ -57,15 +57,11 @@
 
   </header>
   <section class="blog-content">
-    <p>国庆了，放假了，学校人烟稀少  </p>
+    <p>博客迁移，是一件挺麻烦的事情，涉及到文章数据和评论数据。我的博客平台使用的多说评论系统，在我迁移评论的时候，也遇到了一些障碍。但是，最终还是比较完美地迁移成功。讲一下我迁移的方案吧  </p>
 
-<p>博客搭建也已经一年多了。之前的博客域名kaiyao.net.cn由于是中国域名，需要备案，也不方便别人记住，就换了一个更个性化的域名：sukai.me，之后就准备一直用这个了。虽然.me域名要贵很多，但算是给自己投资吧，希望我能坚持写博客  </p>
+<h4>多说评论迁移准备工作</h4>
 
-<p>博客迁移，是一件挺麻烦的事情，涉及到文章数据和评论数据。我的博客平台使用的多说评论系统，在我迁移评论的时候，也遇到了一些障碍。但是，最终还是比较完美地迁移成功。讲一下我迁移的方案吧  </p>
-
-<h3>多说评论迁移准备工作</h3>
-
-<p>先去多说后台管理系统，寻找迁移方法。果然，在工具里面找到了<strong>导入数据，导出数据</strong>功能，然后选择<strong>包含评论数据</strong>，并导出评论。之后，会得到一个Json格式的文件  </p>
+<p>先去多说后台管理系统，寻找迁移方法。果然，在工具里面找到了<code>导入数据，导出数据</code>功能，然后选择<code>包含评论数据</code>，并导出评论。之后，会得到一个Json格式的文件  </p>
 
 <p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/多说导入导出数据.png" width = "380" height = "260" alt="多说导入导出数据" align=center />  </p>
 
@@ -73,13 +69,13 @@
 
 <p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/duoshuo-json.png" width = "380" height = "260" alt="json个体" align=center />  </p>
 
-<p>不难读懂：post_id就是这条评论的全局唯一的标识，thread_id是评论所在网页的全局唯一标识（即文章的id），message即具体评论的内容，下面的author_id，author_email等等就是评论人的相关多说账号信息了  </p>
+<p>不难看出，post_id就是这条评论的全局唯一的标识，thread_id是评论所在网页的全局唯一标识（即文章的id），message即具体评论的内容，下面的author_id，author_email等等就是评论人的相关多说账号信息了  </p>
 
-<p><a href="http://dev.duoshuo.com/docs/500d0629448f04782b00000a">多说文档</a>也是说的明明白白的，结合看一下，一目了然  </p>
+<p><a href="http://dev.duoshuo.com/docs/500d0629448f04782b00000a" target="_blank">多说官网文档</a>也是说的明明白白的，一目了然  </p>
 
-<p>ok，当时，心中就大体有方案了  </p>
+<p>大体方案就出炉了  </p>
 
-<h3>多说评论迁移方案</h3>
+<h4>多说评论迁移方案</h4>
 
 <p>既然是迁移评论，那么该评论的全局id肯定还是原来的，变的就是文章id了。因为换了新域名嘛，文章id变换了，只要把json文件里面评论的原文章id（就是thread_id）变成相应的新文章id就行啦  </p>
 
@@ -91,7 +87,7 @@
 
 <p>至于，你想手动覆盖json文件里面的old thread_id，还是写脚本对josn文件操作进行覆盖，看你评论数量而定吧。怎么省事，怎么搞  </p>
 
-<h3>对多说的吐槽</h3>
+<h4>对多说的吐槽</h4>
 
 <p>寻找评论迁移方案的时候，先在多说开发者中心尝试看看能不能找到，结果是没找到。而且，我觉的多说是不是没人维护了？？？很多人在下面提问，就是没有技术支持的回答  </p>
 
@@ -99,7 +95,7 @@
 
 <p>我还想换一个评论系统disqus，由于它的加载比较慢，账号不支持国内许多社交账号，还是放弃了  </p>
 
-<p>不得不说，多说成功的原因就是：接天朝地气吧。界面做的也比disqus好看些。接地气，而且好看的东西果然还是很受欢迎的。  </p>
+<p>不得不说，多说成功的原因就是：接天朝地气吧。界面做的也比disqus好看些。接地气，而且好看的东西果然还是很受欢迎的  </p>
 
 <p>多数的后台数据管理，我就不敢恭维了。估计不止我一个人在吐槽吧  </p>
 
@@ -115,9 +111,7 @@
 
 <p>11-24号之前的评论在我的站点显示不了。虽然中午12点时，多说称已经修复了bug。我检查了我的站点，发现大部分页面恢复正常，仍有一个页面处于bug中  </p>
 
-<p>搭建博客的意义不应该在于不停地被评论系统所折腾，我决定转到Disqus  </p>
-
-<p>之前的多说评论不想再折腾弄到disqus了，重新开始吧！</p>
+<p>搭建博客的意义不应该在于不停地被评论系统所折腾，我决定转到Disqus，重新开始吧</p>
 
   </section>
   
@@ -148,18 +142,18 @@
               <div class="about-me-content">
                 <a href="http://sukai.me"><img class="avatar" src="http://7xl2fd.com1.z0.glb.clouddn.com/12.png"></img></a>
                 <h5 class="about-me-name"><a href="http://sukai.me/AboutMe/">KaiSu</a></h5>
-                <p class="about-me-words">M.Sc stdudent in #AI at <a href="http://palm.seu.edu.cn" target="_blank">seu palm</a>.I code in Python, Java.</p>
+                <p class="about-me-words">A Programmer. I code in Python, Java.</p>
                 <ul class="about-me-ul">
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/archive/index.html">
                       Articles
-                      <h5 class="about-me-li-h5">37</h5>
+                      <h5 class="about-me-li-h5">31</h5>
                     </a>
                   </li>
                   <li class="about-me-li">
                     <a class="about-me-li-content" href="http://sukai.me/tag/index.html">
                       Tags
-                      <h5 class="about-me-li-h5">36</h5>
+                      <h5 class="about-me-li-h5">33</h5>
                     </a>
                   </li>
                 </ul>
@@ -174,14 +168,14 @@
                 <a href="https://github.com/su-kaiyao" title="github" target="_blank"><i class="am-icon-github am-icon-md"></i></a>
                 <a href="http://weibo.com/2902370675/profile?topnav=1&wvr=6" title="weibo" target="_blank"><i class="am-icon-weibo am-icon-md"></i></a>
                 <a href="https://twitter.com/SuKai_Coding" title="twitter" target="_blank"><i class="am-icon-twitter am-icon-md"></i></a>
-                <a id="weixin-icon">
+                <!-- <a id="weixin-icon">
                   <i class="am-icon-weixin am-icon-md"></i>
                   <div id="weixin-info">
                     <br/>
                     <p>扫扫二维码，多交一枚盆友~</p>
                     <img src="http://7xl2fd.com1.z0.glb.clouddn.com/weixin-qrcode.png">
                   </div>
-                </a>
+                </a> -->
               </div>
             </div>
             <!-- contact-me-->
