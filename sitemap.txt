@@ -8,7 +8,6 @@ http://sukai.me/alfred-user-guide/
 http://sukai.me/imdb-db-structure/
 http://sukai.me/imdb-movies-crawl/
 http://sukai.me/shadowsocks/
-http://sukai.me/bye-2015-hello-2016/
 http://sukai.me/python-linear-regerssion/
 http://sukai.me/advice-for-applying-ml-svm/
 http://sukai.me/ml-neural-networks/
@@ -43,9 +42,9 @@ http://sukai.me/tag/Python/
 http://sukai.me/tag/Machine-Learning/
 http://sukai.me/tag/Cousera/
 http://sukai.me/tag/Reading/
-http://sukai.me/tag/Life/
 http://sukai.me/tag/IMDB/
 http://sukai.me/tag/Douban/
+http://sukai.me/tag/Life/
 http://sukai.me/tag/JSP/
 http://sukai.me/tag/Github/
 http://sukai.me/tag/Crawler/
