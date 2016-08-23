@@ -74,8 +74,6 @@
 <li>虽然很久之前就开始了解<a href="https://en.wikipedia.org/wiki/C10k_problem" title="L0 L1 L2" target="_blank">C10k Problem</a>，当时使用过Java的NIO、Netty。最近看了Node.js相关的文章，对于C10k Problem又有了些研究兴趣。宏观上的理解还是当初的那个印象：传统的解决方案是多进程多线程模型，即One Connection，One Thread，大量（10k）条进程（或线程）的创建和调度会造成OS很大的资源消耗。后来有了IO多路复用模型，select到poll再到epoll，孕育出很多杰作（Tornado、Node.js）等等。另一种解决方案则是协程，将内核从繁重的调度任务中解放出来，典型的代表是Go语言。暂时了解的还不够透彻，之后有空再进一步研究<br/></li>
 </ul>
 
-<p>之后有空再进一步了解  </p>
-
 <p><strong>读书</strong>  </p>
 
 <ul>
@@ -94,7 +92,7 @@
 <ul>
 <li>将Blog的Analysis切换到了Google Analysis<br/></li>
 <li>重新装上LOL，玩了3 ~ 4天又将其卸载<br/></li>
-<li>看了几部不错的电影：《驯龙高手Ⅰ&amp;Ⅱ》、《夏洛特烦恼》、《火影：博人转》、《X战警：天启》。最喜欢的是《驯龙高手Ⅰ&amp;Ⅱ》，在豆瓣里是Top 250的影片<br/></li>
+<li>这个月看了不少电影😜：《驯龙高手Ⅰ&amp;Ⅱ》、《夏洛特烦恼》、《火影：博人转》、《我是传奇》、《使徒行者》、《寒战Ⅱ》、《他是龙》、《X战警：天启》。最喜欢的是《驯龙高手Ⅰ&amp;Ⅱ》，在豆瓣里是Top 250的影片<br/></li>
 </ul>
 
 <p>8月待续  </p>
