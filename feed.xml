@@ -3,8 +3,153 @@
     <title>SuKai</title>
     <link href="" rel="self" />
     <link href="http://sukai.me/" />
-    <updated>2016-07-30T12:00:00Z</updated>
+    <updated>2016-08-24T21:00:00Z</updated>
     <id>http://sukai.me/</id>
+    
+    <entry>
+        <title><![CDATA[Face Alignment Summary]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/face-alignment-summary/"/>
+        <updated>2016-08-24T21:00:00Z</updated>
+        <published>2016-08-24T21:00:00Z</published>
+        <id>http://sukai.me/face-alignment-summary/</id>
+        <content type="html">
+            <![CDATA[
+             <p>以我目前所读论文为依据，现有算法大体上分为两种类型：  </p>
+
+<ul>
+<li>1. classifying search windows<br/></li>
+<li>2. directly predicting key point positions(or shape parameters)<br/></li>
+</ul>
+
+<p>暂时没有接触第一种category的paper，第二种还可以细分为两种：  </p>
+
+<ul>
+<li>1. 基于模型(Model Based)，代表有AAM、ASM<br/></li>
+<li>2. 基于回归(Regression Based)。还可以细分为基于线性回归的，代表有CPR；基于非线性回归的，代表有DCNN、CFAN、TDA<br/></li>
+</ul>
+
+<p>对每个paper需要关注这几个点：  </p>
+
+<ul>
+<li>框架或模型：基于model的框架，cascaded（级联）框架，deep learning框架等等<br/></li>
+<li>优缺点：算法的speed、accuracy、是否利用geometric constraints，额外因素如occlusion、pose variations、lighting的影响<br/></li>
+<li>Feature是如何提取的<br/></li>
+</ul>
+
+<h3>Model Based</h3>
+
+<p>基于模型的论文都对人脸建立了一定的模型，比如：AAM模型、ASM模型、CLM模型。论文认为模型可以刻画出人脸图像，所以只需要求得特定人脸的模型参数，即可合成对应的人脸图像  </p>
+
+<p>基于模型的方法难点在于人脸模型的建立，而且对初始值很敏感，鲁棒性不高  </p>
+
+<p>这方面论文看了4篇，理解多，简略介绍  </p>
+
+<h3>Regression Based</h3>
+
+<p>该方法尝试学习 从deteced face region 到 facial landmarks的 mapping，有用线性和非线性regressor这两种  </p>
+
+<h4>1.线性回归</h4>
+
+<p>1.1 Cascaded Pose Regression（CVPR 10）  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/CPR.png" alt=""/>  </p>
+
+<p>级联回归模型在CVPR 10首次提出。它的核心思想是学习多个回归器，每个回归器预测当前当前形状和真是形状之间的偏差，然后将偏差合成到当前形状，形成新的预测形状，作为下一个回归器的输入，从而逐步逼近真实值。每个回归器均不一样，需要预先提取特征，作为回归器的输入，特征采用pose-indexed features（不是很理解特征提取这方面，懂的人可以告知本人，不胜感激），回归函数采用Random Fern Regressors  </p>
+
+<p>CPR有明显的缺点：其对初始化形状非常敏感，论文中使用K次不同的初始化形状来测试，并融合K次的测试结果作为最终预测形状。而且CPR不能有效解决occlusion问题  </p>
+
+<p>CPR出现后，线性回归模型大都基于级联模型，统一称作级联回归模型  </p>
+
+<p>1.2 Face Alignment by Expicit Shape Regression（CVPR 12）  </p>
+
+<p>论文设计了two-level boosted regression，使用correlation-based feature selection方案来提取shape indexed feature  </p>
+
+<p>Two-Level Boosted Regression具体是指：External-level和Internal-level  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/ESR.png" alt=""/>  </p>
+
+<p>其中最原始的回归器r基于random fern学习  </p>
+
+<p>1.3 Using Conditional Regression Forests（CVPR 12）  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/CRF.png" alt=""/>  </p>
+
+<p>论文不同于基于Regression Forest的方法，它的核心是Conditional Regression Forests。基于Regression Forest学习到facial image patches和location of feature points之间的mapping，而conditional regression forest则基于face image的某些属性预先进行分类，然后基于特定分类下的regression forest学习相应的mapping  </p>
+
+<p>1.4 Robust Face Landmark estimation under occlusion（ICCV 13）  </p>
+
+<p>又名：Robust Cascaded Pose Regression（RCPR），旨在解决CPR的遮挡问题，它在预测landmarks的同时预测特征点被遮挡的状态  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/RCPR.png" alt=""/>  </p>
+
+<p>同时RCPR对CPR的初始化问题也提出了trick，即智能重启：随机初始化一组形状，运行至级联模型的前10%回归器，统计形状预测的方差，如果方差小于一定阈值，说明这组初始化不错，则跑完剩下的90%的级联函数，得到最终的预测结果；如果方差大于一定阈值，则说明初始化不理想，选择重新初始化一组形状  </p>
+
+<p>1.5 DRMF（CVPR 13）  </p>
+
+<p>论文首先用Constrained Local Models（由之前某篇论文提出，与AAM、ASM类似）对人脸进行建模。之后DRMF利用SVR对回归器建模，并使用HOG特征（相对的有：SIFT特征）最为回归函数的输入，最终预测出CLM的人脸模型参数，而不是直接预测人脸的形状。由于模型很难刻画出完整的人脸变化形状，所以鲁棒性欠缺  </p>
+
+<p>1.6 Regressing Local Binary Features（CVPR 14）  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/LBF2.png" alt=""/>  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/LBF1.png" alt=""/>  </p>
+
+<p>LBF的亮点是二值化特征的提取，提取遵循论文所说的局部原则（locality priciple）：  </p>
+
+<ul>
+<li>高可判的纹理信息大多落在当前预测特征点（由级联模型的前一步得到）周围的局部区域<br/></li>
+<li>形状上下文信息（比如其他特征点的位置）和该特征点的局部纹理都提供了充足的信息<br/></li>
+</ul>
+
+<p>具体的来说，LBF基于random forest在局部区域学习局部稀疏二值化特征，因此计算开销大大减少  </p>
+
+<p>1.7 Face Alignment with an Ensemble of Regression Trees（CVPR 14）  </p>
+
+<p>论文基于回归树学习级联模型中的回归函数  </p>
+
+<h4>2.非线性回归：利用CNN进行非线性建模</h4>
+
+<p>2.1 CUHK的DCNN（CVPR 13）提出了3层框架  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/DCNN.png" alt="DCNN"/>  </p>
+
+<p>第一层使用整个face image作为input region（所以特征是global high-level feature），得到了initial predicitons，所以也被称为initialization stage。而且同时进行多个不同的key points的预测，所以能有效利用geometric constraints  </p>
+
+<p>之后的二三层对第一层的结果进行refine，每层的cnn以当前预测点为中心，提取local feature，预测出当前facial points和ground truth之间的偏差  </p>
+
+<p>可以看出DCNN采用coarse-to-fine的步骤，一步一步逼近ground truth，因此也属于cascaded（级联）模型  </p>
+
+<p>2.2 CFAN（ECCV 14）  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/CFAN.png" alt=""/>  </p>
+
+<p>与DCNN类似，也是coarse-to-fine的级联模型，第一个CNN预测出初始值，后面的CNN用于refine并逼近真实值。DCNN二三层是对第一层初始结果的refine，使用没有shape constraint的local features，因此容易得到局部最优值，对occlusion等影响因素的鲁棒性不理想。CFAN解决了这个问题，在同样的第一层处理之后，之后的每层使用point之间的约束信息（constraint），因此CFAN对第一步init值的敏感度要比DCNN低一些。另外，CFAN的每层的input image的分辨率也只逐渐变高的，第一步用于快速的预测初始值，低分辨率的图片对应于large search step，后面紧跟的refine则选择使用逐渐变高的分辨率进行  </p>
+
+<p>2.3 TDA（ACCV 14）  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/TDA.png" alt=""/>  </p>
+
+<p>TDA与DCNN、CFAN大体类似，其不同之处是先根据Face Image的Topic进行分类，然后使用每个分类下独立特有的CNN网络进行处理  </p>
+
+<p>这里的Topic分类是指通过k-means clustering对人脸图片进行分类，来决定人脸图片属于5中Topic中的哪一类，以决定之后使用某具体分类下的CNN网络  </p>
+
+<p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/TDA-Topic-Aware.png" alt=""/>  </p>
+
+<p>可以看出上面三种算法都将Image To Shape的mapping分解到级联框架的各个stage分别进行训练或处理，而且利用CNN可以免于特征的手动提取  </p>
+
+<p>PS：CFAN和TDA是由中科院张杰博士于同一年提出👍  </p>
+
+<h3>References</h3>
+
+<ul>
+<li><a href="http://blog.csdn.net/santo_wong_94/article/details/49330295" target="_blank">阅读Face Alignment by Explicit Shape Regression</a><br/></li>
+<li><a href="http://chuansong.me/n/290740451748" target="_blank">深度大讲堂：面部特征点定位概述及最近研究进展</a></li>
+</ul>
+
+            ]]>
+        </content>
+    </entry>
     
     <entry>
         <title><![CDATA[2016暑期总结]]></title>
@@ -58,9 +203,9 @@
 <p><strong>工作</strong>  </p>
 
 <ul>
+<li>Google Face Image爬虫。没有写这个爬虫前算是小看这个Project的难度了，这个Project最大的难点是GFW。Google被墙，要想让JVM强制走sock5，我采用的方案是Proxifier和Shadowsocks的结合，当然事情还没那么简单，GFW将Google.com的DNS污染了，所以使用Proxifier时候要选择让Proxy Server自主DNS解析，这边也不得不佩服GFW。还有一个小难点是Https，我使用Java的Httpclient，默认模拟Https（Http）请求时，Httpclient默认自动加上SSL层，节省了我的编程的时间。至于寻找图片下拉刷新的Ajax Url，通过Chrome调试窗口的Network（本来还想用WireShark，无奈不会用，也没那个必要）就可以找到了，这点不难。最终代码托管在Github上：<a href="https://github.com/su-kaiyao/googleFaceImageSpider" target="_blank">googleFaceImageSpider</a>。当然啦，我的爬虫是通用的，只要指定搜索Image的关键词就可以了，还可以指定爬多少张，也可以指定线程池大小和线程数量，以提高速度<br/></li>
 <li>回顾了上个月阅读的11篇论文<br/></li>
 <li>阅读3 ~ 4篇新论文（Face Alignment）<br/></li>
-<li>Google Face Image爬虫。没有写这个爬虫前算是小看这个Project的难度了，这个Project最大的难点是GFW。Google被墙，要想让JVM强制走sock5，我采用的方案是Proxifier和Shadowsocks的结合，当然事情还没那么简单，GFW将Google.com的DNS污染了，所以使用Proxifier时候要选择让Proxy Server自主DNS解析，这边也不得不佩服GFW。还有一个小难点是Https，我使用Java的Httpclient，默认模拟Https（Http）请求时，Httpclient默认自动加上SSL层，节省了我的编程的时间。至于寻找图片下拉刷新的Ajax Url，通过Chrome调试窗口的Network（本来还想用WireShark，无奈不会用，也没那个必要）就可以找到了，这点不难。最终代码托管在Github上：<a href="https://github.com/su-kaiyao/googleFaceImageSpider" target="_blank">googleFaceImageSpider</a>。当然啦，我的爬虫是通用的，只要指定搜索Image的关键词就可以了，还可以指定爬多少张，也可以指定线程池大小和线程数量，以提高速度<br/></li>
 </ul>
 
 <p><strong>学习</strong>  </p>
@@ -465,45 +610,6 @@
 </ul>
 
 <p>总共51本，下半年继续坚持</p>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[毕业了]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/bachelor-degree/"/>
-        <updated>2016-06-19T00:32:00Z</updated>
-        <published>2016-06-19T00:32:00Z</published>
-        <id>http://sukai.me/bachelor-degree/</id>
-        <content type="html">
-            <![CDATA[
-             <p>四年前，从高中踏入大学的大门，从未幻想过毕业时的我会是怎样的，至少应该不会成为家里的拖油瓶吧  </p>
-
-<p>这段时间的朋友圈充斥着毕业的快乐和感恩，所以本以为这份大学毕业总结会非常好些，没想到真的很伤脑筋。记得去年参加学长学姐的毕业生晚会时，心里还有几分激动。今年可能是因为我没有参加班级聚会和毕业生晚会，所以真的没什么情感和灵感去写这篇总结  </p>
-
-<p>现在越来越能体会到学生是一生最穷的时刻。但是倘若以后有钱有权了，时间就会变少了。生活的过程就是拿一味东西去换另一味东西。所以首先需要告诉自己：还有三年又要毕业啦！争取在这三年里抓住某些东西吧  </p>
-
-<p>大学里面是有挺后悔的事情的，大概这些事情的原因都是由于自己太盲目跟风了吧。而且我发现大学生麻木跟风的人不在少数，个人感觉自己大三之后才开始规划自己的路线。比如，进入某组织，成为某组织的一员；学生会的社团一职等等  </p>
-
-<p>也越来越能体会到什么是理想、什么是现实，理想和现实有差距，说和做是两码事。但是不管怎样，自己也一直在成熟，不过我这个瓜熟得很慢。但是至少某些关键节点的大事情还是under control的，算是给自己的安慰吧  </p>
-
-<p>从五月一号开始的未来好几年，至少硕士三年都要定居南京了。想想硕士期间住在学校，假期就可以乘着地铁回家，也是件蛮爽的事  </p>
-
-<p>夜深，有点困意，胡乱写写，算是糊“任务”吧  </p>
-
-<p>2016-06-19 00:32PM 于NanJing.  </p>
-
-<hr/>
-
-<p><strong>更新：2016-06-27 10:30PM</strong>  </p>
-
-<p>毕业典礼终于在6.26下午落下帷幕，大学四年嘻嘻哈哈的我差点因熊思东校长的毕业寄语落泪  </p>
-
-<p>27号，整理好行李，装上毕业证、学位证，告别了住了四年的东5号楼，告别了昔日的同学  </p>
-
-<p>回到南京，在地铁上向班级群发送了：“<strong>小伙伴们。祝你们前程似锦</strong>”，眼里忍不住噙满泪花</p>
 
             ]]>
         </content>

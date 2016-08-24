@@ -1,3 +1,4 @@
+http://sukai.me/face-alignment-summary/
 http://sukai.me/2016-summer/
 http://sukai.me/algorithms-order-statistic/
 http://sukai.me/you-just-seem-to-be-working-hard/
@@ -71,6 +72,7 @@ http://sukai.me/tag/Sql-Server/
 http://sukai.me/tag/GFW/
 http://sukai.me/tag/Tmux/
 http://sukai.me/tag/MAC/
+http://sukai.me/tag/Face-Alignment/
 http://sukai.me/tag/index.html
 http://sukai.me/archive/2016/
 http://sukai.me/archive/2015/
