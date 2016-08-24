@@ -173,7 +173,7 @@ Face Alignment Summary | SuKai
 
 <p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/CFAN.png" alt=""/>  </p>
 
-<p>与DCNN类似，也是coarse-to-fine的级联模型，第一个CNN预测出初始值，后面的CNN用于refine并逼近真实值。DCNN二三层是对第一层初始结果的refine，使用没有shape constraint的local features，因此容易得到局部最优值，对occlusion等影响因素的鲁棒性不理想。CFAN解决了这个问题，在同样的第一层处理之后，之后的每层使用point之间的约束信息（constraint），因此CFAN对第一步init值的敏感度要比DCNN低一些。另外，CFAN的每层的input image的分辨率也只逐渐变高的，第一步用于快速的预测初始值，低分辨率的图片对应于large search step，后面紧跟的refine则选择使用逐渐变高的分辨率进行  </p>
+<p>与DCNN类似，也是coarse-to-fine的级联模型，第一个CNN预测出初始值，后面的CNN用于refine从而逼近真实值。DCNN二三层是对第一层初始结果的refine，使用没有shape constraint的local features，因此容易得到局部最优值，对occlusion等影响因素的鲁棒性不理想。CFAN解决了这个问题，在同样的第一层处理之后，之后的每层使用point之间的约束信息（constraint），因此CFAN对第一步init值的敏感度要比DCNN低。另外，CFAN的每层的input image的分辨率逐渐提高，第一步用于快速的预测初始值，低分辨率的图片对应于large search step，后面紧跟的refine用作局部调整，则选择使用高分辨率的image作为input  </p>
 
 <p>2.3 TDA（ACCV 14）  </p>
 
@@ -181,11 +181,11 @@ Face Alignment Summary | SuKai
 
 <p>TDA与DCNN、CFAN大体类似，其不同之处是先根据Face Image的Topic进行分类，然后使用每个分类下独立特有的CNN网络进行处理  </p>
 
-<p>这里的Topic分类是指通过k-means clustering对人脸图片进行分类，来决定人脸图片属于5中Topic中的哪一类，以决定之后使用某具体分类下的CNN网络  </p>
+<p>这里的Topic分类是指通过k-means clustering对人脸图片进行分类，来决定人脸图片属于5中Topic中的哪一类，以决定之后使用某具体分类下的CNN网络。和级联回归模型中的Conditional Regression Forests（利用face image的head pose对face进行分类）想法类似  </p>
 
 <p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/TDA-Topic-Aware.png" alt=""/>  </p>
 
-<p>可以看出上面三种算法都将Image To Shape的mapping分解到级联框架的各个stage分别进行训练或处理，而且利用CNN可以免于特征的手动提取  </p>
+<p>可以看出上面三种级联深度模型都将Image To Shape的mapping分解到级联框架的各个stage分别进行训练或处理，而且基于CNN对非线性映射进行建模，也免于特征的手动提取  </p>
 
 <p>PS：CFAN和TDA是由中科院张杰博士于同一年提出👍  </p>
 
@@ -195,8 +195,10 @@ Face Alignment Summary | SuKai
 <li><a href="http://www.cnblogs.com/gavin-vision/p/4829016.html" target="_blank">Cascade Pose Regression</a><br/></li>
 <li><a href="http://blog.csdn.net/santo_wong_94/article/details/49330295" target="_blank">阅读Face Alignment by Explicit Shape Regression</a><br/></li>
 <li><a href="http://blog.luoyetx.com/2015/08/face-alignment-at-3000fps/" target="_blank">Face Alignment at 3000 FPS via Regressing Local Binary Features</a><br/></li>
-<li><a href="http://chuansong.me/n/290740451748" target="_blank">深度大讲堂：面部特征点定位概述及最近研究进展</a></li>
+<li><a href="http://chuansong.me/n/290740451748" target="_blank">深度大讲堂：面部特征点定位概述及最近研究进展</a><br/></li>
 </ul>
+
+<p>历时1个月多一点的时间，总共读了约15篇paper。大多数paper都在8月初就完成了阅读，拖到现在才整理也是因为自己懒惰。作为CV和ML新手，以及阅读相隔时间较长，文章不免会有许多理解上的错误🤖</p>
 
   </section>
   
