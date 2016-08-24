@@ -141,9 +141,7 @@ Face Alignment Summary | SuKai
 
 <p>论文首先用Constrained Local Models（CLM模型）对人脸进行建模。之后DRMF利用SVR对回归器建模，并使用HOG特征（相对的有：SIFT特征）最为回归函数的输入，最终预测出CLM的人脸模型参数，而不是直接预测人脸的形状。由于模型很难刻画出完整的人脸变化形状，所以鲁棒性欠缺  </p>
 
-<p>1.6 Supervised Descent Method  </p>
-
-<p>1.7 Regressing Local Binary Features（CVPR 14）  </p>
+<p>1.6 Regressing Local Binary Features（CVPR 14）  </p>
 
 <p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/LBF2.png" alt=""/>  </p>
 
@@ -152,6 +150,14 @@ Face Alignment Summary | SuKai
 <p>如图，LBF使用了Random Forest作预测，但LBF并没有直接采用随机树中叶子节点存储的形变量作为最终预测结果，而是将输出组成二值化特征（LBF），再利用这个LBF来作最终的形变预测  </p>
 
 <p>总的来说，LBF方法第一步为每个landmark独立建立随机森林，形成各自的Local Binary Feature；然后连接所有的LBF作全局线性回归（这样可以有效利用关键点间的约束信息）得到最终形变量。其中第一步基于random forest学习得到Feature Mapping需要使用到shape indexed feature，也因为LBF非常稀疏，所以计算速度很快  </p>
+
+<p>1.7 Supervised Descent Method  </p>
+
+<p>SDM将Face Alignment看作非线性最小二乘问题。通常求解非线性最小二乘问题可以通过二阶的牛顿法解决，然而在computer vision任务中，某些函数不一定可微，而且Hessian矩阵位维数很大且不一定正定，所以论文提出了SDM算法来最小化非线性最小二乘函数，即以监督学习方式求解梯度方向  </p>
+
+<p>在训练阶段，SDM学习每个特征点的非线性最小二乘函数的梯度方向，组成梯度序列。之后测试阶段，就可以直接使用学习好的梯度方向来最小化非线性最小二乘函数，从而避免直接计算Jacobian或Hessian矩阵  </p>
+
+<p>通过论文可以发现，因此需要学习一组梯度序列，该方法属于级联回归模型  </p>
 
 <p>1.8 Face Alignment with an Ensemble of Regression Trees（CVPR 14）  </p>
 
