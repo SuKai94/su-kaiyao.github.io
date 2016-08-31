@@ -119,7 +119,7 @@ Face Alignment Summary | SuKai
 
 <p><img src="http://7xl2fd.com1.z0.glb.clouddn.com/ESR.png" alt=""/>  </p>
 
-<p>而且，论文注意到形状约束的重要性。它认为只有那些显著的特征点（眼睛中心、嘴巴边缘）可以由image appearance可靠地得到，其余不显著的Landmarks需要使用特征点间的shape constraint进行约束。先前的工作如ASM、AAM利用参数化的形状模型（PCA）来强制这种约束，而本文则抛弃不灵活的固定模型，使用boosted regression，使得shape constraint adaptively enforced from coarse to fine，论文的结论是最终的shape是初始形状和所有训练形状的线性组合，只要初始形状满足形状约束，得到的regressed shapa在由所有训练的shape构成的线性子空间中也满足形状约束（具体证明见论文），所以和之间预先固定的PCA shape model相比，论文非参数化的形状约束adaptively determined  </p>
+<p>而且，论文注意到形状约束的重要性。它认为只有那些显著的特征点（眼睛中心、嘴巴边缘）可以由image appearance可靠地得到，其余不显著的Landmarks需要使用特征点间的shape constraint进行约束。先前的工作如ASM、AAM利用参数化的形状模型（PCA）来强制这种约束，而本文则抛弃不灵活的固定模型，使用boosted regression，使得shape constraint adaptively enforced from coarse to fine，论文的结论是最终的shape是初始形状和所有训练形状的线性组合，只要初始形状满足形状约束，得到的regressed shape在由所有训练的shape构成的线性子空间中也满足形状约束（具体证明见论文），所以和之间预先固定的PCA shape model相比，论文非参数化的形状约束adaptively determined  </p>
 
 <p>1.3 Using Conditional Regression Forests（CVPR 12）  </p>
 
