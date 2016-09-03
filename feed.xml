@@ -223,6 +223,7 @@
 <li>Google Face Image爬虫。没有写这个爬虫前算是小看这个Project的难度了，这个Project最大的难点是GFW。Google被墙，要想让JVM强制走sock5，我采用的方案是Proxifier和Shadowsocks的结合，当然事情还没那么简单，GFW将Google.com的DNS污染了，所以使用Proxifier时候要选择让Proxy Server自主DNS解析，这边也不得不佩服GFW。还有一个小难点是Https，我使用Java的Httpclient，默认模拟Https（Http）请求时，Httpclient默认自动加上SSL层，节省了我的编程的时间。至于寻找图片下拉刷新的Ajax Url，通过Chrome调试窗口的Network（本来还想用WireShark，无奈不会用，也没那个必要）就可以找到了，这点不难。最终代码托管在Github上：<a href="https://github.com/su-kaiyao/googleFaceImageSpider" target="_blank">googleFaceImageSpider</a>。当然啦，我的爬虫是通用的，只要指定搜索Image的关键词就可以了，还可以指定爬多少张，也可以指定线程池大小和线程数量，以提高速度<br/></li>
 <li>回顾了上个月阅读的11篇论文<br/></li>
 <li>阅读3 ~ 4篇新论文（Face Alignment）<br/></li>
+<li>写了一篇<a href="http://sukai.me/face-alignment-summary/" target="_blank">Face Alignment综述</a>，竟然出现在了爱可可老师的<a href="http://weibo.com/1402400261/E5bJ0AKtQ?refer_flag=1001030103_&type=comment#_rnd1472891861823" target="_blank">微博</a><br/></li>
 </ul>
 
 <p><strong>学习</strong>  </p>
@@ -260,8 +261,6 @@
 <li>一首“歌”真的能激活头脑中的回忆神经，夜晚在工作台放着大四在宿舍经常放的歌曲，能回忆很多大四宿舍的生活场景，能闻到宿舍熟悉的味道<br/></li>
 </ul>
 
-<p>8月待续  </p>
-
 <h3>反馈</h3>
 
 <p><strong>信噪比</strong>  </p>
@@ -289,9 +288,7 @@
 
 <p>“纸上得来终觉浅，绝知此事要躬行”。对着书本，对着Tutorial看，永远只敲一些Demo程序，就敢宣称自己懂了，已经知晓了这门技术和语言，仿佛走路都轻快了许多。现在觉得这种想法令人咋舌。一项工程的代码由40%的正常逻辑程序，还要外加60%的异常处理呢！往往这些异常处理才是最膈应你的地方，也是最能令你思维活跃，得到锻炼的下酒菜  </p>
 
-<p>所以，学会放低姿态，安安心心做一名合格的程序狗，过五关斩六将，刻意并努力着充实自己的生活，哪怕酸甜苦辣，也绝非易事  </p>
-
-<p>未完待续..</p>
+<p>所以，学会放低姿态，安安心心做一名合格的程序狗，过五关斩六将，刻意并努力着充实自己的生活，哪怕酸甜苦辣，也绝非易事</p>
 
             ]]>
         </content>
