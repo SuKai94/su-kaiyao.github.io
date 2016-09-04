@@ -5,7 +5,8 @@
 }
 
 body {
-  font-family: "Avenir Next",Helvetica,Arial,"Lantinghei SC","Microsoft YaHei",sans-serif;
+  /*font-family: "Avenir Next", -apple-system, Helvetica,Arial,"Lantinghei SC","Microsoft YaHei",sans-serif;*/
+  font-family: "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   /*background: #FFF url("bg.jpg") repeat fixed 0% 0%;#F5F8FA*/
   background: #E2E2E2 none repeat scroll 0% 0%;
 }
@@ -136,7 +137,7 @@ section, article {
 }
 
 .blog-title {
-  font-family: "Avenir Next",Helvetica,Arial,"Lantinghei SC","Microsoft YaHei",sans-serif;
+  font-family: "Avenir Next",-apple-system,Helvetica,Arial,"Lantinghei SC","Microsoft YaHei",sans-serif;
   font-size: 25px;
   font-weight: bold;
   text-align: center;
