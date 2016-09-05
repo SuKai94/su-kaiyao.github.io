@@ -22,6 +22,7 @@ http://sukai.me/hibernate-caches/
 http://sukai.me/My-Vim/
 http://sukai.me/tmux/
 http://sukai.me/java-NIO初探/
+http://sukai.me/2016-09-review/
 http://sukai.me/about-unit-test/
 http://sukai.me/github-gh-pages/
 http://sukai.me/sqlserver-store-procedure/
@@ -33,6 +34,7 @@ http://sukai.me/Board/
 http://sukai.me/deeplearning-wiki/
 http://sukai.me/face-alignment-wiki/
 http://sukai.me/friend/
+http://sukai.me/fucking-monthly/
 http://sukai.me/machine-learning-wiki/
 http://sukai.me/MyTrans/
 http://sukai.me/program-wiki/
@@ -48,6 +50,7 @@ http://sukai.me/tag/JSP/
 http://sukai.me/tag/Github/
 http://sukai.me/tag/Crawler/
 http://sukai.me/tag/Linux/
+http://sukai.me/tag//
 http://sukai.me/tag/Java/
 http://sukai.me/tag/Alfred/
 http://sukai.me/tag/WeiXin/
