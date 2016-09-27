@@ -63,7 +63,17 @@
 <li>读了一篇“Joint Cascade Face Detection and Alignment”<br/></li>
 </ul>
 
-<h3>Face Alignment</h3>
+<h3>Face Alignment相关开源代码</h3>
+
+<p>1.<a href="https://github.com/seetaface/SeetaFaceEngine" target="_blank">SeetaFace Engine</a>  </p>
+
+<p>SeetaFace Engine是最近才开源的C++ Face Recognition Engine，共有三个模块：Face Detection、Face Alignment、之后就是Face Identification。自己一直主打Unix + Python/Java，所以期初利用Visual Studio 2015编译运行SeetaFace Engine遇到一些阻碍。在我顺利编译并简单测试过前两个模块后，就开始着重阅读了Face Alignment快的代码。首先强调一下，SeetaFace Engine只公开了测试代码，并没有公开整套的训练代码，所有模型参数均保存在model文件夹中的bin文件内。  </p>
+
+<p>第一个detect模块读取Test Image灰度级别的像素信息，检测出人脸矩形框（矩形框的左上角点的坐标，以及矩形框的width、height），之后作为第二个alignment模块的输入。alignment模块首先读取bin文件中训练好的模型参数（deep learning的层数，每层的神经元个数，以及两层之间的weights和b），之后对人脸矩形框进行extend，然后利用<a href="https://en.wikipedia.org/wiki/Bilinear_interpolation" target="_blank">Bilinear interpolation</a>对人脸图像resize（<a href="http://stackoverflow.com/questions/26142288/resize-an-image-with-bilinear-interpolation-without-imresize" target="_blank">Resize an image with bilinear interpolation without imresize</a>），最后使用mean_shape的五点作为Initial Landmark  </p>
+
+<p>之后进入级联模型的First Stage，首先需要作的就是提取SIFT特征。在提取sift之前，首先需要提取以每个Landmark为中心的32*32的区域，作为SIFT特征提取器的输入，之后得到128维的SIFT。不过真的很难过，虽然我看懂了sift.cpp的代码，但是我还真不知道SIFT的特征提取原理，虽然尝试去阅读了99年的SIFT论文，回头再阅读sift.cpp的代码，还是有些地方云里雾里。总的来说SIFT的步骤就是：Key Point Localization -&gt; Orientation Assignment -&gt; Key Point Descriptor（128维）。最终5个Landmark得到5*128维特征。将5*128维特征作为Deep Learning的Input Layer，经过两层的weights、b的加权求和，最终得到形变量（网络的最后一层利用了Sigmoid层进行[0, 1]的约束？？），与Initial Landmark相加，作为级联模型Second Stage的输入，过程和First Stage一样  </p>
+
+<p>总的来说，虽然没有公布训练代码，但是从测试代码中还是学习到了一定的知识，尤其是整套流程，还有一些优秀的可重复使用的代码片段，最重要的是激活了我学习c++的兴趣  </p>
 
 <h3>学习</h3>
 
