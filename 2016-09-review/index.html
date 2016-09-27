@@ -67,7 +67,7 @@
 
 <p>1.<a href="https://github.com/seetaface/SeetaFaceEngine" target="_blank">SeetaFace Engine</a>  </p>
 
-<p>SeetaFace Engine是最近才开源的C++ Face Recognition Engine，共有三个模块：Face Detection、Face Alignment、之后就是Face Identification。自己一直主打Unix + Python/Java，所以期初利用Visual Studio 2015编译运行SeetaFace Engine遇到一些阻碍。在我顺利编译并简单测试过前两个模块后，就开始着重阅读了Face Alignment快的代码。首先强调一下，SeetaFace Engine只公开了测试代码，并没有公开整套的训练代码，所有模型参数均保存在model文件夹中的bin文件内。  </p>
+<p>SeetaFace Engine是最近才开源的C++ Face Recognition Engine，共有三个模块：Face Detection、Face Alignment、之后就是Face Identification。自己一直主打Unix + Python/Java，所以起初利用Visual Studio 2015编译运行SeetaFace Engine遇到一些阻碍。在我顺利编译并简单测试过前两个模块后，就开始着重阅读了Face Alignment快的代码。首先强调一下，SeetaFace Engine只公开了测试代码，并没有公开整套的训练代码，所有模型参数均保存在model文件夹中的bin文件内。  </p>
 
 <p>第一个detect模块读取Test Image灰度级别的像素信息，检测出人脸矩形框（矩形框的左上角点的坐标，以及矩形框的width、height），之后作为第二个alignment模块的输入。alignment模块首先读取bin文件中训练好的模型参数（deep learning的层数，每层的神经元个数，以及两层之间的weights和b），之后对人脸矩形框进行extend，然后利用<a href="https://en.wikipedia.org/wiki/Bilinear_interpolation" target="_blank">Bilinear interpolation</a>对人脸图像resize（<a href="http://stackoverflow.com/questions/26142288/resize-an-image-with-bilinear-interpolation-without-imresize" target="_blank">Resize an image with bilinear interpolation without imresize</a>），最后使用mean_shape的五点作为Initial Landmark  </p>
 
