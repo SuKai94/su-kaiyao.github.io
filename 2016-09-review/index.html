@@ -59,8 +59,33 @@
 <li>实验室的网站挂掉了，开始以为是apache的问题。在我实在没有办法之后，求救于<a href="http://iat.net.cn" target="_balnk">iat</a>，不过最终算是浪费了iat大概4 ~ 5h的时间，因为最终的杂症是学校网络中心的网关问题，简直是坑爹<br/></li>
 <li>进入一个新实验室，开头两三天体会最深的就是工作环境的适应。Fucking the Environment：一，实验室分配的PC是win 7系统（还是毕业学长们用剩下的😭），自己从大二开始换ubuntu，后来换了Mac，以至于在win下ssh到server都不会，而且win下安装programming language似乎都很蛋疼，不是一条简单的命令能解决的事情。在我看来，本可以一条命令解决的问题，实际却要打开浏览器，下载安装包，再一步一步点击Next是一个罪大恶极的事情。二、因为做deep baseline不得不用到GPU，所以ssh到实验室GPU server编译安装caffe（实验室之前使用的是MatConvNet）。各种依赖和环境变量就像一个马蜂窝一样砸到我的头上，蛰得我满头包。这些环境的搭建是不可避免的臭狗屎，不做就会熏你一整天，拿起纸细心擦拭掉心情就会舒畅很多<br/></li>
 <li>caffe的依赖之多以及版本的兼容性之差，导致其安装成为了一件Hard Task。我google出来的安装教程，竟然看到不少于5个人为了caffe重装了系统。我的安装过程也是次不愉快的旅程（期间还想过用Docker是不是会好一些），花了大概两个半天时间，就在我濒临边缘准备放弃caffe框架使用时，吃完晚饭回来竟然ok了，顺利train了mnist examples<br/></li>
-<li>读了“Joint Cascade Face Detection and Alignment”等等论文<br/></li>
 </ul>
+
+<h3>论文阅读</h3>
+
+<ol>
+<li>Facial Landmark Detection by Deep Multi-task Learning<br/></li>
+</ol>
+
+<p>不同于传统的Multi-Task Learning，传统的多个任务在目标函数中的“地位”等同，学习的任务是同时最小化所有task loss。本篇论文则强调模型任务分为main task和auxiliary task。main task是指facial landmark detection（回归问题），以及一系列的auxiliary task，e.g head pose estimation、face attribute inferance（smile、wear glasses），用于辅助main task的学习，每个auxiliary task在target loss中的weight也不一样  </p>
+
+<p>特征的话就是用Deep CNN提取得。另外，因为mian task和auxiliary task中各自task的learning difficulty和converage rate是不一样的，所以论文提出了一种task-wise stopping，某一个task的优化达到某个阈值，即可停止对该任务的学习  </p>
+
+<p>2.Joint Detection and Alignment using Multi Task CNN  </p>
+
+<p>论文注意到Face Detection和Alignment之间的inherent correlation，直接Jonitly Detect和Alignment  </p>
+
+<p>首先通过不同的scale对image进行resize，形成Image Pyramid，作为下面三个stage的Input  </p>
+
+<p>First stage，利用Fully Convolution Network得到许多个Facial windows和Bounding Box Regression，之后通过non-maximum suppression对highly overlapped candidates进行merge  </p>
+
+<p>Second stage，通过另一个cnn过滤掉false candidates，再做一次NMS。Third stage，identify face regions，and output five landmarks  </p>
+
+<p>3.Fully Convolutional Networks for Semantic Segmentation  </p>
+
+<p>4.Joint Cascade Face Detection and Alignment  </p>
+
+<p>5.Object Recognition from Local Scale-Invariant Features  </p>
 
 <h3>Face Alignment相关开源代码</h3>
 
