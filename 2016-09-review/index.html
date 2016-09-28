@@ -57,15 +57,25 @@
 
 <ul>
 <li>实验室的网站挂掉了，开始以为是apache的问题。在我实在没有办法之后，求救于<a href="http://iat.net.cn" target="_balnk">iat</a>，不过最终算是浪费了iat大概4 ~ 5h的时间，因为最终的杂症是学校网络中心的网关问题，简直是坑爹<br/></li>
-<li>进入一个新实验室，开头两三天体会最深的就是<strong>工作环境的适应</strong>。Fucking the Environment：一，实验室分配的PC是win 7系统（还是毕业学长们用剩下的😭），自己从大二开始换ubuntu，后来换了Mac，以至于在win下ssh到server都不会，而且win下安装programming language似乎都很蛋疼，不是一条简单的命令能解决的事情。在我看来，本可以一条命令解决的问题，实际却要打开浏览器，下载安装包，再一步一步点击Next是一个罪大恶极的事情。二、因为做deep baseline不得不用到GPU，所以ssh到实验室GPU server编译安装caffe（实验室之前使用的是MatConvNet）。各种依赖和环境变量就像一个马蜂窝一样砸到我的头上，蛰得我满头包。这些环境的搭建是不可避免的臭狗屎，不做就会熏你一整天，拿起纸细心擦拭掉心情就会舒畅很多<br/></li>
+<li>进入一个新实验室，开头两三天体会最深的就是工作环境的适应。Fucking the Environment：一，实验室分配的PC是win 7系统（还是毕业学长们用剩下的😭），自己从大二开始换ubuntu，后来换了Mac，以至于在win下ssh到server都不会，而且win下安装programming language似乎都很蛋疼，不是一条简单的命令能解决的事情。在我看来，本可以一条命令解决的问题，实际却要打开浏览器，下载安装包，再一步一步点击Next是一个罪大恶极的事情。二、因为做deep baseline不得不用到GPU，所以ssh到实验室GPU server编译安装caffe（实验室之前使用的是MatConvNet）。各种依赖和环境变量就像一个马蜂窝一样砸到我的头上，蛰得我满头包。这些环境的搭建是不可避免的臭狗屎，不做就会熏你一整天，拿起纸细心擦拭掉心情就会舒畅很多<br/></li>
 <li>caffe的依赖之多以及版本的兼容性之差，导致其安装成为了一件Hard Task。我google出来的安装教程，竟然看到不少于5个人为了caffe重装了系统。我的安装过程也是次不愉快的旅程（期间还想过用Docker是不是会好一些），花了大概两个半天时间，就在我濒临边缘准备放弃caffe框架使用时，吃完晚饭回来竟然ok了，顺利train了mnist examples<br/></li>
-<li>利用caffe和开源<a href="https://github.com/luoyetx/deep-landmark" target="_blank">deep-landmark</a>对<a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN_FacePoint.htm" target="_blank">CNN_Face_Five_Point_Detect</a>进行了实验，目前暂时不清楚代码中网络结构各layer参数值为何那样设置。另外简单地跑了<a href="http://github.com/jwyang/face-alignment" target="_blank">Face Alignment 3000FPS LBF Matlab</a>实验。<br/></li>
+<li>利用caffe和开源对进行了实验，目前暂时不清楚代码中网络结构各layer参数值为何那样设置。另外简单地跑了<br/></li>
 <li>读了一篇“Joint Cascade Face Detection and Alignment”<br/></li>
 </ul>
 
 <h3>Face Alignment相关开源代码</h3>
 
-<p>1.<a href="https://github.com/seetaface/SeetaFaceEngine" target="_blank">SeetaFace Engine</a>  </p>
+<p>1.<a href="https://github.com/luoyetx/deep-landmark" target="_blank">deep-landmark</a>  </p>
+
+<p>deep-landmark是对<a href="http://mmlab.ie.cuhk.edu.hk/archive/CNN_FacePoint.htm" target="_blank">CNN_Face_Five_Point_Detect</a>的复现，采用了caffe的python interface  </p>
+
+<p>依据论文，deep-lanmark定义了13个CNN，分别用于对Face不同部位landmark的回归。For Example：对于Level 1的Deep CNN F1，首先利用脚本生成此CNN的1_F_train.prototxt、1_F_solver.prototxt、1_F_deploy.prototxt。然后生成level 1层所需要的训练数据，以h5格式保存。最后利用caffe训练  </p>
+
+<p>其余层level 2、level 3类似，参考论文Figure 2即可  </p>
+
+<p>deep-leanmark代码写得非常漂亮，里面诸多代码片段都值得重复使用或借鉴  </p>
+
+<p>2.<a href="https://github.com/seetaface/SeetaFaceEngine" target="_blank">SeetaFace Engine</a>  </p>
 
 <p>SeetaFace Engine是最近才开源的C++ Face Recognition Engine，共有三个模块：Face Detection、Face Alignment、之后就是Face Identification。自己一直主打Unix + Python/Java，所以起初利用Visual Studio 2015编译运行SeetaFace Engine遇到一些阻碍。在我顺利编译并简单测试过前两个模块后，就开始着重阅读了Face Alignment的代码。首先强调一下，SeetaFace Engine只公开了测试代码，并没有公开整套的训练代码，所有模型参数均保存在model文件夹中的bin文件内。  </p>
 
@@ -74,6 +84,10 @@
 <p>之后进入级联模型的First Stage，首先需要作的就是提取SIFT特征。在提取sift之前，首先利用<a href="https://en.wikipedia.org/wiki/Bilinear_interpolation" target="_blank">Bilinear interpolation</a>对人脸图像resize（<a href="http://stackoverflow.com/questions/26142288/resize-an-image-with-bilinear-interpolation-without-imresize" target="_blank">Resize an image with bilinear interpolation without imresize</a>），最后使用mean_shape的五点作为Initial Landmark，即First Stage的Input。然后提取以Landmark为中心的32*32的区域，作为SIFT特征提取器的输入，之后得到128维的SIFT。不过真的很难过，虽然我看懂了sift.cpp的代码，但是我还真不知道SIFT的特征提取原理，虽然尝试去阅读了99年的SIFT论文，回头再阅读sift.cpp的代码，还是有些地方云里雾里。总的来说SIFT的步骤就是：Key Point Localization -&gt; Orientation Assignment -&gt; Key Point Descriptor（128维）。最终5个Landmark得到5*128维特征。将5*128维特征作为Deep Learning的Input Layer，经过两层的weights、b的加权求和，最终得到形变量（网络结构除最后一层外的每一层都利用了Sigmoid进行了[0, 1]的约束，why？），与Initial Landmark相加，作为级联模型Second Stage的输入，过程和First Stage一样，不同之处在于Second Stage的Resize结果更大，也就是图片输入更大，分辨率越高  </p>
 
 <p>总的来说，虽然没有公布训练代码，但是从测试代码中还是学习到了一定的知识，尤其是整套流程，还有一些优秀的可重复使用的代码片段，最重要的是激活了我学习c++的兴趣  </p>
+
+<p>3.<a href="https://github.com/kpzhang93/MTCNN_face_detection_alignment" target="_blank">MTCNN_face_detection_alignment</a>  </p>
+
+<p>4.<a href="http://github.com/jwyang/face-alignment" target="_blank">face alignment 3000fps LBF.Matlab</a>  </p>
 
 <h3>学习</h3>
 
