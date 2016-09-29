@@ -79,9 +79,19 @@
 
 <p>Second stage，通过另一个cnn过滤掉false candidates，再做一次NMS。Third stage，identify face regions，and output five landmarks  </p>
 
-<p>3.Fully Convolutional Networks for Semantic Segmentation  </p>
+<p>3.Joint Cascade Face Detection and Alignment  </p>
 
-<p>4.Joint Cascade Face Detection and Alignment  </p>
+<p>Sun Jian组的另一篇文章。论文通过三组实验：  </p>
+
+<ul>
+<li>对未aligned的face images set提取SIFT，进行face detect experiments<br/></li>
+<li>使用a fixed mean face shape，进行face detect experiments<br/></li>
+<li>使用LBF对其image face，进行face detect experiments<br/></li>
+</ul>
+
+<p>结果发现，第三组实验效果远远要好，即face alignment helps face detetction，所以提出了learn two tasks jointly in the same cascade framwork。具体的是使用Hough Forest来learn a mixed classification/regression decision trees，通过概率p来决定minmize binary entropy for classification or variance of the facial point increments for regression。当然，参数p在earlier stage应该larger，后面逐渐smaller  </p>
+
+<p>4.Fully Convolutional Networks for Semantic Segmentation  </p>
 
 <p>5.Object Recognition from Local Scale-Invariant Features  </p>
 
@@ -131,7 +141,7 @@
 <h3>生活</h3>
 
 <ul>
-<li>Banwangong买了ipv6 vps，速度要比之前Host1plus的vps快一些。而且由于ipv6的缘故，Youtube观看都是秒级别的加载速度，用户体验极佳~</li>
+<li>Banwangong买了ipv6 vps，速度要比之前Host1plus的vps快一些。而且由于ipv6的缘故，Youtube观看都是秒级别的加载速度，用户体验极佳~s</li>
 </ul>
 
   </section>
