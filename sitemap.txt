@@ -28,6 +28,7 @@ http://sukai.me/sqlserver-store-procedure/
 http://sukai.me/renren-crawler/
 http://sukai.me/tiandifei-control-apm/
 http://sukai.me/2016-09-review/
+http://sukai.me/2016-10-review/
 http://sukai.me/AboutMe/
 http://sukai.me/algorithms-wiki/
 http://sukai.me/Board/
