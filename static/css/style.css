@@ -167,7 +167,7 @@ section, article {
   padding: 0.5em;
   background: #002b36;
   color: #839496;*/
-  font-family: monaco, consolas;
+  font-family: consolas;
   background: #333333;
   color: #EEE;
   border: 1px solid #cccccc;
@@ -412,7 +412,7 @@ post.html
 
 .highlight pre {
   border: 1px solid #cccccc;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 19px;
   overflow: auto;
   padding: 6px 10px;
@@ -473,7 +473,7 @@ post.html
 .highlight .cm,
 .highlight .c1 {
   color: #998;
-  font-style: italic;
+  font-style: sans-serif;
 }
 
 .highlight .cp,

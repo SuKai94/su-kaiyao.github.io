@@ -3,8 +3,171 @@
     <title>sukai's blog</title>
     <link href="" rel="self" />
     <link href="http://sukai.me/" />
-    <updated>2016-08-24T21:00:00Z</updated>
+    <updated>2016-10-31T18:00:00Z</updated>
     <id>http://sukai.me/</id>
+    
+    <entry>
+        <title><![CDATA[Caffe Blob源码阅读]]></title>
+        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
+        <link href="http://sukai.me/caffe-blob-source-code/"/>
+        <updated>2016-10-31T18:00:00Z</updated>
+        <published>2016-10-31T18:00:00Z</published>
+        <id>http://sukai.me/caffe-blob-source-code/</id>
+        <content type="html">
+            <![CDATA[
+             <p>本文仅用于整理阅读Caffe源码过程中的记录，所写内容只确保本人看懂  </p>
+
+<p>Blob是Caffe中处理和传递实际数据的数据封装包，并且在CPU于GPU之间具有同步处理能力  </p>
+
+<p>Blob是连续存储的N维数组，最多可以表示 <strong>const int kMaxBlobAxes = 32;</strong> 32维的数组  </p>
+
+<h4>Blob类成员</h4>
+<div class="highlight"><pre><span class="nl">protected:</span>  
+  <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">SyncedMemory</span><span class="o">&gt;</span> <span class="n">data_</span><span class="p">;</span>  
+  <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">SyncedMemory</span><span class="o">&gt;</span> <span class="n">diff_</span><span class="p">;</span>  
+  <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">SyncedMemory</span><span class="o">&gt;</span> <span class="n">shape_data_</span><span class="p">;</span> <span class="c1">// 每一维数据的大小  </span>
+  <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">shape_</span><span class="p">;</span>  
+  <span class="kt">int</span> <span class="n">count_</span><span class="p">;</span> <span class="c1">// 当前容量  </span>
+  <span class="kt">int</span> <span class="n">capacity_</span><span class="p">;</span> <span class="c1">// 能承受的容量</span>
+</pre></div>
+
+<p>shape<em>data</em> 和 shape_记录了每一维度数据的大小  </p>
+
+<h4>Blob类相关操作</h4>
+
+<p><strong>1.offset</strong>用于给定坐标，获取Blob相应坐标数据。例如，对于批量图像数据来说，blob常规的维数为图像数量 N  * 通道数 K * 图像高度 H * 图像宽度 W。Blob按行为主存储。所以4维blob，坐标为（n，k，h，w）的值在blob中的物理位置为（（n * K + k）* H + h）* W + w  </p>
+<div class="highlight"><pre><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">offset</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>  
+      <span class="k">const</span> <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>  
+    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">num</span><span class="p">());</span>  
+    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">channels</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">channels</span><span class="p">());</span>  
+    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">height</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">height</span><span class="p">());</span>  
+    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">width</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">width</span><span class="p">());</span>  
+    <span class="k">return</span> <span class="p">((</span><span class="n">n</span> <span class="o">*</span> <span class="n">channels</span><span class="p">()</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">height</span><span class="p">()</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="n">width</span><span class="p">()</span> <span class="o">+</span> <span class="n">w</span><span class="p">;</span>  
+  <span class="p">}</span>  
+
+  <span class="kr">inline</span> <span class="kt">int</span> <span class="n">offset</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">indices</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">num_axes</span><span class="p">());</span>  
+    <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_axes</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>  
+      <span class="n">offset</span> <span class="o">*=</span> <span class="n">shape</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>  
+      <span class="k">if</span> <span class="p">(</span><span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>  
+        <span class="n">CHECK_LT</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">shape</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>  
+        <span class="n">offset</span> <span class="o">+=</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>  
+      <span class="p">}</span>  
+    <span class="p">}</span>  
+    <span class="k">return</span> <span class="n">offset</span><span class="p">;</span>  
+  <span class="p">}</span>
+</pre></div>
+
+<p><strong>2.Reshape</strong>用于修改Blob的大小（尺寸）  </p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="nf">Reshape</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span>  
+      <span class="k">const</span> <span class="kt">int</span> <span class="n">width</span><span class="p">);</span>  
+<span class="kt">void</span> <span class="nf">Reshape</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">shape</span><span class="p">);</span>  
+<span class="kt">void</span> <span class="nf">Reshape</span><span class="p">(</span><span class="k">const</span> <span class="n">BlobShape</span><span class="o">&amp;</span> <span class="n">shape</span><span class="p">);</span>  
+<span class="kt">void</span> <span class="nf">ReshapeLike</span><span class="p">(</span><span class="k">const</span> <span class="n">Blob</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">);</span>
+</pre></div>
+
+<p>所有重载Reshape函数最终都调用 void Blob<Dtype>::Reshape(const vector<int>&amp; shape)。特别地，当内存空间不足时(count_ &gt; capacity_)，会为Blob重新分配内存  </p>
+<div class="highlight"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Dtype</span><span class="o">&gt;</span>  
+<span class="kt">void</span> <span class="n">Blob</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;::</span><span class="n">Reshape</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">shape</span><span class="p">)</span> <span class="p">{</span>  
+  <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">shape</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">kMaxBlobAxes</span><span class="p">);</span>  
+  <span class="n">count_</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  
+  <span class="n">shape_</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">shape</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>  
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">shape_data_</span> <span class="o">||</span> <span class="n">shape_data_</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">shape</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span> <span class="p">{</span>  
+    <span class="n">shape_data_</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="k">new</span> <span class="n">SyncedMemory</span><span class="p">(</span><span class="n">shape</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)));</span>  
+  <span class="p">}</span>  
+  <span class="kt">int</span><span class="o">*</span> <span class="n">shape_data</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">shape_data_</span><span class="o">-&gt;</span><span class="n">mutable_cpu_data</span><span class="p">());</span>  
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">shape</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>  
+    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>  
+    <span class="k">if</span> <span class="p">(</span><span class="n">count_</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>  
+      <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">INT_MAX</span> <span class="o">/</span> <span class="n">count_</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;blob size exceeds INT_MAX&quot;</span><span class="p">;</span>  
+    <span class="p">}</span>  
+    <span class="n">count_</span> <span class="o">*=</span> <span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>  
+    <span class="n">shape_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>  
+    <span class="n">shape_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>  
+  <span class="p">}</span>  
+  <span class="k">if</span> <span class="p">(</span><span class="n">count_</span> <span class="o">&gt;</span> <span class="n">capacity_</span><span class="p">)</span> <span class="p">{</span>  
+    <span class="n">capacity_</span> <span class="o">=</span> <span class="n">count_</span><span class="p">;</span>  
+    <span class="n">data_</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="k">new</span> <span class="n">SyncedMemory</span><span class="p">(</span><span class="n">capacity_</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Dtype</span><span class="p">)));</span>  
+    <span class="n">diff_</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="k">new</span> <span class="n">SyncedMemory</span><span class="p">(</span><span class="n">capacity_</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Dtype</span><span class="p">)));</span>  
+  <span class="p">}</span>  
+<span class="p">}</span>
+</pre></div>
+
+<h4>SyncedMemory</h4>
+
+<p>对于Blob中的数据，我们关心的是values（值）和gradients（梯度），所以一个Blob单元存储了两块数据：data和diff。而且数据既可以存储在CPU上，也可以存储在GPU上  </p>
+
+<p>SyncedMemory完成了数据在CPU和GPU上的同步，以及内存的分配和释放操作  </p>
+<div class="highlight"><pre><span class="kr">inline</span> <span class="kt">void</span> <span class="n">SyncedMemory</span><span class="o">::</span><span class="n">to_cpu</span><span class="p">()</span> <span class="p">{</span>  
+  <span class="k">switch</span> <span class="p">(</span><span class="n">head_</span><span class="p">)</span> <span class="p">{</span>  
+  <span class="k">case</span> <span class="n">UNINITIALIZED</span>:  
+    <span class="n">CaffeMallocHost</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cpu_ptr_</span><span class="p">,</span> <span class="n">size_</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cpu_malloc_use_cuda_</span><span class="p">);</span>  
+    <span class="n">caffe_memset</span><span class="p">(</span><span class="n">size_</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cpu_ptr_</span><span class="p">);</span>  
+    <span class="n">head_</span> <span class="o">=</span> <span class="n">HEAD_AT_CPU</span><span class="p">;</span>  
+    <span class="n">own_cpu_data_</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>  
+    <span class="k">break</span><span class="p">;</span>  
+  <span class="k">case</span> <span class="n">HEAD_AT_GPU</span>:  
+<span class="cp">#ifndef CPU_ONLY  </span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cpu_ptr_</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>  
+      <span class="n">CaffeMallocHost</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cpu_ptr_</span><span class="p">,</span> <span class="n">size_</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cpu_malloc_use_cuda_</span><span class="p">);</span>  
+      <span class="n">own_cpu_data_</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>  
+    <span class="p">}</span>  
+    <span class="n">caffe_gpu_memcpy</span><span class="p">(</span><span class="n">size_</span><span class="p">,</span> <span class="n">gpu_ptr_</span><span class="p">,</span> <span class="n">cpu_ptr_</span><span class="p">);</span>  
+    <span class="n">head_</span> <span class="o">=</span> <span class="n">SYNCED</span><span class="p">;</span>  
+<span class="cp">#else  </span>
+    <span class="n">NO_GPU</span><span class="p">;</span>  
+<span class="cp">#endif  </span>
+    <span class="k">break</span><span class="p">;</span>  
+  <span class="k">case</span> <span class="n">HEAD_AT_CPU</span>:  
+  <span class="k">case</span> <span class="n">SYNCED</span>:  
+    <span class="k">break</span><span class="p">;</span>  
+  <span class="p">}</span>  
+<span class="p">}</span>  
+
+<span class="kr">inline</span> <span class="kt">void</span> <span class="n">SyncedMemory</span><span class="o">::</span><span class="n">to_gpu</span><span class="p">()</span> <span class="p">{</span>  
+<span class="cp">#ifndef CPU_ONLY  </span>
+  <span class="k">switch</span> <span class="p">(</span><span class="n">head_</span><span class="p">)</span> <span class="p">{</span>  
+  <span class="k">case</span> <span class="n">UNINITIALIZED</span>:  
+    <span class="n">CUDA_CHECK</span><span class="p">(</span><span class="n">cudaGetDevice</span><span class="p">(</span><span class="o">&amp;</span><span class="n">gpu_device_</span><span class="p">));</span>  
+    <span class="n">CUDA_CHECK</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">gpu_ptr_</span><span class="p">,</span> <span class="n">size_</span><span class="p">));</span>  
+    <span class="n">caffe_gpu_memset</span><span class="p">(</span><span class="n">size_</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">gpu_ptr_</span><span class="p">);</span>  
+    <span class="n">head_</span> <span class="o">=</span> <span class="n">HEAD_AT_GPU</span><span class="p">;</span>  
+    <span class="n">own_gpu_data_</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>  
+    <span class="k">break</span><span class="p">;</span>  
+  <span class="k">case</span> <span class="n">HEAD_AT_CPU</span>:  
+    <span class="k">if</span> <span class="p">(</span><span class="n">gpu_ptr_</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>  
+      <span class="n">CUDA_CHECK</span><span class="p">(</span><span class="n">cudaGetDevice</span><span class="p">(</span><span class="o">&amp;</span><span class="n">gpu_device_</span><span class="p">));</span>  
+      <span class="n">CUDA_CHECK</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">gpu_ptr_</span><span class="p">,</span> <span class="n">size_</span><span class="p">));</span>  
+      <span class="n">own_gpu_data_</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>  
+    <span class="p">}</span>  
+    <span class="n">caffe_gpu_memcpy</span><span class="p">(</span><span class="n">size_</span><span class="p">,</span> <span class="n">cpu_ptr_</span><span class="p">,</span> <span class="n">gpu_ptr_</span><span class="p">);</span>  
+    <span class="n">head_</span> <span class="o">=</span> <span class="n">SYNCED</span><span class="p">;</span>  
+    <span class="k">break</span><span class="p">;</span>  
+  <span class="k">case</span> <span class="n">HEAD_AT_GPU</span>:  
+  <span class="k">case</span> <span class="n">SYNCED</span>:  
+    <span class="k">break</span><span class="p">;</span>  
+  <span class="p">}</span>  
+<span class="cp">#else  </span>
+  <span class="n">NO_GPU</span><span class="p">;</span>  
+<span class="cp">#endif  </span>
+<span class="p">}</span>
+</pre></div>
+
+<p>未完待续  </p>
+
+<hr/>
+
+<p>拦路虎是逃不过的，一直抵触学习C++，最终还是需要把坑给填上</p>
+
+            ]]>
+        </content>
+    </entry>
     
     <entry>
         <title><![CDATA[Face Alignment Summary]]></title>
@@ -554,79 +717,6 @@
 <p><strong>你总要度过生存期，才能谈生活和梦想</strong>  </p>
 
 <p>无论在哪里，你都先要解决生存的问题，然后谈生活和梦想。我想，任何梦想和生活，都是基于度过生存期那段连下个馆子都计划再三的时光后的，否则，都是空中楼阁。在度过生存期的过程中，可能会失去一些宝贵的东西，或过得不如意。但不忘初心，记得每天提醒自己：这些黑暗只是为了今后的黎明，做这些不愿意的事情只是为了以后能更好地站起来。这样便好</p>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[2016上半年书单]]></title>
-        <author><name>SuKai</name><uri>http://sukai.me/</uri></author>
-        <link href="http://sukai.me/2016-first-half-booklists/"/>
-        <updated>2016-06-19T16:30:00Z</updated>
-        <published>2016-06-19T16:30:00Z</published>
-        <id>http://sukai.me/2016-first-half-booklists/</id>
-        <content type="html">
-            <![CDATA[
-             <p>大概是3月份入手了Kindle PaperWhite 3，发现真的很喜欢这个电子阅读器。所以平时的阅读习惯就变成了从readcolor.com和readfree.me下载许多mobi书籍存在Kindle上。有时候下载些epub的在果6的多看阅读上浏览  </p>
-
-<p>我上半年似乎看了不少小说（：逃，下面就粗略地从自己的评分由高往低简单记录下  </p>
-
-<ul>
-<li><strong>《孤独小说家》</strong>：书名虽然叫作“孤独小说家”，讲的是一位小说家青田耕平坚持写作十年，才收获梦想拿到直本奖。但给我留下最深刻印象的是耕平丧妻后仍不浮躁、坚守内心纯真孤独的那份难得可贵<br/></li>
-<li><strong>《岛上书店》</strong>：本以为玛雅的出现拯救了A.J.，没想到结局还是不尽人意，这就是生活<br/></li>
-<li><strong>《时间简史：从大爆炸到黑洞》</strong>：这是本只有全球5%的人才能看懂的书，可惜我不是那5%。但这又是一本让你有些熟悉的书，里面有部分结论在高中物理，大学物理都有所涉及，里面还有部分结论和猜想被众多科幻片引入。有机会会翻阅第二遍<br/></li>
-<li><strong>《统计学习方法》</strong>：机器学习入门经典书籍<br/></li>
-<li><strong>《机器学习实战》</strong>：理论看多了，来点代码非常不错<br/></li>
-<li><strong>《高效能程序员的修炼》</strong>：教你如何做一名敏捷式程序员，和《高效程序员的45个习惯》有重合观点<br/></li>
-<li><strong>《把时间当作朋友》</strong>：非常好的一本书，不多说<br/></li>
-<li><strong>《奇特的一生》</strong>：李笑来推荐的书。柳比歇夫一直在算自己每天的24小时都花在了什么地方，相当自律的一个人，警告自己珍惜时间<br/></li>
-<li><strong>《富爸爸穷爸爸》</strong>：坚定了自己未来要给自己打工的决心<br/></li>
-<li><strong>《深入浅出统计学》</strong>：回顾“统计学”的一本好书<br/></li>
-<li><strong>《拉伸：最好的运动》</strong>：作为一名程序员，拉伸很有必要。书里附送了一张拉伸教程表，可以学习下<br/></li>
-<li><strong>《Python科学计算》</strong>：不错的一本工具书。教你如何利用Python进行科研<br/></li>
-<li><strong>《重来：更为简单有效的商业思维》</strong>：有关创业的<br/></li>
-<li><strong>《从0到1：开启商业与未来的秘密》</strong>：另一本有关创业的<br/></li>
-<li><strong>《你只是看起来很努力》</strong>：李尚龙杂文合集。鸡汤型书籍，但却很有启发性，推荐阅读<br/></li>
-<li><strong>《一地鸡毛》</strong>：令人绝望的现实<br/></li>
-<li><strong>《你今天真好看》</strong>：很好看的漫画，很萌<br/></li>
-<li><strong>《父与子全集》</strong>：又一本萌萌哒的漫画，父与子之间的故事<br/></li>
-<li><strong>《赤裸裸的统计学》</strong>：结合实际案例讲述的入门级统计学科普书，不推荐你逐字逐句去细读<br/></li>
-<li><strong>《台湾这些年所知道的祖国》</strong><br/></li>
-<li><strong>《不要等到毕业以后》</strong>：里面相当多的观点深有体会<br/></li>
-<li><strong>《你所谓的稳定，不过是在浪费生命》</strong><br/></li>
-<li><strong>《别告诉我你会记笔记》</strong>：有些关于做笔记的建议还是值得采纳的。特别是将脑袋中瞬息的灵感记在本子上，并写写画画，思绪更容易被激发<br/></li>
-<li><strong>《4点起床》</strong>：这本书最大的收获就是提醒你珍惜时间，尤其是早晨上半午的时间<br/></li>
-<li><strong>《考拉小巫的英语学习笔记》</strong>：作者的执行力很强，令人佩服。自己是自愧不如了<br/></li>
-<li><strong>《Automate the Boring Stuff with Python》</strong>：教你如何利用Python帮你处理一些繁琐的事<br/></li>
-<li><strong>《少有人走得路》</strong>：偏心理学的书。书中讲：大部分人不愿意正视“人生苦难重重”，总会选择先享受，然后逃避问题和痛苦，这句说得太好了。所以每个工作日的早晨都应该推迟满足感，首先在工作的第一个钟头去解决那些最麻烦的事情，即先吃苦再享受<br/></li>
-<li><strong>《天才在左，疯子在右》</strong>：若不是书名的提醒，你不会发现这本书是记录精神病患者的。那些精神病患者的想象力、智力似乎都比正常人惊人的高，令人吃惊<br/></li>
-<li><strong>《Introducing Github》</strong>：介绍Github的一本书<br/></li>
-<li><strong>《Think Python》</strong><br/></li>
-<li><strong>《绿皮火车》</strong>：为什么读起来很费力，不轻松<br/></li>
-<li><strong>《哪来的天才？》</strong>：keep practiceing<br/></li>
-<li><strong>《创业时，我们在知乎聊什么？》</strong>：如果自己真的创业了，回来会仔细品读的<br/></li>
-<li><strong>《深入浅出数据分析》</strong>：个人觉着不如《深入浅出统计学》<br/></li>
-<li><strong>《重新定义公司》</strong>：Google发展史，里面有一章讲google为什么退出中国市场的<br/></li>
-<li><strong>《创京东</strong>》：京东发展史，没有细看。很佩服刘强东，事业有成，还有奶茶妹妹，人生赢家<br/></li>
-<li><strong>《敏感的人：如何面对外界的压力》</strong><br/></li>
-<li><strong>《轻松学会独立思考》</strong><br/></li>
-<li><strong>《我们台湾这些年》</strong>：流水账文章，比不上《台湾这些年所知道的祖国》<br/></li>
-<li><strong>《大数据时代》</strong>：泛泛而谈的一本书<br/></li>
-<li><strong>《大教堂与集市》</strong>：看得翻译本，不是很能懂<br/></li>
-<li><strong>《中国人，你为什么不快乐》</strong><br/></li>
-<li><strong>《沉默的大多数》</strong><br/></li>
-<li><strong>《那些男孩教我的事》</strong><br/></li>
-<li><strong>《黑客：计算机革命的英雄》</strong><br/></li>
-<li><strong>《我这个普通人的生活》</strong><br/></li>
-<li><strong>《十四岁》</strong>：日本人14岁的时候就开始找女生援交了？<br/></li>
-<li><strong>《互联网+：从IT到DT》</strong><br/></li>
-<li><strong>《年轻时做过的那些荒唐事儿》</strong><br/></li>
-<li><strong>《生命中最简单又困难的事》</strong><br/></li>
-<li><strong>《当你生病时，你会想起谁？》</strong><br/></li>
-</ul>
-
-<p>总共51本，下半年继续坚持</p>
 
             ]]>
         </content>

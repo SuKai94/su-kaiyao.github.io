@@ -1,3 +1,4 @@
+http://sukai.me/caffe-blob-source-code/
 http://sukai.me/face-alignment-summary/
 http://sukai.me/2016-summer/
 http://sukai.me/algorithms-order-statistic/
@@ -63,6 +64,7 @@ http://sukai.me/tag/Life/
 http://sukai.me/tag/Hibernate/
 http://sukai.me/tag/BigData/
 http://sukai.me/tag/四轴飞行器/
+http://sukai.me/tag/caffe/
 http://sukai.me/tag/Stored-Procedure/
 http://sukai.me/tag/Unit-Test/
 http://sukai.me/tag/Project/
