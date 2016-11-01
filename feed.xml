@@ -19,9 +19,9 @@
 
 <p>Blob是Caffe中处理和传递实际数据的数据封装包，并且在CPU于GPU之间具有同步处理能力  </p>
 
-<p>Blob是连续存储的N维数组，最多可以表示 <strong>const int kMaxBlobAxes = 32;</strong> 32维的数组  </p>
-
 <h4>Blob类成员</h4>
+
+<p>Blob是连续存储的N维数组，在 <strong>blob.hpp</strong> 中定义了Blob的成员变量  </p>
 <div class="highlight"><pre><span class="nl">protected:</span>  
   <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">SyncedMemory</span><span class="o">&gt;</span> <span class="n">data_</span><span class="p">;</span>  
   <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">SyncedMemory</span><span class="o">&gt;</span> <span class="n">diff_</span><span class="p">;</span>  
@@ -31,40 +31,36 @@
   <span class="kt">int</span> <span class="n">capacity_</span><span class="p">;</span> <span class="c1">// 能承受的容量</span>
 </pre></div>
 
-<p>shape<em>data</em> 和 shape_记录了每一维度数据的大小  </p>
+<p>data_ 存储前向传播的数据，diff_ 存储反向传播的梯度；shape_ data_ 和 shape_记录了每一维度数据的大小  </p>
+
+<p>一个Blob最多可以表示 <strong>const int kMaxBlobAxes = 32;</strong> 32维的数组  </p>
 
 <h4>Blob类相关操作</h4>
 
-<p><strong>1.offset</strong>用于给定坐标，获取Blob相应坐标数据。例如，对于批量图像数据来说，blob常规的维数为图像数量 N  * 通道数 K * 图像高度 H * 图像宽度 W。Blob按行为主存储。所以4维blob，坐标为（n，k，h，w）的值在blob中的物理位置为（（n * K + k）* H + h）* W + w  </p>
-<div class="highlight"><pre><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">offset</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>  
-      <span class="k">const</span> <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>  
-    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>  
-    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">num</span><span class="p">());</span>  
-    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">channels</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>  
-    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">channels</span><span class="p">());</span>  
-    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">height</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>  
-    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">height</span><span class="p">());</span>  
-    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">width</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>  
-    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">width</span><span class="p">());</span>  
-    <span class="k">return</span> <span class="p">((</span><span class="n">n</span> <span class="o">*</span> <span class="n">channels</span><span class="p">()</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">height</span><span class="p">()</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="n">width</span><span class="p">()</span> <span class="o">+</span> <span class="n">w</span><span class="p">;</span>  
-  <span class="p">}</span>  
-
-  <span class="kr">inline</span> <span class="kt">int</span> <span class="n">offset</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">indices</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>  
-    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">num_axes</span><span class="p">());</span>  
-    <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_axes</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>  
-      <span class="n">offset</span> <span class="o">*=</span> <span class="n">shape</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>  
-      <span class="k">if</span> <span class="p">(</span><span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>  
-        <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>  
-        <span class="n">CHECK_LT</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">shape</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>  
-        <span class="n">offset</span> <span class="o">+=</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>  
-      <span class="p">}</span>  
-    <span class="p">}</span>  
-    <span class="k">return</span> <span class="n">offset</span><span class="p">;</span>  
-  <span class="p">}</span>
+<p><strong>1.构造函数</strong>  </p>
+<div class="highlight"><pre><span class="k">explicit</span> <span class="nf">Blob</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span>  
+      <span class="k">const</span> <span class="kt">int</span> <span class="n">width</span><span class="p">);</span>  
+<span class="k">explicit</span> <span class="nf">Blob</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">shape</span><span class="p">);</span>
 </pre></div>
 
-<p><strong>2.Reshape</strong>用于修改Blob的大小（尺寸）  </p>
+<p>在 <strong>blob.cpp</strong> 中，构造函数会调用 <strong>Reshape</strong> 完成初始化操作，为 data_ 和 diff_ 分配共享内存对象SyncedMemory  </p>
+<div class="highlight"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Dtype</span><span class="o">&gt;</span>  
+<span class="n">Blob</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;::</span><span class="n">Blob</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span>  
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">width</span><span class="p">)</span>  
+  <span class="c1">// capacity_ must be initialized before calling Reshape  </span>
+  <span class="o">:</span> <span class="n">capacity_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>  
+  <span class="n">Reshape</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">);</span>  
+<span class="p">}</span>  
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Dtype</span><span class="o">&gt;</span>  
+<span class="n">Blob</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;::</span><span class="n">Blob</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">shape</span><span class="p">)</span>  
+  <span class="c1">// capacity_ must be initialized before calling Reshape  </span>
+  <span class="o">:</span> <span class="n">capacity_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>  
+  <span class="n">Reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">);</span>  
+<span class="p">}</span>
+</pre></div>
+
+<p><strong>2.Reshape</strong>：修改Blob的大小（尺寸）  </p>
 <div class="highlight"><pre><span class="kt">void</span> <span class="nf">Reshape</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span>  
       <span class="k">const</span> <span class="kt">int</span> <span class="n">width</span><span class="p">);</span>  
 <span class="kt">void</span> <span class="nf">Reshape</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">shape</span><span class="p">);</span>  
@@ -99,11 +95,111 @@
 <span class="p">}</span>
 </pre></div>
 
-<h4>SyncedMemory</h4>
+<p><strong>3.offset</strong>用于给定坐标，获取Blob相应坐标数据。例如，对于批量图像数据来说，blob常规的维数为图像数量 N  * 通道数 K * 图像高度 H * 图像宽度 W。Blob按行为主存储。所以4维blob，坐标为（n，k，h，w）的值在blob中的物理位置为（（n * K + k）* H + h）* W + w  </p>
+<div class="highlight"><pre><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">offset</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>  
+      <span class="k">const</span> <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>  
+    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">num</span><span class="p">());</span>  
+    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">channels</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">channels</span><span class="p">());</span>  
+    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">height</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">height</span><span class="p">());</span>  
+    <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">width</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">width</span><span class="p">());</span>  
+    <span class="k">return</span> <span class="p">((</span><span class="n">n</span> <span class="o">*</span> <span class="n">channels</span><span class="p">()</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">height</span><span class="p">()</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="n">width</span><span class="p">()</span> <span class="o">+</span> <span class="n">w</span><span class="p">;</span>  
+  <span class="p">}</span>  
 
-<p>对于Blob中的数据，我们关心的是values（值）和gradients（梯度），所以一个Blob单元存储了两块数据：data和diff。而且数据既可以存储在CPU上，也可以存储在GPU上  </p>
+  <span class="kr">inline</span> <span class="kt">int</span> <span class="n">offset</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">indices</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>  
+    <span class="n">CHECK_LE</span><span class="p">(</span><span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">num_axes</span><span class="p">());</span>  
+    <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_axes</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>  
+      <span class="n">offset</span> <span class="o">*=</span> <span class="n">shape</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>  
+      <span class="k">if</span> <span class="p">(</span><span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="n">CHECK_GE</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>  
+        <span class="n">CHECK_LT</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">shape</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>  
+        <span class="n">offset</span> <span class="o">+=</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>  
+      <span class="p">}</span>  
+    <span class="p">}</span>  
+    <span class="k">return</span> <span class="n">offset</span><span class="p">;</span>  
+  <span class="p">}</span>
+</pre></div>
+
+<p><strong>4.Blob的Update</strong>：参数更新操作  </p>
+
+<p>完成梯度下降过程中的参数更新：  </p>
+
+<p>$$data_{k+1} = data_k - diff$$  </p>
+<div class="highlight"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Dtype</span><span class="o">&gt;</span>  
+<span class="kt">void</span> <span class="n">Blob</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;::</span><span class="n">Update</span><span class="p">()</span> <span class="p">{</span>  
+  <span class="c1">// We will perform update based on where the data is located.  </span>
+  <span class="k">switch</span> <span class="p">(</span><span class="n">data_</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">())</span> <span class="p">{</span>  
+  <span class="k">case</span> <span class="n">SyncedMemory</span>:<span class="o">:</span><span class="n">HEAD_AT_CPU</span><span class="o">:</span>  
+    <span class="c1">// perform computation on CPU  </span>
+    <span class="n">caffe_axpy</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;</span><span class="p">(</span><span class="n">count_</span><span class="p">,</span> <span class="n">Dtype</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>  
+        <span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">Dtype</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">diff_</span><span class="o">-&gt;</span><span class="n">cpu_data</span><span class="p">()),</span>  
+        <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data_</span><span class="o">-&gt;</span><span class="n">mutable_cpu_data</span><span class="p">()));</span>  
+    <span class="k">break</span><span class="p">;</span>  
+  <span class="k">case</span> <span class="n">SyncedMemory</span>:<span class="o">:</span><span class="n">HEAD_AT_GPU</span><span class="o">:</span>  
+  <span class="k">case</span> <span class="n">SyncedMemory</span>:<span class="o">:</span><span class="n">SYNCED</span><span class="o">:</span>  
+<span class="cp">#ifndef CPU_ONLY  </span>
+    <span class="c1">// perform computation on GPU  </span>
+    <span class="n">caffe_gpu_axpy</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;</span><span class="p">(</span><span class="n">count_</span><span class="p">,</span> <span class="n">Dtype</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>  
+        <span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">Dtype</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">diff_</span><span class="o">-&gt;</span><span class="n">gpu_data</span><span class="p">()),</span>  
+        <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data_</span><span class="o">-&gt;</span><span class="n">mutable_gpu_data</span><span class="p">()));</span>  
+<span class="cp">#else  </span>
+    <span class="n">NO_GPU</span><span class="p">;</span>  
+<span class="cp">#endif  </span>
+    <span class="k">break</span><span class="p">;</span>  
+  <span class="k">default</span><span class="o">:</span>  
+    <span class="n">LOG</span><span class="p">(</span><span class="n">FATAL</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Syncedmem not initialized.&quot;</span><span class="p">;</span>  
+  <span class="p">}</span>  
+<span class="p">}</span>
+</pre></div>
+
+<h4>SyncedMemory类</h4>
+
+<p>Blob中的data 和 diff 既可以存储在CPU上，也可以存储在GPU上。Blob不用去担心数据的分配以及GPU/CPU同步问题，而交由SyncedMemory去管理  </p>
 
 <p>SyncedMemory完成了数据在CPU和GPU上的同步，以及内存的分配和释放操作  </p>
+
+<p>在Blob中访问数据：  </p>
+
+<ul>
+<li>一种是以 const 方式只读，不改变数值<br/></li>
+<li>一种mutable可改变数值的动态方式<br/></li>
+</ul>
+
+<p>最终都是交由 SyncedMemory 的数据访问函数 cpu_data() 和 mutable_cpu_data()  </p>
+<div class="highlight"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Dtype</span><span class="o">&gt;</span>  
+<span class="k">const</span> <span class="n">Dtype</span><span class="o">*</span> <span class="n">Blob</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;::</span><span class="n">cpu_data</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>  
+  <span class="n">CHECK</span><span class="p">(</span><span class="n">data_</span><span class="p">);</span>  
+  <span class="k">return</span> <span class="p">(</span><span class="k">const</span> <span class="n">Dtype</span><span class="o">*</span><span class="p">)</span><span class="n">data_</span><span class="o">-&gt;</span><span class="n">cpu_data</span><span class="p">();</span>  
+<span class="p">}</span>  
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Dtype</span><span class="o">&gt;</span>  
+<span class="k">const</span> <span class="n">Dtype</span><span class="o">*</span> <span class="n">Blob</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;::</span><span class="n">gpu_data</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>  
+  <span class="n">CHECK</span><span class="p">(</span><span class="n">data_</span><span class="p">);</span>  
+  <span class="k">return</span> <span class="p">(</span><span class="k">const</span> <span class="n">Dtype</span><span class="o">*</span><span class="p">)</span><span class="n">data_</span><span class="o">-&gt;</span><span class="n">gpu_data</span><span class="p">();</span>  
+<span class="p">}</span>  
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Dtype</span><span class="o">&gt;</span>  
+<span class="n">Dtype</span><span class="o">*</span> <span class="n">Blob</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;::</span><span class="n">mutable_cpu_data</span><span class="p">()</span> <span class="p">{</span>  
+  <span class="n">CHECK</span><span class="p">(</span><span class="n">data_</span><span class="p">);</span>  
+  <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data_</span><span class="o">-&gt;</span><span class="n">mutable_cpu_data</span><span class="p">());</span>  
+<span class="p">}</span>  
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Dtype</span><span class="o">&gt;</span>  
+<span class="n">Dtype</span><span class="o">*</span> <span class="n">Blob</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;::</span><span class="n">mutable_gpu_data</span><span class="p">()</span> <span class="p">{</span>  
+  <span class="n">CHECK</span><span class="p">(</span><span class="n">data_</span><span class="p">);</span>  
+  <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data_</span><span class="o">-&gt;</span><span class="n">mutable_gpu_data</span><span class="p">());</span>  
+<span class="p">}</span>
+</pre></div>
+
+<p>在SyncedMemory中，head_ 表示数据同步状态  </p>
+<div class="highlight"><pre><span class="k">enum</span> <span class="n">SyncedHead</span> <span class="p">{</span> <span class="n">UNINITIALIZED</span><span class="p">,</span> <span class="n">HEAD_AT_CPU</span><span class="p">,</span> <span class="n">HEAD_AT_GPU</span><span class="p">,</span> <span class="n">SYNCED</span> <span class="p">};</span>
+</pre></div>
+
+<p>并且通过 to_cpu 和 to_gpu 进行数据同步  </p>
 <div class="highlight"><pre><span class="kr">inline</span> <span class="kt">void</span> <span class="n">SyncedMemory</span><span class="o">::</span><span class="n">to_cpu</span><span class="p">()</span> <span class="p">{</span>  
   <span class="k">switch</span> <span class="p">(</span><span class="n">head_</span><span class="p">)</span> <span class="p">{</span>  
   <span class="k">case</span> <span class="n">UNINITIALIZED</span>:  
@@ -159,11 +255,42 @@
 <span class="p">}</span>
 </pre></div>
 
-<p>未完待续  </p>
+<p>官方有个CPU/GPU数据同步的例子：  </p>
+<div class="highlight"><pre><span class="c1">// Assuming that data are on the CPU initially, and we have a blob.  </span>
+<span class="k">const</span> <span class="n">Dtype</span><span class="o">*</span> <span class="n">foo</span><span class="p">;</span>  
+<span class="n">Dtype</span><span class="o">*</span> <span class="n">bar</span><span class="p">;</span>  
+<span class="n">foo</span> <span class="o">=</span> <span class="n">blob</span><span class="p">.</span><span class="n">gpu_data</span><span class="p">();</span> <span class="c1">// data copied cpu-&gt;gpu.  </span>
+<span class="n">foo</span> <span class="o">=</span> <span class="n">blob</span><span class="p">.</span><span class="n">cpu_data</span><span class="p">();</span> <span class="c1">// no data copied since both have up-to-date contents.  </span>
+<span class="n">bar</span> <span class="o">=</span> <span class="n">blob</span><span class="p">.</span><span class="n">mutable_gpu_data</span><span class="p">();</span> <span class="c1">// no data copied.  </span>
+<span class="c1">// ... some operations ...  </span>
+<span class="n">bar</span> <span class="o">=</span> <span class="n">blob</span><span class="p">.</span><span class="n">mutable_gpu_data</span><span class="p">();</span> <span class="c1">// no data copied when we are still on GPU.  </span>
+<span class="n">foo</span> <span class="o">=</span> <span class="n">blob</span><span class="p">.</span><span class="n">cpu_data</span><span class="p">();</span> <span class="c1">// data copied gpu-&gt;cpu, since the gpu side has modified the data  </span>
+<span class="n">foo</span> <span class="o">=</span> <span class="n">blob</span><span class="p">.</span><span class="n">gpu_data</span><span class="p">();</span> <span class="c1">// no data copied since both have up-to-date contents  </span>
+<span class="n">bar</span> <span class="o">=</span> <span class="n">blob</span><span class="p">.</span><span class="n">mutable_cpu_data</span><span class="p">();</span> <span class="c1">// still no data copied.  </span>
+<span class="n">bar</span> <span class="o">=</span> <span class="n">blob</span><span class="p">.</span><span class="n">mutable_gpu_data</span><span class="p">();</span> <span class="c1">// data copied cpu-&gt;gpu.  </span>
+<span class="n">bar</span> <span class="o">=</span> <span class="n">blob</span><span class="p">.</span><span class="n">mutable_cpu_data</span><span class="p">();</span> <span class="c1">// data copied gpu-&gt;cpu.</span>
+</pre></div>
+
+<h4>Blob的序列化</h4>
+
+<p>Blob通过Google Protocol Buffers进行相应的序列化操作，相应的函数有  </p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="n">Blob</span><span class="o">&lt;</span><span class="n">Dtype</span><span class="o">&gt;::</span><span class="n">FromProto</span><span class="p">(</span><span class="k">const</span> <span class="n">BlobProto</span><span class="o">&amp;</span> <span class="n">proto</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">reshape</span><span class="p">)</span>  
+<span class="kt">void</span> <span class="n">Blob</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">ToProto</span><span class="p">(</span><span class="n">BlobProto</span><span class="o">*</span> <span class="n">proto</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">write_diff</span><span class="p">)</span>  
+<span class="kt">void</span> <span class="n">Blob</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">ToProto</span><span class="p">(</span><span class="n">BlobProto</span><span class="o">*</span> <span class="n">proto</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">write_diff</span><span class="p">)</span>
+</pre></div>
+
+<h4>总结</h4>
+
+<p>Blon详细描述了信息是如何在Layer和Net中存储和交换的，是理解Layer和Net的基础  </p>
 
 <hr/>
 
-<p>拦路虎是逃不过的，一直抵触学习C++，最终还是需要把坑给填上</p>
+<p>References  </p>
+
+<ul>
+<li><a href="https://github.com/BVLC/caffe"><a href="https://github.com/BVLC/caffe">https://github.com/BVLC/caffe</a></a><br/></li>
+<li><a href="http://imbinwang.github.io/blog/inside-caffe-code-blob" target="_blank"><a href="http://imbinwang.github.io/blog/inside-caffe-code-blob">http://imbinwang.github.io/blog/inside-caffe-code-blob</a></a><br/></li>
+</ul>
 
             ]]>
         </content>
